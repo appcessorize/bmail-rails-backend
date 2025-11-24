@@ -5,7 +5,7 @@ class User < ApplicationRecord
 
   has_many :entries, dependent: :destroy
   has_one_attached :profile_image do |attachable|
-    attachable.variant :thumb, resize_to_limit: [200, 200]
+    attachable.variant :thumb, resize_to_limit: [ 200, 200 ]
   end
 
   before_create :generate_auth_token
@@ -23,9 +23,9 @@ class User < ApplicationRecord
     self.auth_token = SecureRandom.hex(32)
 
     # Only set token_digest if column exists (for backward compatibility)
-    if self.class.column_names.include?('token_digest')
+    if self.class.column_names.include?("token_digest")
       self.token_digest = Digest::SHA256.hexdigest(auth_token)
-      self.token_expires_at = TOKEN_EXPIRATION.from_now if self.class.column_names.include?('token_expires_at')
+      self.token_expires_at = TOKEN_EXPIRATION.from_now if self.class.column_names.include?("token_expires_at")
     end
   end
 
@@ -34,7 +34,7 @@ class User < ApplicationRecord
     return nil if token.blank?
 
     # Support both old auth_token and new token_digest lookup
-    if column_names.include?('token_digest')
+    if column_names.include?("token_digest")
       digest = Digest::SHA256.hexdigest(token)
       user = find_by(token_digest: digest)
 
@@ -60,12 +60,12 @@ class User < ApplicationRecord
 
     # Validate content type
     unless profile_image.content_type.in?(%w[image/jpeg image/jpg image/png image/gif])
-      errors.add(:profile_image, 'must be a JPEG, PNG, or GIF')
+      errors.add(:profile_image, "must be a JPEG, PNG, or GIF")
     end
 
     # Validate file size (5MB max)
     if profile_image.byte_size > 5.megabytes
-      errors.add(:profile_image, 'size must be less than 5MB')
+      errors.add(:profile_image, "size must be less than 5MB")
     end
   end
 end

@@ -1,6 +1,6 @@
 class EntriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_entry, only: [:show, :update, :destroy]
+  before_action :set_entry, only: [ :show, :update, :destroy ]
 
   # GET /entries
   def index
@@ -44,7 +44,7 @@ class EntriesController < ApplicationController
   def set_entry
     @entry = current_user.entries.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Not found' }, status: :not_found
+    render json: { error: "Not found" }, status: :not_found
   end
 
   def entry_params

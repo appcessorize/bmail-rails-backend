@@ -3,7 +3,7 @@ module SecurityAuditable
 
   def log_security_event(event_type, details = {})
     Rails.logger.info({
-      event: 'security_audit',
+      event: "security_audit",
       type: event_type,
       user_id: self.id,
       username: self.username,

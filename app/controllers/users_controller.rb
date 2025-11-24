@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:me, :upload_image, :update_image_privacy, :delete_image]
+  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image ]
 
   # POST /signup
   def create
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
       current_user.profile_image.attach(params[:image])
 
       if current_user.valid?
-        current_user.log_security_event('image_uploaded', {
+        current_user.log_security_event("image_uploaded", {
           content_type: params[:image].content_type,
           size: params[:image].size,
           ip: request.remote_ip
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
   # PATCH /update_image_privacy
   def update_image_privacy
     if current_user.update(image_public: params[:image_public])
-      current_user.log_security_event('image_privacy_changed', {
+      current_user.log_security_event("image_privacy_changed", {
         new_value: params[:image_public],
         ip: request.remote_ip
       })

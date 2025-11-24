@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_action :authenticate_user!, only: [:destroy]
+  before_action :authenticate_user!, only: [ :destroy ]
 
   # POST /login
   def create
@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       user.generate_auth_token
       user.save!
 
-      user.log_security_event('login_success', { ip: request.remote_ip })
+      user.log_security_event("login_success", { ip: request.remote_ip })
 
       render json: {
         user: {
@@ -21,14 +21,14 @@ class SessionsController < ApplicationController
       }, status: :ok
     else
       Rails.logger.warn({
-        event: 'security_audit',
-        type: 'login_failed',
+        event: "security_audit",
+        type: "login_failed",
         username: params[:username],
         ip: request.remote_ip,
         timestamp: Time.current.iso8601
       }.to_json)
 
-      render json: { error: 'Invalid username or password' }, status: :unauthorized
+      render json: { error: "Invalid username or password" }, status: :unauthorized
     end
   end
 
