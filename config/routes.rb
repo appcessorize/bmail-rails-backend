@@ -14,5 +14,7 @@ Rails.application.routes.draw do
   patch  "/update_image_privacy", to: "users#update_image_privacy"
   delete "/delete_image", to: "users#delete_image"
 
+  get    "/users/:user_id/image", to: "images#show"
+
   resources :entries
 end

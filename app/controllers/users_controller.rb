@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
     if user.profile_image.attached?
       response[:has_image] = true
-      response[:image_url] = rails_blob_url(user.profile_image) if user.image_public || user == current_user
+      response[:image_url] = url_for(controller: "images", action: "show", user_id: user.id, only_path: false)
     else
       response[:has_image] = false
     end
@@ -51,7 +51,8 @@ class UsersController < ApplicationController
           ip: request.remote_ip
         })
 
-        render json: { message: "Image uploaded successfully", image_url: rails_blob_url(current_user.profile_image) }, status: :ok
+        image_url = url_for(controller: "images", action: "show", user_id: current_user.id, only_path: false)
+        render json: { message: "Image uploaded successfully", image_url: image_url }, status: :ok
       else
         current_user.profile_image.purge
         render json: { errors: current_user.errors.full_messages }, status: :unprocessable_entity
