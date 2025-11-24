@@ -1,6 +1,4 @@
-class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:home]
-
+class PagesController < ActionController::Base
   def home
     render html: landing_page_html.html_safe
   end
