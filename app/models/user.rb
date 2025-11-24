@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   include SecurityAuditable
 
-  has_secure_password
+  has_secure_password validations: false
 
   has_many :entries, dependent: :destroy
   has_one_attached :profile_image do |attachable|
@@ -13,8 +13,9 @@ class User < ApplicationRecord
   validate :profile_image_validation
 
   validates :username, presence: true, uniqueness: true
-  validates :password, length: { minimum: 6 }, if: -> { password.present? }
+  validates :password, length: { minimum: 6 }, if: -> { password.present? && apple_user_id.blank? }
   validates :auth_token, uniqueness: true
+  validates :apple_user_id, uniqueness: true, allow_nil: true
 
   TOKEN_EXPIRATION = 30.days
 

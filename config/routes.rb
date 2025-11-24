@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get    "/me",     to: "users#me"
 
   post   "/login",  to: "sessions#create"
+  post   "/auth/apple", to: "sessions#apple"
   delete "/logout", to: "sessions#destroy"
 
   post   "/upload_image", to: "users#upload_image"
