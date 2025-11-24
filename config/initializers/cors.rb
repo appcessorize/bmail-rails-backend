@@ -11,9 +11,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     if Rails.env.development?
       origins "localhost:3000", "127.0.0.1:3000", /\Ahttp:\/\/localhost:\d+\z/
     else
-      # In production, set your actual domain(s)
-      # Replace with your actual production domain
-      origins ENV.fetch("ALLOWED_ORIGINS", "your-production-domain.com").split(",")
+      # In production, allow both root domain and api subdomain
+      origins ENV.fetch("ALLOWED_ORIGINS", "https://blackmail.wtf,https://api.blackmail.wtf").split(",").map(&:strip)
     end
 
     resource "*",

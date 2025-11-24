@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Landing page at root
+  root "pages#home"
+
+  # API endpoints
   post   "/signup", to: "users#create"
   get    "/me",     to: "users#me"
 
