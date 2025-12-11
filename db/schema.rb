@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_24_212927) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_11_200001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,22 +51,40 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_24_212927) do
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
+  create_table "focus_sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "duration_minutes", null: false
+    t.datetime "ended_at"
+    t.datetime "started_at", null: false
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["started_at"], name: "index_focus_sessions_on_started_at"
+    t.index ["user_id", "status"], name: "index_focus_sessions_on_user_id_and_status"
+    t.index ["user_id"], name: "index_focus_sessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "apple_user_id"
     t.string "auth_token"
     t.datetime "created_at", null: false
     t.string "email"
     t.boolean "image_public", default: false, null: false
+    t.string "page_slug", limit: 10
     t.string "password_digest"
+    t.datetime "shame_activated_at"
+    t.boolean "shame_active", default: false, null: false
     t.string "token_digest"
     t.datetime "token_expires_at"
     t.datetime "updated_at", null: false
     t.string "username"
     t.index ["apple_user_id"], name: "index_users_on_apple_user_id"
+    t.index ["page_slug"], name: "index_users_on_page_slug", unique: true
     t.index ["token_digest"], name: "index_users_on_token_digest", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "entries", "users"
+  add_foreign_key "focus_sessions", "users"
 end

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLACKMAIL FOCUS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #000;
+      color: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #e5332a;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(229, 51, 42, 0.3);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+    }
+
+    .status-shame {
+      background-color: #e5332a;
+      color: white;
+    }
+
+    .status-good {
+      background-color: #22c55e;
+      color: white;
+    }
+
+    .shame-image {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 16px;
+      border: 4px solid #e5332a;
+      margin-bottom: 20px;
+      box-shadow: 0 0 30px rgba(229, 51, 42, 0.4);
+    }
+
+    .message {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .message-shame {
+      color: #e5332a;
+    }
+
+    .message-good {
+      color: #22c55e;
+    }
+
+    .submessage {
+      font-size: 1rem;
+      color: #9ca3af;
+      margin-bottom: 30px;
+    }
+
+    .timestamp {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 0.75rem;
+      color: #4b5563;
+    }
+
+    .footer a {
+      color: #4f9bc4;
+      text-decoration: none;
+    }
+
+    .good-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">BLACKMAIL</div>
+
+    <% if @shame_visible %>
+      <div class="status-badge status-shame">FAILED</div>
+
+      <% if @image_url %>
+        <img src="<%= @image_url %>" alt="Shame Photo" class="shame-image">
+      <% end %>
+
+      <div class="message message-shame">THEY COULDN'T RESIST</div>
+      <div class="submessage">This person failed their focus session.</div>
+
+      <% if @shame_activated_at %>
+        <div class="timestamp">
+          Failed <%= time_ago_in_words(@shame_activated_at) %> ago
+        </div>
+      <% end %>
+
+    <% else %>
+      <div class="status-badge status-good">FOCUSED</div>
+
+      <div class="good-icon">&#x1F54A;</div>
+
+      <div class="message message-good">STAYING STRONG</div>
+      <div class="submessage">This person is keeping their focus. No shame here... yet.</div>
+    <% end %>
+
+    <div class="footer">
+      Powered by <a href="/">Blackmail Focus</a>
+    </div>
+  </div>
+</body>
+</html>

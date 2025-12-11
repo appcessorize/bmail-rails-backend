@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image ]
+  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame ]
 
   # POST /signup
   def create
@@ -25,7 +25,11 @@ class UsersController < ApplicationController
       id: user.id,
       username: user.username,
       email: user.email,
-      image_public: user.image_public
+      image_public: user.image_public,
+      page_slug: user.page_slug,
+      page_url: user.page_slug.present? ? "#{request.base_url}/p/#{user.page_slug}" : nil,
+      shame_active: user.shame_active,
+      shame_activated_at: user.shame_activated_at&.iso8601
     }
 
     if user.profile_image.attached?
@@ -84,6 +88,15 @@ class UsersController < ApplicationController
     else
       render json: { error: "No image to delete" }, status: :not_found
     end
+  end
+
+  # PATCH /shame/deactivate
+  def deactivate_shame
+    current_user.deactivate_shame!
+    render json: {
+      message: "Shame deactivated",
+      shame_active: current_user.shame_active
+    }, status: :ok
   end
 
   private
