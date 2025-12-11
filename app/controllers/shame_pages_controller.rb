@@ -1,4 +1,4 @@
-class ShamePagesController < ApplicationController
+class ShamePagesController < ActionController::Base
   skip_before_action :verify_authenticity_token, raise: false
 
   # GET /p/:slug
