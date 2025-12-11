@@ -38,7 +38,7 @@
       <a href="/" class="hover:opacity-80 transition">
         <img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL" class="h-8 w-auto">
       </a>
-      <span class="text-bm-blue">↓</span>
+      <button onclick="openFaqModal()" class="text-bm-blue text-xl font-bold w-8 h-8 border-2 border-bm-blue rounded-full flex items-center justify-center hover:bg-bm-blue/10 transition">?</button>
     </header>
 
     <!-- Main Content -->
@@ -158,7 +158,7 @@
 
       <!-- CTA to Homepage -->
       <div class="bg-bm-cream rounded-2xl p-6 text-center">
-        <p class="text-bm-dark mb-4 font-bold">Want to hold yourself accountable?</p>
+        <p class="text-bm-dark mb-4 font-bold">Get updates on this page</p>
         <a
           href="/"
           class="inline-block bg-bm-red text-white py-3 px-8 rounded-xl font-bold text-lg hover:opacity-90 transition"
@@ -177,7 +177,60 @@
 
   </div>
 
+  <!-- FAQ Modal -->
+  <div id="faqModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+    <div class="bg-bm-dark border-2 border-bm-blue rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto">
+      <div class="sticky top-0 bg-bm-dark border-b border-bm-blue p-4 flex justify-between items-center">
+        <h2 class="text-bm-blue text-xl font-bold">FAQ</h2>
+        <button onclick="closeFaqModal()" class="text-bm-cream hover:text-bm-blue transition text-2xl">&times;</button>
+      </div>
+      <div class="p-6 space-y-6">
+        <div>
+          <h3 class="text-bm-red font-bold mb-2">What is this page?</h3>
+          <p class="text-bm-cream/80 text-sm">This is a public shame page for someone using the Blackmail app. When they fail a focus session by picking up their phone, their embarrassing photo appears here.</p>
+        </div>
+        <div>
+          <h3 class="text-bm-red font-bold mb-2">How does Blackmail work?</h3>
+          <p class="text-bm-cream/80 text-sm">Users upload an embarrassing photo and set a focus timer. If they pick up their phone before the timer ends, their photo becomes visible on their public shame page.</p>
+        </div>
+        <div>
+          <h3 class="text-bm-red font-bold mb-2">Why would someone do this?</h3>
+          <p class="text-bm-cream/80 text-sm">The fear of public embarrassment is a powerful motivator. By sharing this page with friends, users create real accountability to stay focused and off their phones.</p>
+        </div>
+        <div>
+          <h3 class="text-bm-red font-bold mb-2">Can they hide their photo?</h3>
+          <p class="text-bm-cream/80 text-sm">Yes! Users can hide their shame photo anytime from the app settings. But until they do, it stays visible to anyone with this link.</p>
+        </div>
+        <div>
+          <h3 class="text-bm-red font-bold mb-2">Is this page public?</h3>
+          <p class="text-bm-cream/80 text-sm">The page URL is a random code that's impossible to guess. Only people who have been shared the link can see it - there's no public directory.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    function openFaqModal() {
+      const modal = document.getElementById('faqModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFaqModal() {
+      const modal = document.getElementById('faqModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('faqModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeFaqModal();
+      }
+    });
+
     function shareNative() {
       if (navigator.share) {
         navigator.share({
