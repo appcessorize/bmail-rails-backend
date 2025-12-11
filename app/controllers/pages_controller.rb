@@ -135,7 +135,7 @@ class PagesController < ActionController::Base
             <a href="/" class="logo">
               <img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL">
             </a>
-            <nav style="color: #4f9bc4;">↓</nav>
+            <nav style="color: #4f9bc4; font-size: 1.5rem; width: 32px; height: 32px; border: 2px solid #4f9bc4; border-radius: 50%; display: flex; align-items: center; justify-content: center;">?</nav>
           </header>
 
           <h1>No One is Bored,<br>Everything is Boring</h1>
