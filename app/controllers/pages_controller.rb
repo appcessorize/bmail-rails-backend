@@ -40,10 +40,11 @@ class PagesController < ActionController::Base
             margin-bottom: 40px;
           }
           .logo {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #4f9bc4;
             text-decoration: none;
+          }
+          .logo img {
+            height: 40px;
+            width: auto;
           }
           h1 {
             font-size: 3.5rem;
@@ -131,7 +132,9 @@ class PagesController < ActionController::Base
       <body>
         <div class="container">
           <header>
-            <a href="/" class="logo">BLACKMAIL.WTF</a>
+            <a href="/" class="logo">
+              <img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL">
+            </a>
             <nav style="color: #4f9bc4;">↓</nav>
           </header>
 
