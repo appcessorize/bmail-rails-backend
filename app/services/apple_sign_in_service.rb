@@ -56,13 +56,23 @@ class AppleSignInService
 
   def fetch_apple_public_keys
     uri = URI(APPLE_PUBLIC_KEY_URL)
-    response = Net::HTTP.get_response(uri)
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 5  # 5 seconds to establish connection
+    http.read_timeout = 10 # 10 seconds to read response
+
+    request = Net::HTTP::Get.new(uri)
+    response = http.request(request)
 
     unless response.is_a?(Net::HTTPSuccess)
       raise AppleSignInError, "Failed to fetch Apple public keys"
     end
 
     JSON.parse(response.body)["keys"]
+  rescue Net::OpenTimeout, Net::ReadTimeout => e
+    Rails.logger.error "Apple public keys fetch timeout: #{e.message}"
+    raise AppleSignInError, "Timeout fetching Apple public keys"
   rescue StandardError => e
     Rails.logger.error "Failed to fetch Apple public keys: #{e.message}"
     raise AppleSignInError, "Could not retrieve Apple public keys"

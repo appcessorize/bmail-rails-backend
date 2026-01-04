@@ -125,8 +125,12 @@ class SessionsController < ApplicationController
 
   # DELETE /logout
   def destroy
-    # Invalidate token by expiring it immediately
-    current_user.update(token_expires_at: Time.current)
+    # Fully invalidate token by clearing digest and expiring
+    current_user.update(
+      token_digest: nil,
+      token_expires_at: Time.current
+    )
+    current_user.log_security_event("logout", { ip: request.remote_ip })
     head :no_content
   end
 end
