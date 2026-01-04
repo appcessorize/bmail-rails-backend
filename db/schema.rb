@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_11_200001) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_04_202237) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,8 +69,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_11_200001) do
     t.string "auth_token"
     t.datetime "created_at", null: false
     t.string "email"
+    t.integer "failed_login_attempts", default: 0, null: false
     t.boolean "image_public", default: false, null: false
-    t.string "page_slug", limit: 10
+    t.datetime "locked_until"
+    t.string "page_slug", limit: 16
     t.string "password_digest"
     t.datetime "shame_activated_at"
     t.boolean "shame_active", default: false, null: false
@@ -81,6 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_11_200001) do
     t.index ["apple_user_id"], name: "index_users_on_apple_user_id"
     t.index ["page_slug"], name: "index_users_on_page_slug", unique: true
     t.index ["token_digest"], name: "index_users_on_token_digest", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
