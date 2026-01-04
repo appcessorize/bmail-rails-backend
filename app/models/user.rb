@@ -70,17 +70,11 @@ class User < ApplicationRecord
   def self.find_by_valid_token(token)
     return nil if token.blank?
 
-    # Support both old auth_token and new token_digest lookup
-    if column_names.include?("token_digest")
-      digest = Digest::SHA256.hexdigest(token)
-      user = find_by(token_digest: digest)
+    digest = Digest::SHA256.hexdigest(token)
+    user = find_by(token_digest: digest)
 
-      return nil unless user
-      return nil if user.token_expires_at && user.token_expires_at < Time.current
-    else
-      # Fallback for old auth_token column
-      user = find_by(auth_token: token)
-    end
+    return nil unless user
+    return nil if user.token_expires_at && user.token_expires_at < Time.current
 
     user
   end
