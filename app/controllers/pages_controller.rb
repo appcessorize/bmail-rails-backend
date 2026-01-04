@@ -3,6 +3,14 @@ class PagesController < ActionController::Base
     render html: landing_page_html.html_safe
   end
 
+  def privacy
+    render html: privacy_policy_html.html_safe
+  end
+
+  def terms
+    render html: terms_of_service_html.html_safe
+  end
+
   private
 
   def landing_page_html
@@ -172,10 +180,214 @@ class PagesController < ActionController::Base
           <footer>
             <p>On your deathbed, do you think you will regret not using your phone more?</p>
             <p style="margin-top: 1rem;">© 2025 Blackmail.wtf</p>
+            <p style="margin-top: 0.5rem;">
+              <a href="/privacy" style="color: #4f9bc4; text-decoration: none;">Privacy Policy</a>
+              &nbsp;•&nbsp;
+              <a href="/terms" style="color: #4f9bc4; text-decoration: none;">Terms of Service</a>
+            </p>
           </footer>
         </div>
       </body>
       </html>
     HTML
+  end
+
+  def privacy_policy_html
+    <<~HTML
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Privacy Policy - Blackmail.wtf</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
+        #{legal_page_styles}
+      </head>
+      <body>
+        <div class="container">
+          <a href="/" class="back-link">← Back to Home</a>
+          <h1>Privacy Policy</h1>
+          <p class="updated">Last updated: January 2025</p>
+
+          <section>
+            <h2>1. Information We Collect</h2>
+            <p>We collect the following information when you use Blackmail.wtf:</p>
+            <ul>
+              <li><strong>Account Information:</strong> Username, email address (optional), and authentication credentials.</li>
+              <li><strong>Profile Images:</strong> Photos you voluntarily upload for use with the shame feature.</li>
+              <li><strong>Usage Data:</strong> Focus session history, including start times, durations, and completion status.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>2. How We Use Your Information</h2>
+            <p>We use your information to:</p>
+            <ul>
+              <li>Provide and operate the Blackmail.wtf service</li>
+              <li>Display your shame page when you fail a focus session (only if you have uploaded a photo)</li>
+              <li>Track your focus session history</li>
+              <li>Improve and maintain our service</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>3. Information Sharing</h2>
+            <p>We do not sell, trade, or rent your personal information to third parties. Your profile image is only displayed on your unique shame page URL when shame is active, and only to those who have your specific page link.</p>
+          </section>
+
+          <section>
+            <h2>4. Data Security</h2>
+            <p>We implement reasonable security measures to protect your personal information. However, no method of transmission over the internet is 100% secure.</p>
+          </section>
+
+          <section>
+            <h2>5. Your Rights</h2>
+            <p>You can:</p>
+            <ul>
+              <li>Delete your profile image at any time</li>
+              <li>Hide your shame image from your public page</li>
+              <li>Request deletion of your account by contacting us</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>6. Contact Us</h2>
+            <p>For privacy-related questions, contact us at: <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a></p>
+          </section>
+        </div>
+      </body>
+      </html>
+    HTML
+  end
+
+  def terms_of_service_html
+    <<~HTML
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Terms of Service - Blackmail.wtf</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
+        #{legal_page_styles}
+      </head>
+      <body>
+        <div class="container">
+          <a href="/" class="back-link">← Back to Home</a>
+          <h1>Terms of Service</h1>
+          <p class="updated">Last updated: January 2025</p>
+
+          <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing or using Blackmail.wtf, you agree to be bound by these Terms of Service. If you do not agree, do not use our service.</p>
+          </section>
+
+          <section>
+            <h2>2. Description of Service</h2>
+            <p>Blackmail.wtf is a focus and productivity app that uses social accountability to help you stay off your phone. You upload a photo that may be displayed on a public page if you fail to complete a focus session.</p>
+          </section>
+
+          <section>
+            <h2>3. User Responsibilities</h2>
+            <p>You agree to:</p>
+            <ul>
+              <li>Only upload images of yourself that you have the right to share</li>
+              <li>Not upload illegal, harmful, or inappropriate content</li>
+              <li>Not use the service for any unlawful purpose</li>
+              <li>Keep your account credentials secure</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>4. Content Ownership</h2>
+            <p>You retain ownership of any images you upload. By uploading content, you grant us a license to display that content as part of the service (i.e., on your shame page when applicable).</p>
+          </section>
+
+          <section>
+            <h2>5. Disclaimer</h2>
+            <p>The service is provided "as is" without warranties of any kind. We are not responsible for any embarrassment, social consequences, or other outcomes resulting from your use of the service.</p>
+          </section>
+
+          <section>
+            <h2>6. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by law, Blackmail.wtf shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the service.</p>
+          </section>
+
+          <section>
+            <h2>7. Termination</h2>
+            <p>We reserve the right to terminate or suspend your account at any time for violations of these terms or for any other reason at our discretion.</p>
+          </section>
+
+          <section>
+            <h2>8. Changes to Terms</h2>
+            <p>We may update these terms from time to time. Continued use of the service after changes constitutes acceptance of the new terms.</p>
+          </section>
+
+          <section>
+            <h2>9. Contact</h2>
+            <p>Questions about these terms? Contact us at: <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a></p>
+          </section>
+        </div>
+      </body>
+      </html>
+    HTML
+  end
+
+  def legal_page_styles
+    <<~CSS
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+          font-family: Georgia, 'Times New Roman', serif;
+          background: #120f0e;
+          color: #f9fafb;
+          min-height: 100vh;
+          padding: 20px;
+          line-height: 1.7;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .back-link {
+          display: inline-block;
+          color: #4f9bc4;
+          text-decoration: none;
+          margin-bottom: 2rem;
+          font-size: 1rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        h1 {
+          font-size: 2.5rem;
+          color: #e5332a;
+          margin-bottom: 0.5rem;
+        }
+        .updated {
+          color: #888;
+          margin-bottom: 2rem;
+          font-style: italic;
+        }
+        section {
+          margin-bottom: 2rem;
+          padding: 1.5rem;
+          background: rgba(79, 155, 196, 0.05);
+          border-radius: 8px;
+          border-left: 3px solid #4f9bc4;
+        }
+        h2 {
+          color: #4f9bc4;
+          font-size: 1.3rem;
+          margin-bottom: 1rem;
+        }
+        p { margin-bottom: 1rem; }
+        ul {
+          margin-left: 1.5rem;
+          margin-bottom: 1rem;
+        }
+        li { margin-bottom: 0.5rem; }
+        a { color: #4f9bc4; }
+        a:hover { color: #6fb5d8; }
+        @media (max-width: 768px) {
+          h1 { font-size: 2rem; }
+        }
+      </style>
+    CSS
   end
 end

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame ]
+  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy ]
 
   # POST /signup
   def create
@@ -97,6 +97,13 @@ class UsersController < ApplicationController
       message: "Shame deactivated",
       shame_active: current_user.shame_active
     }, status: :ok
+  end
+
+  # DELETE /delete_account
+  def destroy
+    current_user.log_security_event("account_deleted", { ip: request.remote_ip })
+    current_user.destroy
+    render json: { message: "Account deleted successfully" }, status: :ok
   end
 
   private

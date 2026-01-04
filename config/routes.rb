@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   # Landing page at root
   root "pages#home"
 
+  # Legal pages
+  get "/privacy", to: "pages#privacy"
+  get "/terms", to: "pages#terms"
+
   # Public shame page (no auth required)
   get "/p/:slug", to: "shame_pages#show", as: :shame_page
 
@@ -12,6 +16,7 @@ Rails.application.routes.draw do
   post   "/login",  to: "sessions#create"
   post   "/auth/apple", to: "sessions#apple"
   delete "/logout", to: "sessions#destroy"
+  delete "/delete_account", to: "users#destroy"
 
   post   "/upload_image", to: "users#upload_image"
   patch  "/update_image_privacy", to: "users#update_image_privacy"
