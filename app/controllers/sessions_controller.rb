@@ -16,8 +16,25 @@ class SessionsController < ApplicationController
       }.to_json)
 
       render json: { error: "user_not_found" }, status: :not_found
+    elsif user.locked?
+      # Account is locked due to too many failed attempts
+      Rails.logger.warn({
+        event: "security_audit",
+        type: "login_account_locked",
+        username: params[:username],
+        ip: request.remote_ip,
+        locked_until: user.locked_until.iso8601,
+        timestamp: Time.current.iso8601
+      }.to_json)
+
+      render json: {
+        error: "account_locked",
+        locked_until: user.locked_until.iso8601,
+        retry_after: user.lockout_remaining
+      }, status: :too_many_requests
     elsif user.authenticate(params[:password])
-      # Generate new token and hash it
+      # Successful login - reset failed attempts and generate token
+      user.reset_failed_logins!
       user.generate_auth_token
       user.save!
 
@@ -28,19 +45,35 @@ class SessionsController < ApplicationController
           id: user.id,
           username: user.username
         },
-        auth_token: user.auth_token
+        auth_token: user.auth_token,
+        token_expires_at: user.token_expires_at&.iso8601
       }, status: :ok
     else
-      # Wrong password - return 401, client should NOT try signup
+      # Wrong password - record failed attempt
+      user.record_failed_login!
+
       Rails.logger.warn({
         event: "security_audit",
         type: "login_wrong_password",
         username: params[:username],
         ip: request.remote_ip,
+        failed_attempts: user.failed_login_attempts,
         timestamp: Time.current.iso8601
       }.to_json)
 
-      render json: { error: "invalid_password" }, status: :unauthorized
+      # Return appropriate error based on lockout status
+      if user.locked?
+        render json: {
+          error: "account_locked",
+          locked_until: user.locked_until.iso8601,
+          retry_after: user.lockout_remaining
+        }, status: :too_many_requests
+      else
+        render json: {
+          error: "invalid_password",
+          attempts_remaining: User::MAX_FAILED_ATTEMPTS - user.failed_login_attempts
+        }, status: :unauthorized
+      end
     end
   end
 
@@ -106,7 +139,8 @@ class SessionsController < ApplicationController
         id: user.id,
         username: user.username
       },
-      auth_token: user.auth_token
+      auth_token: user.auth_token,
+      token_expires_at: user.token_expires_at&.iso8601
     }, status: :ok
   rescue AppleSignInService::AppleSignInError => e
     Rails.logger.warn({

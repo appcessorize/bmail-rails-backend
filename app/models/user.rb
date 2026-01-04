@@ -23,14 +23,46 @@ class User < ApplicationRecord
 
   TOKEN_EXPIRATION = 7.days
 
-  # Generate a unique 8-character slug for the public shame page
+  # Account lockout settings
+  MAX_FAILED_ATTEMPTS = 5
+  LOCKOUT_DURATION = 15.minutes
+
+  # Generate a unique 12-character slug for the public shame page
   def generate_page_slug
     return if page_slug.present?
 
     loop do
-      self.page_slug = SecureRandom.alphanumeric(8).downcase
+      self.page_slug = SecureRandom.alphanumeric(12).downcase
       break unless User.exists?(page_slug: page_slug)
     end
+  end
+
+  # MARK: - Account Lockout
+
+  # Check if account is currently locked
+  def locked?
+    locked_until.present? && locked_until > Time.current
+  end
+
+  # Record a failed login attempt
+  def record_failed_login!
+    increment!(:failed_login_attempts)
+
+    if failed_login_attempts >= MAX_FAILED_ATTEMPTS
+      update!(locked_until: LOCKOUT_DURATION.from_now)
+      log_security_event("account_locked", { failed_attempts: failed_login_attempts })
+    end
+  end
+
+  # Reset failed login attempts (called on successful login)
+  def reset_failed_logins!
+    update!(failed_login_attempts: 0, locked_until: nil) if failed_login_attempts > 0 || locked_until.present?
+  end
+
+  # Time remaining until account unlocks
+  def lockout_remaining
+    return 0 unless locked?
+    (locked_until - Time.current).to_i
   end
 
   # Activate shame mode (called when user fails a focus session)

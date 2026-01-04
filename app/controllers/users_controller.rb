@@ -11,7 +11,8 @@ class UsersController < ApplicationController
           id: user.id,
           username: user.username
         },
-        auth_token: user.auth_token
+        auth_token: user.auth_token,
+        token_expires_at: user.token_expires_at&.iso8601
       }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
