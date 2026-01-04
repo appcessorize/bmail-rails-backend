@@ -15,12 +15,13 @@ class User < ApplicationRecord
   validate :profile_image_validation
 
   validates :username, presence: true, uniqueness: true
-  validates :password, length: { minimum: 6 }, if: -> { password.present? && apple_user_id.blank? }
+  validates :email, uniqueness: true, allow_nil: true
+  validates :password, length: { minimum: 8 }, if: -> { password.present? && apple_user_id.blank? }
   validates :auth_token, uniqueness: true
   validates :apple_user_id, uniqueness: true, allow_nil: true
   validates :page_slug, uniqueness: true, allow_nil: true
 
-  TOKEN_EXPIRATION = 30.days
+  TOKEN_EXPIRATION = 7.days
 
   # Generate a unique 8-character slug for the public shame page
   def generate_page_slug
