@@ -5,7 +5,18 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(username: params[:username])
 
-    if user&.authenticate(params[:password])
+    if user.nil?
+      # User not found - return 404 so client knows to try signup
+      Rails.logger.info({
+        event: "security_audit",
+        type: "login_user_not_found",
+        username: params[:username],
+        ip: request.remote_ip,
+        timestamp: Time.current.iso8601
+      }.to_json)
+
+      render json: { error: "user_not_found" }, status: :not_found
+    elsif user.authenticate(params[:password])
       # Generate new token and hash it
       user.generate_auth_token
       user.save!
@@ -20,15 +31,16 @@ class SessionsController < ApplicationController
         auth_token: user.auth_token
       }, status: :ok
     else
+      # Wrong password - return 401, client should NOT try signup
       Rails.logger.warn({
         event: "security_audit",
-        type: "login_failed",
+        type: "login_wrong_password",
         username: params[:username],
         ip: request.remote_ip,
         timestamp: Time.current.iso8601
       }.to_json)
 
-      render json: { error: "Invalid username or password" }, status: :unauthorized
+      render json: { error: "invalid_password" }, status: :unauthorized
     end
   end
 
