@@ -120,9 +120,12 @@ class PagesController < ActionController::Base
         #{shared_styles}
         <style>
           body {
-            background: #000;
-            color: var(--bm-cream);
+            background: #fff;
+            color: var(--bm-dark);
             min-height: 100vh;
+          }
+          .hero-wrapper {
+            background: #fff;
           }
           header {
             display: flex;
@@ -134,13 +137,13 @@ class PagesController < ActionController::Base
           .logo img { height: 40px; width: auto; }
           nav { display: flex; gap: 24px; align-items: center; }
           nav a {
-            color: var(--bm-blue);
+            color: var(--bm-dark);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.95rem;
             transition: color 0.2s;
           }
-          nav a:hover { color: var(--bm-cream); }
+          nav a:hover { color: var(--bm-red); }
           .hero {
             text-align: center;
             padding: 80px 0 60px;
@@ -165,21 +168,29 @@ class PagesController < ActionController::Base
           .hero-text {
             font-size: 1.2rem;
             max-width: 600px;
-            margin: 0 auto 3rem;
-            color: var(--bm-cream);
-            opacity: 0.9;
+            margin: 0 auto 2rem;
+            color: var(--bm-dark);
+            opacity: 0.85;
           }
           .shame-text {
             font-size: 3rem;
             color: var(--bm-red);
             font-weight: 900;
             font-style: italic;
-            margin: 2rem 0;
+            margin: 1.5rem 0 2.5rem;
+          }
+          .app-badge {
+            height: 54px;
+            width: auto;
+            transition: transform 0.2s;
+          }
+          .app-badge:hover {
+            transform: scale(1.05);
           }
           .how-it-works {
-            background: #fff;
+            background: #f5f5f7;
             color: var(--bm-dark);
-            padding: 60px 0;
+            padding: 80px 0;
           }
           .how-it-works h2 {
             font-family: 'WhirlyBirdie', Georgia, serif;
@@ -297,19 +308,22 @@ class PagesController < ActionController::Base
             padding-left: 36px;
           }
           .cta-section {
-            background: #fff;
-            padding: 60px 0;
+            background: var(--bm-dark);
+            padding: 80px 0;
             text-align: center;
           }
           .cta-section h2 {
-            color: var(--bm-dark);
-            font-size: 2rem;
+            font-family: 'WhirlyBirdie', Georgia, serif;
+            color: var(--bm-cream);
+            font-size: 2.5rem;
             margin-bottom: 1rem;
+            letter-spacing: 1px;
           }
           .cta-section p {
-            color: #555;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
+            color: var(--bm-cream);
+            opacity: 0.8;
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
           }
           footer {
             background: #000;
@@ -391,8 +405,10 @@ class PagesController < ActionController::Base
               Fighting modern psychological manipulation is simple when you use the oldest motivational strategy:
             </p>
             <p class="shame-text">SHAME</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-              <a href="#download" class="btn-primary">Download for iOS</a>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+              <a href="https://apps.apple.com/app/blackmail-focus" target="_blank" rel="noopener">
+                <img src="/images/appstorebadgeblack.svg" alt="Download on the App Store" class="app-badge">
+              </a>
               <a href="/manifesto" class="btn-secondary">Read the Manifesto</a>
             </div>
           </section>
@@ -502,7 +518,9 @@ class PagesController < ActionController::Base
           <div class="container">
             <h2>Ready to Reclaim Your Focus?</h2>
             <p>On your deathbed, do you think you will regret not using your phone more?</p>
-            <a href="#" class="btn-primary">Download for iOS (Coming Soon)</a>
+            <a href="https://apps.apple.com/app/blackmail-focus" target="_blank" rel="noopener">
+              <img src="/images/appstorebadgewhite.svg" alt="Download on the App Store" class="app-badge">
+            </a>
           </div>
         </section>
 
