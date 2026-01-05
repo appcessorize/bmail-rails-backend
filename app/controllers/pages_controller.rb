@@ -210,36 +210,86 @@ class PagesController < ActionController::Base
           .step p { color: #555; }
           .faq-section {
             background: var(--bm-dark);
-            padding: 60px 0;
+            padding: 80px 0;
           }
           .faq-section h2 {
             font-family: 'WhirlyBirdie', Georgia, serif;
             text-align: center;
             color: var(--bm-blue);
-            font-size: 2.2rem;
-            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
             letter-spacing: 1px;
           }
-          .faq-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 1.5rem;
+          .faq-subtitle {
+            text-align: center;
+            color: var(--bm-cream);
+            opacity: 0.7;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+          }
+          .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
           }
           .faq-item {
-            background: rgba(79, 155, 196, 0.1);
-            border: 1px solid var(--bm-blue);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border-bottom: 1px solid rgba(79, 155, 196, 0.3);
+            overflow: hidden;
           }
-          .faq-item h3 {
+          .faq-item:first-child {
+            border-top: 1px solid rgba(79, 155, 196, 0.3);
+          }
+          .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+          .faq-question:hover {
+            padding-left: 10px;
+          }
+          .faq-question h3 {
+            color: var(--bm-cream);
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+          .faq-icon {
+            font-size: 1.3rem;
+          }
+          .faq-toggle {
+            color: var(--bm-blue);
+            font-size: 1.8rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+            line-height: 1;
+          }
+          .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
             color: var(--bm-red);
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
           }
-          .faq-item p {
+          .faq-item.active .faq-question h3 {
+            color: var(--bm-red);
+          }
+          .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+          }
+          .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-bottom: 1.5rem;
+          }
+          .faq-answer p {
             color: var(--bm-cream);
             opacity: 0.85;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            padding-left: 36px;
           }
           .cta-section {
             background: #fff;
@@ -306,7 +356,8 @@ class PagesController < ActionController::Base
           @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .tagline { font-size: 1.2rem; }
-            .faq-grid { grid-template-columns: 1fr; }
+            .faq-question h3 { font-size: 1rem; }
+            .faq-answer p { padding-left: 0; }
             nav { gap: 12px; }
             nav a { font-size: 0.85rem; }
           }
@@ -372,31 +423,71 @@ class PagesController < ActionController::Base
 
         <section class="faq-section" id="faq">
           <div class="container">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-grid">
+            <h2>Questions & Answers</h2>
+            <p class="faq-subtitle">Everything you need to know about Blackmail Focus</p>
+            <div class="faq-list">
               <div class="faq-item">
-                <h3>Is my photo really shared publicly?</h3>
-                <p>Only if you fail! Your photo is stored securely. It only appears on your unique shame page URL when you pick up your phone during a focus session.</p>
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">📸</span> Is my photo really shared publicly?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Only if you fail! Your photo is stored securely and encrypted. It only appears on your unique shame page URL when you pick up your phone during a focus session. Think of it as a safety deposit box that only opens when you break your promise.</p>
+                </div>
               </div>
               <div class="faq-item">
-                <h3>Can anyone find my page?</h3>
-                <p>No. Your page URL is a random 12-character code. There's no directory or search. Only people you share the link with can see it.</p>
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">🔍</span> Can anyone find my page?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>No. Your page URL is a random 12-character code—like a secret password. There's no directory, no search, no way to browse. Only people you personally share the link with can ever see it.</p>
+                </div>
               </div>
               <div class="faq-item">
-                <h3>Can I delete my photo?</h3>
-                <p>Yes! You can delete your photo or hide it from your shame page anytime from the app settings. You're always in control.</p>
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">🗑️</span> Can I delete my photo?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Absolutely! You can delete your photo or hide it from your shame page anytime from the app settings. You're always in complete control. We believe in accountability, not hostage situations.</p>
+                </div>
               </div>
               <div class="faq-item">
-                <h3>Why would I do this?</h3>
-                <p>The fear of embarrassment is a powerful motivator. By sharing your page with friends, you create real accountability that positive-thinking apps can't match.</p>
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">🤔</span> Why would I do this to myself?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Because positive thinking doesn't work. The fear of embarrassment is hardwired into our brains—it's one of the most powerful motivators we have. By sharing your page with friends, you create real accountability that no amount of motivational quotes can match.</p>
+                </div>
               </div>
               <div class="faq-item">
-                <h3>Is my data secure?</h3>
-                <p>Yes. Your photos are encrypted and stored securely. We never share your data with third parties or use it for advertising.</p>
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">🔒</span> Is my data secure?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Yes. Your photos are encrypted and stored securely on our servers. We never share your data with third parties, never use it for advertising, and never will. Your embarrassing photo is between you and your accountability partners—no one else.</p>
+                </div>
               </div>
               <div class="faq-item">
-                <h3>What if I complete my focus session?</h3>
-                <p>Nothing bad happens! Your photo stays private, and your shame page shows that you're "Staying Strong" with no photo visible.</p>
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">🏆</span> What if I complete my focus session?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Victory! Your photo stays private, and your shame page proudly shows that you're "Staying Strong" with no embarrassing photo visible. You get the satisfaction of keeping your dignity intact.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                  <h3><span class="faq-icon">💡</span> How is this different from other focus apps?</h3>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Most focus apps use rewards, streaks, or gentle reminders. We use consequences. Real, social, embarrassing consequences. It's the difference between a fitness tracker and a personal trainer who posts your weight online if you skip the gym.</p>
+                </div>
               </div>
             </div>
           </div>
