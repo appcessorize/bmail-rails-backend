@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   get "/privacy", to: "pages#privacy"
   get "/terms", to: "pages#terms"
 
+  # Content pages
+  get "/manifesto", to: "pages#manifesto"
+  get "/press", to: "pages#press"
+
   # Public shame page (no auth required)
   get "/p/:slug", to: "shame_pages#show", as: :shame_page
 
