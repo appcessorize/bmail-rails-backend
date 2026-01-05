@@ -233,23 +233,29 @@ class PagesController < ActionController::Base
           }
           .faq-item {
             border-bottom: 1px solid rgba(79, 155, 196, 0.3);
-            overflow: hidden;
           }
           .faq-item:first-child {
             border-top: 1px solid rgba(79, 155, 196, 0.3);
           }
-          .faq-question {
+          .faq-item summary {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1.5rem 0;
             cursor: pointer;
-            transition: all 0.3s ease;
+            list-style: none;
+            transition: all 0.2s ease;
           }
-          .faq-question:hover {
+          .faq-item summary::-webkit-details-marker {
+            display: none;
+          }
+          .faq-item summary::marker {
+            display: none;
+          }
+          .faq-item summary:hover {
             padding-left: 10px;
           }
-          .faq-question h3 {
+          .faq-item summary h3 {
             color: var(--bm-cream);
             font-size: 1.15rem;
             font-weight: 600;
@@ -261,28 +267,27 @@ class PagesController < ActionController::Base
           .faq-icon {
             font-size: 1.3rem;
           }
-          .faq-toggle {
+          .faq-arrow {
             color: var(--bm-blue);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 300;
             transition: transform 0.3s ease;
             line-height: 1;
           }
-          .faq-item.active .faq-toggle {
-            transform: rotate(45deg);
+          .faq-item[open] .faq-arrow {
+            transform: rotate(180deg);
             color: var(--bm-red);
           }
-          .faq-item.active .faq-question h3 {
+          .faq-item[open] summary h3 {
             color: var(--bm-red);
           }
           .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 0 1.5rem 0;
+            animation: fadeIn 0.3s ease;
           }
-          .faq-item.active .faq-answer {
-            max-height: 300px;
-            padding-bottom: 1.5rem;
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
           }
           .faq-answer p {
             color: var(--bm-cream);
@@ -426,69 +431,69 @@ class PagesController < ActionController::Base
             <h2>Questions & Answers</h2>
             <p class="faq-subtitle">Everything you need to know about Blackmail Focus</p>
             <div class="faq-list">
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">📸</span> Is my photo really shared publicly?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>Only if you fail! Your photo is stored securely and encrypted. It only appears on your unique shame page URL when you pick up your phone during a focus session. Think of it as a safety deposit box that only opens when you break your promise.</p>
                 </div>
-              </div>
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              </details>
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">🔍</span> Can anyone find my page?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>No. Your page URL is a random 12-character code—like a secret password. There's no directory, no search, no way to browse. Only people you personally share the link with can ever see it.</p>
                 </div>
-              </div>
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              </details>
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">🗑️</span> Can I delete my photo?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>Absolutely! You can delete your photo or hide it from your shame page anytime from the app settings. You're always in complete control. We believe in accountability, not hostage situations.</p>
                 </div>
-              </div>
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              </details>
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">🤔</span> Why would I do this to myself?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>Because positive thinking doesn't work. The fear of embarrassment is hardwired into our brains—it's one of the most powerful motivators we have. By sharing your page with friends, you create real accountability that no amount of motivational quotes can match.</p>
                 </div>
-              </div>
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              </details>
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">🔒</span> Is my data secure?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>Yes. Your photos are encrypted and stored securely on our servers. We never share your data with third parties, never use it for advertising, and never will. Your embarrassing photo is between you and your accountability partners—no one else.</p>
                 </div>
-              </div>
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              </details>
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">🏆</span> What if I complete my focus session?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>Victory! Your photo stays private, and your shame page proudly shows that you're "Staying Strong" with no embarrassing photo visible. You get the satisfaction of keeping your dignity intact.</p>
                 </div>
-              </div>
-              <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+              </details>
+              <details class="faq-item">
+                <summary>
                   <h3><span class="faq-icon">💡</span> How is this different from other focus apps?</h3>
-                  <span class="faq-toggle">+</span>
-                </div>
+                  <span class="faq-arrow">▼</span>
+                </summary>
                 <div class="faq-answer">
                   <p>Most focus apps use rewards, streaks, or gentle reminders. We use consequences. Real, social, embarrassing consequences. It's the difference between a fitness tracker and a personal trainer who posts your weight online if you skip the gym.</p>
                 </div>
-              </div>
+              </details>
             </div>
           </div>
         </section>
