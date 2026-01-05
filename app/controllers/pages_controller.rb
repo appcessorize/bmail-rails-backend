@@ -56,7 +56,7 @@ class PagesController < ActionController::Base
           --bm-dark: #{colors[:dark]};
           --bm-pink: #{colors[:pink]};
           --font-display: 'WhirlyBirdie', Georgia, serif;
-          --font-body: Georgia, 'Times New Roman', serif;
+          --font-body: 'Avenir Next', Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
           --font-icons: 'Whirlybats', sans-serif;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
