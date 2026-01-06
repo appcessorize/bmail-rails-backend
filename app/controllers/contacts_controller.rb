@@ -200,10 +200,37 @@ class ContactsController < ActionController::Base
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
           }
           .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(229, 51, 42, 0.4);
+          }
+          .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+          }
+          .submit-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+          }
+          .submit-btn.loading .spinner {
+            display: inline-block;
+          }
+          .submit-btn.loading .btn-text {
+            display: none;
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
           }
           .error-box {
             background: rgba(229, 51, 42, 0.2);
@@ -240,25 +267,36 @@ class ContactsController < ActionController::Base
 
         <div class="container">
           <h1>Get in Touch</h1>
-          <p class="subtitle">Have a question or feedback? We'd love to hear from you.</p>
+          <p class="subtitle">Have a question or feedback? We'd love to hear from you.<br>We'll get back to you the same day.</p>
 
-          <form class="contact-form" action="/contact" method="POST">
+          <form class="contact-form" action="/contact" method="POST" id="contactForm">
             #{error_html}
             <div class="form-group">
               <label for="email">Your Email</label>
               <input type="email" id="email" name="email" placeholder="you@example.com" required>
             </div>
             <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="What's on your mind?" required minlength="10" maxlength="5000"></textarea>
+              <label for="message">Your Message</label>
+              <textarea id="message" name="message" placeholder="Your message..." required minlength="10" maxlength="5000"></textarea>
             </div>
-            <button type="submit" class="submit-btn">Send Message</button>
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span class="btn-text">Send Message ✈</span>
+              <span class="spinner"></span>
+            </button>
           </form>
         </div>
 
         <footer>
           <p>&copy; 2025 Blackmail.wtf &bull; <a href="/privacy">Privacy</a> &bull; <a href="/terms">Terms</a></p>
         </footer>
+
+        <script>
+          document.getElementById('contactForm').addEventListener('submit', function() {
+            var btn = document.getElementById('submitBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+          });
+        </script>
       </body>
       </html>
     HTML
@@ -313,9 +351,9 @@ class ContactsController < ActionController::Base
       </head>
       <body>
         <div class="success-container">
-          <div class="success-icon">✓</div>
-          <h1>Message Sent!</h1>
-          <p>Thanks for reaching out. We'll get back to you soon.</p>
+          <div class="success-icon">✈️</div>
+          <h1>Thank You!</h1>
+          <p>Your message has been sent successfully.<br>We'll get back to you the same day.</p>
           <a href="/" class="back-btn">Back to Home</a>
         </div>
       </body>
