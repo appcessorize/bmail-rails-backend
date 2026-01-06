@@ -44,9 +44,7 @@ class PagesController < ActionController::Base
         }
         @font-face {
           font-family: 'Whirlybats';
-          src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2');
-          font-weight: 100 900;
-          font-style: normal;
+          src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2-variations');
           font-display: swap;
         }
         :root {
@@ -240,12 +238,12 @@ class PagesController < ActionController::Base
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 100;
-            animation: whirlyPulse 2s ease-in-out infinite;
+            font-variation-settings: "ANIM" 100;
+            animation: whirlyLoop 0.9s steps(12) infinite;
           }
-          @keyframes whirlyPulse {
-            0%, 100% { font-weight: 100; }
-            50% { font-weight: 900; }
+          @keyframes whirlyLoop {
+            0% { font-variation-settings: "ANIM" 100; }
+            100% { font-variation-settings: "ANIM" 200; }
           }
           .step-image .whirly-icon.pink-bg {
             background: #F7BBD7;
@@ -257,11 +255,15 @@ class PagesController < ActionController::Base
           }
           .whirly-hover {
             font-family: 'Whirlybats', sans-serif;
-            font-weight: 400;
-            transition: font-weight 0.3s ease;
+            font-variation-settings: "ANIM" 100;
+            display: inline-block;
           }
           .whirly-hover:hover {
-            font-weight: 900;
+            animation: whirlyHover 0.6s steps(12) infinite;
+          }
+          @keyframes whirlyHover {
+            0% { font-variation-settings: "ANIM" 100; }
+            100% { font-variation-settings: "ANIM" 200; }
           }
           .step-content {
             flex: 1;
@@ -427,12 +429,11 @@ class PagesController < ActionController::Base
             font-family: 'Whirlybats', sans-serif;
             font-size: 1.5rem;
             margin-right: 0.5rem;
-            font-weight: 400;
-            transition: font-weight 0.3s ease;
+            font-variation-settings: "ANIM" 100;
             display: inline-block;
           }
           .footer-section:hover .footer-icon {
-            font-weight: 900;
+            animation: whirlyHover 0.6s steps(12) infinite;
           }
           .footer-section h4 {
             color: var(--bm-blue);
@@ -703,10 +704,25 @@ class PagesController < ActionController::Base
         <style>
           @font-face {
             font-family: 'Whirlybats';
-            src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2');
-            font-weight: 100 900;
-            font-style: normal;
+            src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2-variations');
             font-display: swap;
+          }
+          .whirly-icon {
+            font-family: 'Whirlybats', sans-serif;
+            font-size: 1.5rem;
+            display: inline-block;
+            font-variation-settings: "ANIM" 100;
+            transition: font-variation-settings 0.3s ease;
+          }
+          .whirly-icon:hover, .manifesto-btn:hover .whirly-icon {
+            animation: whirlyHover 0.6s ease-in-out infinite;
+          }
+          .whirly-flip {
+            transform: scaleX(-1);
+          }
+          @keyframes whirlyHover {
+            0%, 100% { font-variation-settings: "ANIM" 100; }
+            50% { font-variation-settings: "ANIM" 200; }
           }
           body { background: #fff; color: var(--bm-dark); }
           .close-btn {
@@ -1002,9 +1018,9 @@ class PagesController < ActionController::Base
           <a href="https://apps.apple.com/app/blackmail-focus-or-else/id6745029022" class="manifesto-btn black" style="justify-content: center; gap: 0;">
             <img src="/images/appstorebadgewhite.svg" alt="Download on the App Store" style="height: 44px;">
           </a>
-          <a href="/contact" class="manifesto-btn pink"><span style="font-family: 'Whirlybats', sans-serif; font-size: 1.5rem;">✉</span> CONTACT</a>
-          <a href="/#faq" class="manifesto-btn cream">? FAQ</a>
-          <a href="/" class="manifesto-btn black">← GO BACK</a>
+          <a href="/contact" class="manifesto-btn pink"><span class="whirly-icon">✉</span> CONTACT</a>
+          <a href="/#faq" class="manifesto-btn cream"><span class="whirly-icon">#</span> FAQ</a>
+          <a href="/" class="manifesto-btn black"><span class="whirly-icon whirly-flip">'</span> GO BACK</a>
         </section>
 
         <footer>
