@@ -698,33 +698,37 @@ class PagesController < ActionController::Base
         <title>Manifesto - Blackmail.wtf</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
+        <link rel="preload" href="/fonts/WhirlyBatsVariable.woff2" as="font" type="font/woff2" crossorigin>
         #{shared_styles}
         <style>
+          @font-face {
+            font-family: 'Whirlybats';
+            src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2');
+            font-weight: 100 900;
+            font-style: normal;
+            font-display: swap;
+          }
           body { background: #fff; color: var(--bm-dark); }
-          header {
-            background: #000;
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-          }
-          .header-inner {
+          .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--bm-dark);
+            border-radius: 50%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-          }
-          .header-title {
-            color: var(--bm-blue);
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-          }
-          .back-link {
-            color: var(--bm-red);
+            justify-content: center;
             text-decoration: none;
             font-size: 1.5rem;
-            font-weight: bold;
+            color: var(--bm-cream);
+            z-index: 100;
+            transition: transform 0.2s, background 0.2s;
+          }
+          .close-btn:hover {
+            transform: scale(1.1);
+            background: var(--bm-red);
           }
           .hero-section {
             background: #fff;
@@ -868,14 +872,7 @@ class PagesController < ActionController::Base
         </style>
       </head>
       <body>
-        <header>
-          <div class="container">
-            <div class="header-inner">
-              <span class="header-title">↓ Manifesto</span>
-              <a href="/" class="back-link">✕</a>
-            </div>
-          </div>
-        </header>
+        <a href="/" class="close-btn">✕</a>
 
         <section class="hero-section">
           <h1>No One is Bored,<br>Everything is Boring</h1>
@@ -1002,9 +999,12 @@ class PagesController < ActionController::Base
         </section>
 
         <section class="buttons-section">
-          <a href="/" class="manifesto-btn black">← GO BACK</a>
-          <a href="/contact" class="manifesto-btn pink">✉ CONTACT</a>
+          <a href="https://apps.apple.com/app/blackmail-focus-or-else/id6745029022" class="manifesto-btn black" style="justify-content: center; gap: 0;">
+            <img src="/images/appstorebadgewhite.svg" alt="Download on the App Store" style="height: 44px;">
+          </a>
+          <a href="/contact" class="manifesto-btn pink"><span style="font-family: 'Whirlybats', sans-serif; font-size: 1.5rem;">✉</span> CONTACT</a>
           <a href="/#faq" class="manifesto-btn cream">? FAQ</a>
+          <a href="/" class="manifesto-btn black">← GO BACK</a>
         </section>
 
         <footer>
