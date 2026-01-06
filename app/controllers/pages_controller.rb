@@ -44,8 +44,8 @@ class PagesController < ActionController::Base
         }
         @font-face {
           font-family: 'Whirlybats';
-          src: url('/fonts/WhirlybatsVariable.ttf') format('truetype');
-          font-weight: normal;
+          src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2');
+          font-weight: 100 900;
           font-style: normal;
           font-display: swap;
         }
@@ -117,7 +117,7 @@ class PagesController < ActionController::Base
         <title>Blackmail.wtf - Freedom from Your Phone</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
-        <link rel="preload" href="/fonts/WhirlybatsVariable.ttf" as="font" type="font/ttf" crossorigin>
+        <link rel="preload" href="/fonts/WhirlyBatsVariable.woff2" as="font" type="font/woff2" crossorigin>
         #{shared_styles}
         <style>
           body {
@@ -240,6 +240,12 @@ class PagesController < ActionController::Base
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 100;
+            animation: whirlyPulse 2s ease-in-out infinite;
+          }
+          @keyframes whirlyPulse {
+            0%, 100% { font-weight: 100; }
+            50% { font-weight: 900; }
           }
           .step-image .whirly-icon.pink-bg {
             background: #F7BBD7;
@@ -248,6 +254,14 @@ class PagesController < ActionController::Base
           .step-image .whirly-icon.blue-bg {
             background: var(--bm-blue);
             color: #fff;
+          }
+          .whirly-hover {
+            font-family: 'Whirlybats', sans-serif;
+            font-weight: 400;
+            transition: font-weight 0.3s ease;
+          }
+          .whirly-hover:hover {
+            font-weight: 900;
           }
           .step-content {
             flex: 1;
@@ -408,6 +422,17 @@ class PagesController < ActionController::Base
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
+          }
+          .footer-icon {
+            font-family: 'Whirlybats', sans-serif;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+            font-weight: 400;
+            transition: font-weight 0.3s ease;
+            display: inline-block;
+          }
+          .footer-section:hover .footer-icon {
+            font-weight: 900;
           }
           .footer-section h4 {
             color: var(--bm-blue);
@@ -632,23 +657,23 @@ class PagesController < ActionController::Base
           <div class="container">
             <div class="footer-content">
               <div class="footer-section">
-                <h4>Product</h4>
+                <h4><span class="footer-icon">v</span> Product</h4>
                 <a href="/#download">Download</a>
                 <a href="/manifesto">Manifesto</a>
                 <a href="/press">Press Kit</a>
               </div>
               <div class="footer-section">
-                <h4>Legal</h4>
+                <h4><span class="footer-icon">.</span> Legal</h4>
                 <a href="/privacy">Privacy Policy</a>
                 <a href="/terms">Terms of Service</a>
               </div>
               <div class="footer-section">
-                <h4>Contact</h4>
+                <h4><span class="footer-icon">✉</span> Contact</h4>
                 <a href="/contact">Send us a message</a>
                 <a href="https://twitter.com/blackmailwtf" target="_blank">@blackmailwtf</a>
               </div>
               <div class="footer-section">
-                <h4>About</h4>
+                <h4><span class="footer-icon">≥</span> About</h4>
                 <p>Blackmail.wtf helps you stay focused by using the power of shame. Built for people who are tired of being manipulated by their phones.</p>
               </div>
             </div>
