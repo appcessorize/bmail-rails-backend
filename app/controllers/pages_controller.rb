@@ -197,28 +197,77 @@ class PagesController < ActionController::Base
             text-align: center;
             font-size: 2.5rem;
             color: var(--bm-dark);
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             letter-spacing: 1px;
           }
           .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            max-width: 900px;
+            margin: 0 auto;
           }
           .step {
-            text-align: center;
-            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
           }
-          .step-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+          .step.reverse {
+            flex-direction: row-reverse;
           }
-          .step h3 {
+          .step-image {
+            flex: 0 0 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .step-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+          }
+          .step-image .emoji-icon {
+            font-size: 8rem;
+          }
+          .step-content {
+            flex: 1;
+          }
+          .step-number {
+            font-family: 'WhirlyBirdie', Georgia, serif;
+            font-size: 1rem;
+            color: var(--bm-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+          }
+          .step-content h3 {
+            font-family: 'WhirlyBirdie', Georgia, serif;
             color: var(--bm-red);
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
           }
-          .step p { color: #555; }
+          .step-content p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.7;
+          }
+          @media (max-width: 768px) {
+            .step, .step.reverse {
+              flex-direction: column;
+              text-align: center;
+            }
+            .step-image {
+              flex: none;
+              width: 200px;
+            }
+            .step-image .emoji-icon {
+              font-size: 5rem;
+            }
+            .step-content h3 {
+              font-size: 1.5rem;
+            }
+          }
           .faq-section {
             background: var(--bm-dark);
             padding: 80px 0;
@@ -419,24 +468,54 @@ class PagesController < ActionController::Base
             <h2>How It Works</h2>
             <div class="steps">
               <div class="step">
-                <div class="step-icon">📸</div>
-                <h3>Take an Embarrassing Selfie</h3>
-                <p>Upload a photo you wouldn't want your friends to see. The more embarrassing, the more motivated you'll be.</p>
+                <div class="step-image">
+                  <img src="/images/chartakingpic.png" alt="Take a photo">
+                </div>
+                <div class="step-content">
+                  <div class="step-number">Step 1</div>
+                  <h3>Take an Embarrassing Selfie</h3>
+                  <p>Upload a photo you wouldn't want your friends to see. The more embarrassing, the more motivated you'll be.</p>
+                </div>
+              </div>
+              <div class="step reverse">
+                <div class="step-image">
+                  <img src="/images/safe.svg" alt="Stored securely">
+                </div>
+                <div class="step-content">
+                  <div class="step-number">Step 2</div>
+                  <h3>We Store It Securely</h3>
+                  <p>Don't worry—no one will see it unless you break the rules. Your photo is encrypted and locked away safely.</p>
+                </div>
               </div>
               <div class="step">
-                <div class="step-icon">🔗</div>
-                <h3>Share Your Shame Page</h3>
-                <p>Get a unique anonymous URL to share with friends. They'll check up on you to see if you failed.</p>
+                <div class="step-image">
+                  <span class="emoji-icon">🔗</span>
+                </div>
+                <div class="step-content">
+                  <div class="step-number">Step 3</div>
+                  <h3>Share Your Shame Page</h3>
+                  <p>Get a unique anonymous URL to share with friends. They'll check up on you to see if you failed.</p>
+                </div>
+              </div>
+              <div class="step reverse">
+                <div class="step-image">
+                  <span class="emoji-icon">⏰</span>
+                </div>
+                <div class="step-content">
+                  <div class="step-number">Step 4</div>
+                  <h3>Set a Focus Timer</h3>
+                  <p>Choose how long you want to stay focused. Put your phone face down and get to work.</p>
+                </div>
               </div>
               <div class="step">
-                <div class="step-icon">⏰</div>
-                <h3>Set a Focus Timer</h3>
-                <p>Choose how long you want to stay focused. Put your phone face down and get to work.</p>
-              </div>
-              <div class="step">
-                <div class="step-icon">😱</div>
-                <h3>Face the Consequences</h3>
-                <p>If you pick up your phone before the timer ends, your embarrassing photo goes live on your shame page.</p>
+                <div class="step-image">
+                  <span class="emoji-icon">😱</span>
+                </div>
+                <div class="step-content">
+                  <div class="step-number">Step 5</div>
+                  <h3>Face the Consequences</h3>
+                  <p>If you pick up your phone before the timer ends, your embarrassing photo goes live on your shame page.</p>
+                </div>
               </div>
             </div>
           </div>
