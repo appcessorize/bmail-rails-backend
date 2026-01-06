@@ -58,6 +58,8 @@ class PagesController < ActionController::Base
           --font-icons: 'Whirlybats', sans-serif;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        a { text-decoration: none; }
+        a:hover { text-decoration: underline; }
         body {
           font-family: var(--font-body);
           line-height: 1.7;
@@ -258,12 +260,12 @@ class PagesController < ActionController::Base
             display: flex;
             align-items: center;
             justify-content: center;
-            font-variation-settings: "ANIM" 100;
+            font-variation-settings: "anim" 100;
             animation: whirlyLoop 0.9s steps(12) infinite;
           }
           @keyframes whirlyLoop {
-            0% { font-variation-settings: "ANIM" 100; }
-            100% { font-variation-settings: "ANIM" 200; }
+            0% { font-variation-settings: "anim" 100; }
+            100% { font-variation-settings: "anim" 200; }
           }
           .step-image .whirly-icon.pink-bg {
             background: #F7BBD7;
@@ -275,15 +277,15 @@ class PagesController < ActionController::Base
           }
           .whirly-hover {
             font-family: 'Whirlybats', sans-serif;
-            font-variation-settings: "ANIM" 100;
+            font-variation-settings: "anim" 100;
             display: inline-block;
           }
           .whirly-hover:hover {
             animation: whirlyHover 0.6s steps(12) infinite;
           }
           @keyframes whirlyHover {
-            0% { font-variation-settings: "ANIM" 100; }
-            100% { font-variation-settings: "ANIM" 200; }
+            0% { font-variation-settings: "anim" 100; }
+            100% { font-variation-settings: "anim" 200; }
           }
           .step-content {
             flex: 1;
@@ -457,7 +459,7 @@ class PagesController < ActionController::Base
             font-family: 'Whirlybats', sans-serif;
             font-size: 1.5rem;
             margin-right: 0.5rem;
-            font-variation-settings: "ANIM" 100;
+            font-variation-settings: "anim" 100;
             display: inline-block;
           }
           .footer-section:hover .footer-icon {
@@ -743,7 +745,7 @@ class PagesController < ActionController::Base
             font-family: 'Whirlybats', sans-serif;
             font-size: 1.5rem;
             display: inline-block;
-            font-variation-settings: "ANIM" 100;
+            font-variation-settings: "anim" 100;
             transition: font-variation-settings 0.3s ease;
           }
           .whirly-icon:hover, .manifesto-btn:hover .whirly-icon {
@@ -753,8 +755,8 @@ class PagesController < ActionController::Base
             transform: scaleX(-1);
           }
           @keyframes whirlyHover {
-            0%, 100% { font-variation-settings: "ANIM" 100; }
-            50% { font-variation-settings: "ANIM" 200; }
+            0%, 100% { font-variation-settings: "anim" 100; }
+            50% { font-variation-settings: "anim" 200; }
           }
           body { background: #fff; color: var(--bm-dark); }
           .close-btn {
