@@ -1,3 +1,5 @@
+require "net/http"
+
 class ContactsController < ActionController::Base
   # GET /contact
   def new
@@ -9,6 +11,7 @@ class ContactsController < ActionController::Base
     @contact = Contact.new(contact_params)
 
     if @contact.save
+      send_telegram_notification(@contact)
       render html: success_page_html.html_safe
     else
       render html: contact_form_html(@contact.errors.full_messages).html_safe, status: :unprocessable_entity
@@ -28,6 +31,32 @@ class ContactsController < ActionController::Base
 
   def contact_params
     params.permit(:email, :message)
+  end
+
+  def send_telegram_notification(contact)
+    return unless telegram_configured?
+
+    bot_token = ENV["TELEGRAM_BOT_TOKEN"]
+    chat_id = ENV["TELEGRAM_CHAT_ID"]
+
+    message = <<~MSG
+      📬 New Contact Form Submission
+
+      From: #{contact.email}
+      Time: #{contact.created_at.strftime("%Y-%m-%d %H:%M UTC")}
+
+      Message:
+      #{contact.message}
+    MSG
+
+    uri = URI("https://api.telegram.org/bot#{bot_token}/sendMessage")
+    Net::HTTP.post_form(uri, chat_id: chat_id, text: message, parse_mode: "HTML")
+  rescue StandardError => e
+    Rails.logger.error("Telegram notification failed: #{e.message}")
+  end
+
+  def telegram_configured?
+    ENV["TELEGRAM_BOT_TOKEN"].present? && ENV["TELEGRAM_CHAT_ID"].present?
   end
 
   def admin_authorized?
