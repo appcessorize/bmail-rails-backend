@@ -117,6 +117,7 @@ class PagesController < ActionController::Base
         <title>Blackmail.wtf - Freedom from Your Phone</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
+        <link rel="preload" href="/fonts/WhirlybatsVariable.ttf" as="font" type="font/ttf" crossorigin>
         #{shared_styles}
         <style>
           body {
@@ -229,6 +230,12 @@ class PagesController < ActionController::Base
           .step-image .emoji-icon {
             font-size: 8rem;
           }
+          .step-image .whirly-icon {
+            font-family: 'Whirlybats', sans-serif;
+            font-size: 10rem;
+            color: var(--bm-red);
+            line-height: 1;
+          }
           .step-content {
             flex: 1;
           }
@@ -263,6 +270,9 @@ class PagesController < ActionController::Base
             }
             .step-image .emoji-icon {
               font-size: 5rem;
+            }
+            .step-image .whirly-icon {
+              font-size: 6rem;
             }
             .step-content h3 {
               font-size: 1.5rem;
@@ -435,7 +445,7 @@ class PagesController < ActionController::Base
         <div class="container">
           <header>
             <a href="/" class="logo">
-              <img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL">
+              <img src="/images/BLACKMAILLogoDark.svg" alt="BLACKMAIL">
             </a>
             <nav>
               <a href="/manifesto">Manifesto</a>
@@ -489,7 +499,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step">
                 <div class="step-image">
-                  <span class="emoji-icon">🔗</span>
+                  <span class="whirly-icon">U</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 3</div>
@@ -499,7 +509,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step reverse">
                 <div class="step-image">
-                  <span class="emoji-icon">⏰</span>
+                  <span class="whirly-icon">∂</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 4</div>
@@ -509,7 +519,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step">
                 <div class="step-image">
-                  <span class="emoji-icon">😱</span>
+                  <span class="whirly-icon">{</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 5</div>
@@ -1139,7 +1149,7 @@ class PagesController < ActionController::Base
           <header>
             <div class="header-inner">
               <a href="/" class="back-link">← Back to Home</a>
-              <img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL" style="height: 30px;">
+              <img src="/images/BLACKMAILLogoLight.svg" alt="BLACKMAIL" style="height: 30px;">
             </div>
           </header>
 
@@ -1208,20 +1218,20 @@ class PagesController < ActionController::Base
             <h2>Brand Assets</h2>
             <div class="assets-grid">
               <div class="asset-card">
-                <div class="asset-preview">
-                  <img src="/images/BLACKMAILShadow.png" alt="Logo">
+                <div class="asset-preview" style="background: #fff; border-radius: 8px;">
+                  <img src="/images/BLACKMAILLogoDark.svg" alt="Logo for light backgrounds">
                 </div>
-                <div class="asset-name">Logo (Dark)</div>
-                <div class="asset-format">PNG, transparent</div>
-                <a href="/images/BLACKMAILShadow.png" download class="download-btn">Download</a>
+                <div class="asset-name">Logo (for light bg)</div>
+                <div class="asset-format">SVG</div>
+                <a href="/images/BLACKMAILLogoDark.svg" download class="download-btn">Download</a>
               </div>
               <div class="asset-card">
-                <div class="asset-preview" style="background: #fff; border-radius: 8px;">
-                  <img src="/images/BLACKMAILShadow.png" alt="Logo">
+                <div class="asset-preview">
+                  <img src="/images/BLACKMAILLogoLight.svg" alt="Logo for dark backgrounds">
                 </div>
-                <div class="asset-name">Logo (Light)</div>
-                <div class="asset-format">PNG, transparent</div>
-                <a href="/images/BLACKMAILShadow.png" download class="download-btn">Download</a>
+                <div class="asset-name">Logo (for dark bg)</div>
+                <div class="asset-format">SVG</div>
+                <a href="/images/BLACKMAILLogoLight.svg" download class="download-btn">Download</a>
               </div>
               <div class="asset-card">
                 <div class="asset-preview">
