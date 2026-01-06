@@ -540,8 +540,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="footer-section">
                 <h4>Contact</h4>
-                <a href="mailto:hello@blackmail.wtf">hello@blackmail.wtf</a>
-                <a href="mailto:press@blackmail.wtf">press@blackmail.wtf</a>
+                <a href="/contact">Send us a message</a>
                 <a href="https://twitter.com/blackmailwtf" target="_blank">@blackmailwtf</a>
               </div>
               <div class="footer-section">
@@ -875,7 +874,7 @@ class PagesController < ActionController::Base
 
         <section class="buttons-section">
           <a href="/" class="manifesto-btn black">← GO BACK</a>
-          <a href="mailto:hello@blackmail.wtf" class="manifesto-btn pink">✉ CONTACT</a>
+          <a href="/contact" class="manifesto-btn pink">✉ CONTACT</a>
           <a href="/#faq" class="manifesto-btn cream">? FAQ</a>
         </section>
 
@@ -1194,14 +1193,9 @@ class PagesController < ActionController::Base
             <h2>Contact</h2>
             <div class="contact-grid">
               <div class="contact-card">
-                <h3>Press Inquiries</h3>
-                <a href="mailto:press@blackmail.wtf">press@blackmail.wtf</a>
-                <p>For interviews, reviews, and media requests</p>
-              </div>
-              <div class="contact-card">
-                <h3>General Contact</h3>
-                <a href="mailto:hello@blackmail.wtf">hello@blackmail.wtf</a>
-                <p>For partnerships and general questions</p>
+                <h3>Press & General Inquiries</h3>
+                <a href="/contact">Send us a message</a>
+                <p>For interviews, reviews, partnerships, and media requests</p>
               </div>
               <div class="contact-card">
                 <h3>Social</h3>
@@ -1283,7 +1277,7 @@ class PagesController < ActionController::Base
 
           <section>
             <h2>6. Contact Us</h2>
-            <p>For privacy-related questions, contact us at: <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a></p>
+            <p>For privacy-related questions, <a href="/contact">contact us here</a>.</p>
           </section>
         </div>
       </body>
@@ -1356,7 +1350,7 @@ class PagesController < ActionController::Base
 
           <section>
             <h2>9. Contact</h2>
-            <p>Questions about these terms? Contact us at: <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a></p>
+            <p>Questions about these terms? <a href="/contact">Contact us here</a>.</p>
           </section>
         </div>
       </body>

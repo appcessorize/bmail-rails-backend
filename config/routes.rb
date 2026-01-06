@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   # Content pages
   get "/manifesto", to: "pages#manifesto"
   get "/press", to: "pages#press"
+  get "/contact", to: "contacts#new"
+  post "/contact", to: "contacts#create"
+
+  # Admin endpoints
+  get "/admin/contacts", to: "contacts#index"
 
   # Public shame page (no auth required)
   get "/p/:slug", to: "shame_pages#show", as: :shame_page
