@@ -906,7 +906,7 @@ class PagesController < ActionController::Base
 
             <p>Here he is experimenting on pigeons in his lab. ↓</p>
 
-            <img src="/images/skinnerQuoteRedux.png" alt="Skinner Quote" class="quote-box">
+            <img src="/images/skinnerQuoteRedux.jpeg" alt="Skinner Quote" class="quote-box">
 
             <p>Manipulating them to do his bidding through a simple system of semi-random rewards and punishments.</p>
 
@@ -946,11 +946,11 @@ class PagesController < ActionController::Base
           <div class="container">
             <h2 style="font-weight: 900;">BREAK FREE</h2>
 
-            <img src="/images/pigeonFlyingHigh.png" alt="Flying pigeon" class="image-circle image-circle-blue">
+            <img src="/images/pigeonFlyingHigh.jpg" alt="Flying pigeon" class="image-circle image-circle-blue">
 
             <p>On your deathbed do you think you will regret not using your phone more?</p>
 
-            <img src="/images/shakespearmobile.png" alt="Shakespeare with phone" class="image-circle image-circle-blue">
+            <img src="/images/shakespearmobile.jpg" alt="Shakespeare with phone" class="image-circle image-circle-blue">
 
             <p>Would Shakespeare have finished writing Hamlet if he'd had access to Raid Shadow Legends?</p>
 
