@@ -232,9 +232,22 @@ class PagesController < ActionController::Base
           }
           .step-image .whirly-icon {
             font-family: 'Whirlybats', sans-serif;
-            font-size: 10rem;
-            color: var(--bm-red);
+            font-size: 6rem;
             line-height: 1;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .step-image .whirly-icon.pink-bg {
+            background: #F7BBD7;
+            color: var(--bm-dark);
+          }
+          .step-image .whirly-icon.blue-bg {
+            background: var(--bm-blue);
+            color: #fff;
           }
           .step-content {
             flex: 1;
@@ -272,7 +285,9 @@ class PagesController < ActionController::Base
               font-size: 5rem;
             }
             .step-image .whirly-icon {
-              font-size: 6rem;
+              font-size: 4rem;
+              width: 120px;
+              height: 120px;
             }
             .step-content h3 {
               font-size: 1.5rem;
@@ -445,7 +460,7 @@ class PagesController < ActionController::Base
         <div class="container">
           <header>
             <a href="/" class="logo">
-              <img src="/images/BLACKMAILLogoDark.svg" alt="BLACKMAIL">
+              <img src="/images/BLACKMAILLogoLight.svg" alt="BLACKMAIL">
             </a>
             <nav>
               <a href="/manifesto">Manifesto</a>
@@ -499,7 +514,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step">
                 <div class="step-image">
-                  <span class="whirly-icon">U</span>
+                  <span class="whirly-icon pink-bg">u</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 3</div>
@@ -509,7 +524,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step reverse">
                 <div class="step-image">
-                  <span class="whirly-icon">∂</span>
+                  <span class="whirly-icon blue-bg">∂</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 4</div>
@@ -519,7 +534,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step">
                 <div class="step-image">
-                  <span class="whirly-icon">{</span>
+                  <span class="whirly-icon pink-bg">{</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 5</div>
