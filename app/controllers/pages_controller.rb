@@ -225,6 +225,26 @@ class PagesController < ActionController::Base
             height: auto;
             border-radius: 16px;
           }
+          .step-image .img-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: #F7BBD7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: imgPulse 2s ease-in-out infinite;
+          }
+          .step-image .img-circle img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 0;
+          }
+          @keyframes imgPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+          }
           .step-image .emoji-icon {
             font-size: 8rem;
           }
@@ -304,6 +324,14 @@ class PagesController < ActionController::Base
               font-size: 4rem;
               width: 120px;
               height: 120px;
+            }
+            .step-image .img-circle {
+              width: 120px;
+              height: 120px;
+            }
+            .step-image .img-circle img {
+              width: 70px;
+              height: 70px;
             }
             .step-content h3 {
               font-size: 1.5rem;
@@ -520,7 +548,9 @@ class PagesController < ActionController::Base
             <div class="steps">
               <div class="step">
                 <div class="step-image">
-                  <img src="/images/chartakingpic.png" alt="Take a photo">
+                  <div class="img-circle">
+                    <img src="/images/chartakingpic.png" alt="Take a photo">
+                  </div>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 1</div>
@@ -530,7 +560,9 @@ class PagesController < ActionController::Base
               </div>
               <div class="step reverse">
                 <div class="step-image">
-                  <img src="/images/safe.svg" alt="Stored securely">
+                  <div class="img-circle">
+                    <img src="/images/safe.svg" alt="Stored securely">
+                  </div>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 2</div>
@@ -550,7 +582,7 @@ class PagesController < ActionController::Base
               </div>
               <div class="step reverse">
                 <div class="step-image">
-                  <span class="whirly-icon blue-bg">∂</span>
+                  <span class="whirly-icon pink-bg">∂</span>
                 </div>
                 <div class="step-content">
                   <div class="step-number">Step 4</div>
