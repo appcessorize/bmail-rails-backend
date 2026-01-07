@@ -189,6 +189,15 @@ class PagesController < ActionController::Base
           .app-badge:hover {
             transform: scale(1.05);
           }
+          .manifesto-link {
+            color: var(--bm-blue);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+          }
+          .manifesto-link:hover {
+            color: var(--bm-red);
+          }
           .how-it-works {
             background: #f5f5f7;
             color: var(--bm-dark);
@@ -536,11 +545,11 @@ class PagesController < ActionController::Base
               Fighting modern psychological manipulation is simple when you use the oldest motivational strategy:
             </p>
             <p class="shame-text">SHAME</p>
-            <div style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">
-              <a href="https://apps.apple.com/app/blackmail-focus" target="_blank" rel="noopener">
+            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+              <a href="https://apps.apple.com/app/blackmail-focus-or-else/id6745029022" target="_blank" rel="noopener">
                 <img src="/images/appstorebadgeblack.svg" alt="Download on the App Store" class="app-badge">
               </a>
-              <a href="/manifesto" class="btn-secondary">Read the Manifesto</a>
+              <a href="/manifesto" class="manifesto-link">Read the Manifesto <span class="whirly-hover" style="font-size: 1.2rem;">,</span></a>
             </div>
           </section>
         </div>
@@ -755,6 +764,10 @@ class PagesController < ActionController::Base
           }
           .whirly-flip {
             transform: scaleX(-1);
+          }
+          .manifesto-btn .whirly-icon {
+            min-width: 1.5rem;
+            text-align: center;
           }
           @keyframes whirlyHover {
             0%, 100% { font-variation-settings: "anim" 100; }
@@ -1060,7 +1073,7 @@ class PagesController < ActionController::Base
         </section>
 
         <footer>
-          <p>© 2025 Blackmail.wtf</p>
+          <p><a href="/">© 2025 Blackmail.wtf</a></p>
           <p style="margin-top: 0.5rem;">
             <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a>
           </p>
