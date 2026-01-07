@@ -542,9 +542,14 @@ class PagesController < ActionController::Base
             <p class="tagline">FREEDOM FROM YOUR PHONE</p>
             <p class="hero-text">
               Right now some of the world's most talented people are working overtime to stop you from putting down your phone.
-              Fighting modern psychological manipulation is simple when you use the oldest motivational strategy:
+             
             </p>
-            <p class="shame-text">SHAME</p>
+                 <p class="hero-text">Fighting modern psychological manipulation is simple when you use the oldest motivational strategy:</p>
+            <p class="hero">SHAME</p>
+
+             <p class="hero-text">Blackmail is an iOS app that forces you to take a break from your phone.It uses the power of embarrassment to help you break free from mindlessly scrolling, liking, and tapping.</p>
+              <p class="hero-text">because you don't need motivation...</p>
+              <p class="hero-text">you need consequences</p>
             <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
               <a href="https://apps.apple.com/app/blackmail-focus-or-else/id6745029022" target="_blank" rel="noopener">
                 <img src="/images/appstorebadgeblack.svg" alt="Download on the App Store" class="app-badge">
