@@ -513,7 +513,7 @@ class PagesController < ActionController::Base
             margin-top: 1rem;
           }
           @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 1.6rem; }
             .tagline { font-size: 1.2rem; }
             .faq-question h3 { font-size: 1rem; }
             .faq-answer p { padding-left: 0; }
@@ -623,7 +623,7 @@ class PagesController < ActionController::Base
 
         <section class="faq-section" id="faq">
           <div class="container">
-            <h2>Questions & Answers</h2>
+            <h2>FAQ</h2>
             <p class="faq-subtitle">Everything you need to know about Blackmail Focus</p>
             <div class="faq-list">
               <details class="faq-item">
@@ -935,7 +935,7 @@ class PagesController < ActionController::Base
             text-decoration: none;
           }
           @media (max-width: 768px) {
-            .hero-section h1 { font-size: 2.5rem; }
+            .hero-section h1 { font-size: 1.6rem; }
             .dark-section h2, .light-section h2 { font-size: 1.8rem; }
             .shame-text { font-size: 2rem; }
           }
