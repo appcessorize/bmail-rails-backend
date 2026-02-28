@@ -1,4 +1,5 @@
 require "net/http"
+require "cgi"
 
 class ContactsController < ActionController::Base
   # GET /contact
@@ -50,7 +51,7 @@ class ContactsController < ActionController::Base
     MSG
 
     uri = URI("https://api.telegram.org/bot#{bot_token}/sendMessage")
-    Net::HTTP.post_form(uri, chat_id: chat_id, text: message, parse_mode: "HTML")
+    Net::HTTP.post_form(uri, chat_id: chat_id, text: message)
   rescue StandardError => e
     Rails.logger.error("Telegram notification failed: #{e.message}")
   end
@@ -60,8 +61,13 @@ class ContactsController < ActionController::Base
   end
 
   def admin_authorized?
-    # Check for admin token in header
-    request.headers["X-Admin-Token"] == ENV.fetch("ADMIN_TOKEN", "change-me-in-production")
+    token = ENV["ADMIN_TOKEN"]
+    return false if token.blank?
+
+    ActiveSupport::SecurityUtils.secure_compare(
+      request.headers["X-Admin-Token"].to_s,
+      token
+    )
   end
 
   def colors
@@ -106,7 +112,7 @@ class ContactsController < ActionController::Base
 
   def contact_form_html(errors = [])
     error_html = if errors.any?
-      "<div class='error-box'>#{errors.map { |e| "<p>#{e}</p>" }.join}</div>"
+      "<div class='error-box'>#{errors.map { |e| "<p>#{CGI.escapeHTML(e)}</p>" }.join}</div>"
     else
       ""
     end

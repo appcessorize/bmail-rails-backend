@@ -20,6 +20,27 @@ class Rack::Attack
     end
   end
 
+  # Throttle contact form submissions by IP
+  throttle("contact/ip", limit: 5, period: 300) do |req|
+    if req.path == "/contact" && req.post?
+      req.ip
+    end
+  end
+
+  # Throttle admin endpoint by IP (prevents brute-force on admin token)
+  throttle("admin/ip", limit: 5, period: 60) do |req|
+    if req.path.start_with?("/admin")
+      req.ip
+    end
+  end
+
+  # Throttle Apple auth by IP
+  throttle("apple_auth/ip", limit: 5, period: 60) do |req|
+    if req.path == "/auth/apple" && req.post?
+      req.ip
+    end
+  end
+
   # General request throttling by IP
   throttle("req/ip", limit: 300, period: 60) do |req|
     req.ip

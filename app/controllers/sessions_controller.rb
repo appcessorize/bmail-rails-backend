@@ -151,7 +151,7 @@ class SessionsController < ApplicationController
       timestamp: Time.current.iso8601
     }.to_json)
 
-    render json: { error: "Apple sign in failed: #{e.message}" }, status: :unauthorized
+    render json: { error: "Apple sign in failed" }, status: :unauthorized
   rescue StandardError => e
     Rails.logger.error "Apple sign in error: #{e.message}\n#{e.backtrace.join("\n")}"
     render json: { error: "An error occurred during Apple sign in" }, status: :internal_server_error

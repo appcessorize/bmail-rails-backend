@@ -1,13 +1,73 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Regular user with password auth
+matt:
+  username: matt
+  email: matt@example.com
+  password_digest: <%= BCrypt::Password.create("Password1") %>
+  auth_token: <%= SecureRandom.hex(32) %>
+  token_digest: <%= Digest::SHA256.hexdigest("test_token_matt") %>
+  token_expires_at: <%= 7.days.from_now %>
+  page_slug: abc123def456
+  shame_active: false
+  failed_login_attempts: 0
 
-one:
-  username: MyString
-  email: MyString
-  password_digest: MyString
-  auth_token: MyString
+# Second user for isolation tests
+jane:
+  username: jane
+  email: jane@example.com
+  password_digest: <%= BCrypt::Password.create("SecurePass1") %>
+  auth_token: <%= SecureRandom.hex(32) %>
+  token_digest: <%= Digest::SHA256.hexdigest("test_token_jane") %>
+  token_expires_at: <%= 7.days.from_now %>
+  page_slug: xyz789abc012
+  shame_active: false
+  failed_login_attempts: 0
 
-two:
-  username: MyString
-  email: MyString
-  password_digest: MyString
-  auth_token: MyString
+# Locked user for lockout tests
+locked_user:
+  username: locked_user
+  email: locked@example.com
+  password_digest: <%= BCrypt::Password.create("Password1") %>
+  auth_token: <%= SecureRandom.hex(32) %>
+  token_digest: <%= Digest::SHA256.hexdigest("test_token_locked") %>
+  token_expires_at: <%= 7.days.from_now %>
+  page_slug: locked123456
+  shame_active: false
+  failed_login_attempts: 5
+  locked_until: <%= 15.minutes.from_now %>
+
+# User with expired token
+expired_token_user:
+  username: expired_user
+  email: expired@example.com
+  password_digest: <%= BCrypt::Password.create("Password1") %>
+  auth_token: <%= SecureRandom.hex(32) %>
+  token_digest: <%= Digest::SHA256.hexdigest("test_token_expired") %>
+  token_expires_at: <%= 1.day.ago %>
+  page_slug: expired12345
+  shame_active: false
+  failed_login_attempts: 0
+
+# User with shame active
+shamed_user:
+  username: shamed_user
+  email: shamed@example.com
+  password_digest: <%= BCrypt::Password.create("Password1") %>
+  auth_token: <%= SecureRandom.hex(32) %>
+  token_digest: <%= Digest::SHA256.hexdigest("test_token_shamed") %>
+  token_expires_at: <%= 7.days.from_now %>
+  page_slug: shamed123456
+  shame_active: true
+  shame_activated_at: <%= 1.hour.ago %>
+  failed_login_attempts: 0
+
+# Apple sign-in user (no password)
+apple_user:
+  username: apple_user
+  email: apple@example.com
+  apple_user_id: "000123.abc456def789.0000"
+  auth_token: <%= SecureRandom.hex(32) %>
+  token_digest: <%= Digest::SHA256.hexdigest("test_token_apple") %>
+  token_expires_at: <%= 7.days.from_now %>
+  page_slug: apple1234567
+  shame_active: false
+  failed_login_attempts: 0

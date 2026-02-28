@@ -1,0 +1,19 @@
+active_session:
+  user: matt
+  duration_minutes: 25
+  started_at: <%= 10.minutes.ago %>
+  status: active
+
+completed_session:
+  user: matt
+  duration_minutes: 25
+  started_at: <%= 1.hour.ago %>
+  ended_at: <%= 35.minutes.ago %>
+  status: completed
+
+failed_session:
+  user: jane
+  duration_minutes: 30
+  started_at: <%= 2.hours.ago %>
+  ended_at: <%= 90.minutes.ago %>
+  status: failed

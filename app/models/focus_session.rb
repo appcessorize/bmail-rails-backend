@@ -1,7 +1,7 @@
 class FocusSession < ApplicationRecord
   belongs_to :user
 
-  validates :duration_minutes, presence: true, numericality: { greater_than: 0 }
+  validates :duration_minutes, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 480 }
   validates :started_at, presence: true
   validates :status, presence: true, inclusion: { in: %w[active completed failed] }
 

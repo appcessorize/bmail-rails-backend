@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true
   validates :email, uniqueness: true, allow_nil: true
   validates :password, length: { minimum: 8 }, if: -> { password.present? && apple_user_id.blank? }
+  validate :password_complexity, if: -> { password.present? && apple_user_id.blank? }
   validates :auth_token, uniqueness: true
   validates :apple_user_id, uniqueness: true, allow_nil: true
   validates :page_slug, uniqueness: true, allow_nil: true
@@ -117,6 +118,14 @@ class User < ApplicationRecord
   end
 
   private
+
+  def password_complexity
+    return if password.blank?
+
+    unless password.match?(/[a-z]/) && password.match?(/[A-Z]/) && password.match?(/\d/)
+      errors.add(:password, "must include at least one lowercase letter, one uppercase letter, and one digit")
+    end
+  end
 
   def profile_image_validation
     return unless profile_image.attached?

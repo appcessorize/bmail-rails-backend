@@ -1,0 +1,11 @@
+recent_contact:
+  email: someone@example.com
+  message: "Hello, I have a question about the app. This is long enough."
+  read: false
+  created_at: <%= 1.hour.ago %>
+
+old_contact:
+  email: old@example.com
+  message: "This is an older contact message that has been read already."
+  read: true
+  created_at: <%= 1.week.ago %>

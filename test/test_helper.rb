@@ -9,7 +9,22 @@ module ActiveSupport
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
-
-    # Add more helper methods to be used by all tests here...
   end
+end
+
+module AuthTestHelper
+  # Returns an Authorization header hash for the given fixture user
+  def auth_headers_for(user_fixture_name)
+    token = "test_token_#{user_fixture_name}"
+    { "Authorization" => "Bearer #{token}" }
+  end
+
+  # Returns headers with an invalid token
+  def invalid_auth_headers
+    { "Authorization" => "Bearer invalid_token_xyz" }
+  end
+end
+
+class ActionDispatch::IntegrationTest
+  include AuthTestHelper
 end
