@@ -11,29 +11,30 @@ class ShamePagesController < ActionController::Base
       return
     end
 
-    # Check if shame is active and image exists
     @shame_visible = @user.shame_visible?
-
-    if @shame_visible
-      # Generate a signed URL that expires in 15 minutes
-      @image_url = signed_image_url(@user)
-    end
-
+    @has_image = @shame_visible && @user.profile_image.attached?
     @shame_activated_at = @user.shame_activated_at
 
     render :show
   end
 
+  # GET /p/:slug/image
+  # Serves the shame image via redirect to a fresh signed URL.
+  # The shame page HTML points here so the link never goes stale.
+  def image
+    user = User.find_by(page_slug: params[:slug])
+
+    unless user&.shame_visible? && user.profile_image.attached?
+      head :not_found
+      return
+    end
+
+    redirect_to user.profile_image.url(expires_in: 15.minutes), allow_other_host: true
+  end
+
   private
 
-  # Generate a time-limited signed URL for the image
-  def signed_image_url(user)
-    return nil unless user.profile_image.attached?
-
-    # Use Active Storage's signed URL with expiration
-    user.profile_image.url(expires_in: 15.minutes)
-  rescue => e
-    Rails.logger.error "Failed to generate signed URL: #{e.message}"
-    nil
+  def find_shame_user
+    User.find_by(page_slug: params[:slug])
   end
 end

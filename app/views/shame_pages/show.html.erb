@@ -59,10 +59,10 @@
 
         <p class="text-bm-blue text-lg mb-8">This person failed their focus session.</p>
 
-        <% if @image_url %>
+        <% if @has_image %>
           <div class="mb-6">
             <img
-              src="<%= @image_url %>"
+              src="<%= shame_page_image_path(@user.page_slug) %>"
               alt="Shame Photo"
               class="w-full max-w-sm mx-auto rounded-2xl border-4 border-bm-red shadow-2xl"
               style="box-shadow: 0 0 40px rgba(229, 51, 42, 0.4);"

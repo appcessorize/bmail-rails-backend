@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   # Public shame page (no auth required)
   get "/p/:slug", to: "shame_pages#show", as: :shame_page
+  get "/p/:slug/image", to: "shame_pages#image", as: :shame_page_image
 
   # API endpoints
   post   "/signup", to: "users#create"
