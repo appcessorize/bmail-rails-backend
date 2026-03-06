@@ -25,7 +25,11 @@ Rails.application.routes.draw do
 
   post   "/login",  to: "sessions#create"
   post   "/auth/apple", to: "sessions#apple"
+  post   "/auth/refresh", to: "sessions#refresh"
   delete "/logout", to: "sessions#destroy"
+
+  get  "/attest/challenge", to: "attestations#challenge"
+  post "/attest",           to: "attestations#create"
   delete "/delete_account", to: "users#destroy"
 
   post   "/upload_image", to: "users#upload_image"

@@ -41,6 +41,21 @@ class Rack::Attack
     end
   end
 
+  # Throttle attestation challenge requests
+  throttle("attest_challenge/ip", limit: 10, period: 60) do |req|
+    req.ip if req.path == "/attest/challenge" && req.get?
+  end
+
+  # Throttle attestation creation requests
+  throttle("attest/ip", limit: 5, period: 60) do |req|
+    req.ip if req.path == "/attest" && req.post?
+  end
+
+  # Throttle token refresh requests
+  throttle("auth_refresh/ip", limit: 20, period: 60) do |req|
+    req.ip if req.path == "/auth/refresh" && req.post?
+  end
+
   # General request throttling by IP
   throttle("req/ip", limit: 300, period: 60) do |req|
     req.ip

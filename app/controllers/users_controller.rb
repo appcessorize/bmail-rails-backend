@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy ]
+  before_action :verify_app_attest!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy ]
 
   # POST /signup
   def create
@@ -12,10 +13,19 @@ class UsersController < ApplicationController
           username: user.username
         },
         auth_token: user.auth_token,
-        token_expires_at: user.token_expires_at&.iso8601
+        token_expires_at: user.token_expires_at&.iso8601,
+        refresh_token: user.refresh_token,
+        refresh_token_expires_at: user.refresh_token_expires_at&.iso8601
       }, status: :created
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      error_codes = []
+      error_codes << "username_taken" if user.errors[:username].any? { |e| e.include?("taken") }
+      error_codes << "email_taken" if user.errors[:email].any? { |e| e.include?("taken") }
+
+      render json: {
+        errors: user.errors.full_messages,
+        error_codes: error_codes
+      }, status: :unprocessable_entity
     end
   end
 

@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_many :entries, dependent: :destroy
   has_many :focus_sessions, dependent: :destroy
+  has_many :app_attest_credentials, dependent: :destroy
   has_one_attached :profile_image do |attachable|
     attachable.variant :thumb, resize_to_limit: [ 200, 200 ]
   end
@@ -22,7 +23,10 @@ class User < ApplicationRecord
   validates :apple_user_id, uniqueness: true, allow_nil: true
   validates :page_slug, uniqueness: true, allow_nil: true
 
-  TOKEN_EXPIRATION = 7.days
+  TOKEN_EXPIRATION = 1.hour
+  REFRESH_TOKEN_EXPIRATION = 30.days
+
+  attr_accessor :refresh_token
 
   # Account lockout settings
   MAX_FAILED_ATTEMPTS = 5
@@ -97,6 +101,28 @@ class User < ApplicationRecord
       self.token_digest = Digest::SHA256.hexdigest(auth_token)
       self.token_expires_at = TOKEN_EXPIRATION.from_now if self.class.column_names.include?("token_expires_at")
     end
+
+    generate_refresh_token if self.class.column_names.include?("refresh_token_digest")
+  end
+
+  # Generate a new refresh token
+  def generate_refresh_token
+    self.refresh_token = SecureRandom.hex(32)
+    self.refresh_token_digest = Digest::SHA256.hexdigest(refresh_token)
+    self.refresh_token_expires_at = REFRESH_TOKEN_EXPIRATION.from_now
+  end
+
+  # Find user by valid refresh token
+  def self.find_by_valid_refresh_token(token)
+    return nil if token.blank?
+
+    digest = Digest::SHA256.hexdigest(token)
+    user = find_by(refresh_token_digest: digest)
+
+    return nil unless user
+    return nil if user.refresh_token_expires_at && user.refresh_token_expires_at < Time.current
+
+    user
   end
 
   # Verify if a token is valid and not expired
@@ -139,5 +165,36 @@ class User < ApplicationRecord
     if profile_image.byte_size > 5.megabytes
       errors.add(:profile_image, "size must be less than 5MB")
     end
+
+    # Validate magic bytes to prevent content-type spoofing
+    validate_image_magic_bytes
+  end
+
+  MAGIC_BYTES = {
+    "\xFF\xD8\xFF".b => %w[image/jpeg image/jpg],
+    "\x89PNG".b => %w[image/png],
+    "GIF87a".b => %w[image/gif],
+    "GIF89a".b => %w[image/gif]
+  }.freeze
+
+  def validate_image_magic_bytes
+    return unless profile_image.attached?
+
+    header = nil
+    profile_image.blob.open do |tempfile|
+      header = tempfile.read(6)
+    end
+
+    return if header.nil?
+
+    matched = MAGIC_BYTES.any? do |magic, types|
+      header.byteslice(0, magic.bytesize) == magic && types.include?(profile_image.content_type)
+    end
+
+    unless matched
+      errors.add(:profile_image, "file content does not match its declared type")
+    end
+  rescue StandardError
+    errors.add(:profile_image, "could not verify file type")
   end
 end

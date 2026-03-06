@@ -1,5 +1,6 @@
 class FocusSessionsController < ApplicationController
   before_action :authenticate_user!
+  before_action :verify_app_attest!
   before_action :set_focus_session, only: [:show, :complete, :fail]
 
   # GET /focus_sessions

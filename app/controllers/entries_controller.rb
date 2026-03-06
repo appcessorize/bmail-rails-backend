@@ -1,5 +1,6 @@
 class EntriesController < ApplicationController
   before_action :authenticate_user!
+  before_action :verify_app_attest!
   before_action :set_entry, only: [ :show, :update, :destroy ]
 
   # GET /entries

@@ -1,12 +1,13 @@
 class SessionsController < ApplicationController
   before_action :authenticate_user!, only: [ :destroy ]
+  before_action :verify_app_attest!, only: [ :destroy ]
 
   # POST /login
   def create
     user = User.find_by(username: params[:username])
 
     if user.nil?
-      # User not found - return 404 so client knows to try signup
+      # User not found - return generic error to prevent username enumeration
       Rails.logger.info({
         event: "security_audit",
         type: "login_user_not_found",
@@ -15,7 +16,7 @@ class SessionsController < ApplicationController
         timestamp: Time.current.iso8601
       }.to_json)
 
-      render json: { error: "user_not_found" }, status: :not_found
+      render json: { error: "invalid_credentials", error_code: "invalid_credentials" }, status: :unauthorized
     elsif user.locked?
       # Account is locked due to too many failed attempts
       Rails.logger.warn({
@@ -29,6 +30,7 @@ class SessionsController < ApplicationController
 
       render json: {
         error: "account_locked",
+        error_code: "account_locked",
         locked_until: user.locked_until.iso8601,
         retry_after: user.lockout_remaining
       }, status: :too_many_requests
@@ -46,7 +48,9 @@ class SessionsController < ApplicationController
           username: user.username
         },
         auth_token: user.auth_token,
-        token_expires_at: user.token_expires_at&.iso8601
+        token_expires_at: user.token_expires_at&.iso8601,
+        refresh_token: user.refresh_token,
+        refresh_token_expires_at: user.refresh_token_expires_at&.iso8601
       }, status: :ok
     else
       # Wrong password - record failed attempt
@@ -65,13 +69,14 @@ class SessionsController < ApplicationController
       if user.locked?
         render json: {
           error: "account_locked",
+          error_code: "account_locked",
           locked_until: user.locked_until.iso8601,
           retry_after: user.lockout_remaining
         }, status: :too_many_requests
       else
         render json: {
-          error: "invalid_password",
-          attempts_remaining: User::MAX_FAILED_ATTEMPTS - user.failed_login_attempts
+          error: "invalid_credentials",
+          error_code: "invalid_credentials"
         }, status: :unauthorized
       end
     end
@@ -140,7 +145,9 @@ class SessionsController < ApplicationController
         username: user.username
       },
       auth_token: user.auth_token,
-      token_expires_at: user.token_expires_at&.iso8601
+      token_expires_at: user.token_expires_at&.iso8601,
+      refresh_token: user.refresh_token,
+      refresh_token_expires_at: user.refresh_token_expires_at&.iso8601
     }, status: :ok
   rescue AppleSignInService::AppleSignInError => e
     Rails.logger.warn({
@@ -157,12 +164,35 @@ class SessionsController < ApplicationController
     render json: { error: "An error occurred during Apple sign in" }, status: :internal_server_error
   end
 
+  # POST /auth/refresh
+  def refresh
+    refresh_token = params[:refresh_token]
+    user = User.find_by_valid_refresh_token(refresh_token)
+
+    if user
+      user.generate_auth_token
+      user.save!
+      user.log_security_event("token_refreshed", { ip: request.remote_ip })
+
+      render json: {
+        auth_token: user.auth_token,
+        token_expires_at: user.token_expires_at&.iso8601,
+        refresh_token: user.refresh_token,
+        refresh_token_expires_at: user.refresh_token_expires_at&.iso8601
+      }, status: :ok
+    else
+      render json: { error: "invalid_refresh_token" }, status: :unauthorized
+    end
+  end
+
   # DELETE /logout
   def destroy
     # Fully invalidate token by clearing digest and expiring
     current_user.update(
       token_digest: nil,
-      token_expires_at: Time.current
+      token_expires_at: Time.current,
+      refresh_token_digest: nil,
+      refresh_token_expires_at: Time.current
     )
     current_user.log_security_event("logout", { ip: request.remote_ip })
     head :no_content
