@@ -38,7 +38,7 @@ class SessionsController < ApplicationController
       # Successful login - reset failed attempts and generate token
       user.reset_failed_logins!
       user.generate_auth_token
-      user.save!
+      user.save!(validate: false)
 
       user.log_security_event("login_success", { ip: request.remote_ip })
 
@@ -108,7 +108,7 @@ class SessionsController < ApplicationController
     if user
       # Existing user - log them in
       user.generate_auth_token
-      user.save!
+      user.save!(validate: false)
       user.log_security_event("apple_login_success", { ip: request.remote_ip })
     else
       # New user - create account
@@ -171,7 +171,7 @@ class SessionsController < ApplicationController
 
     if user
       user.generate_auth_token
-      user.save!
+      user.save!(validate: false)
       user.log_security_event("token_refreshed", { ip: request.remote_ip })
 
       render json: {
