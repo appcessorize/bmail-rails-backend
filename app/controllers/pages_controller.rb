@@ -44,7 +44,8 @@ class PagesController < ActionController::Base
         }
         @font-face {
           font-family: 'Whirlybats';
-          src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2-variations');
+          src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2'),
+               url('/fonts/WhirlybatsVariable.ttf') format('truetype');
           font-display: swap;
         }
         :root {
@@ -512,13 +513,60 @@ class PagesController < ActionController::Base
             opacity: 0.8;
             margin-top: 1rem;
           }
+          .menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid var(--bm-dark);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 1.4rem;
+            line-height: 1;
+            color: var(--bm-dark);
+          }
+          .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bm-dark);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+          }
+          .mobile-menu-overlay.open {
+            display: flex;
+          }
+          .mobile-menu-overlay a {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--bm-cream);
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+          }
+          .mobile-menu-overlay a:hover {
+            color: var(--bm-red);
+          }
+          .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--bm-cream);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+          }
           @media (max-width: 768px) {
             h1 { font-size: 1.6rem; }
             .tagline { font-size: 1.2rem; }
             .faq-question h3 { font-size: 1rem; }
             .faq-answer p { padding-left: 0; }
-            nav { gap: 12px; }
-            nav a { font-size: 0.85rem; }
+            nav { display: none; }
+            .menu-toggle { display: block; }
           }
         </style>
       </head>
@@ -533,6 +581,7 @@ class PagesController < ActionController::Base
               <a href="/press">Press Kit</a>
               <a href="#faq">FAQ</a>
             </nav>
+            <button class="menu-toggle" onclick="document.querySelector('.mobile-menu-overlay').classList.add('open');document.body.style.overflow='hidden';" aria-label="Open menu">☰</button>
           </header>
         </div>
 
@@ -733,6 +782,12 @@ class PagesController < ActionController::Base
             </div>
           </div>
         </footer>
+        <div class="mobile-menu-overlay">
+          <button class="mobile-menu-close" onclick="document.querySelector('.mobile-menu-overlay').classList.remove('open');document.body.style.overflow='';" aria-label="Close menu">&times;</button>
+          <a href="/manifesto" onclick="document.querySelector('.mobile-menu-overlay').classList.remove('open');document.body.style.overflow='';">Manifesto</a>
+          <a href="/press" onclick="document.querySelector('.mobile-menu-overlay').classList.remove('open');document.body.style.overflow='';">Press Kit</a>
+          <a href="#faq" onclick="document.querySelector('.mobile-menu-overlay').classList.remove('open');document.body.style.overflow='';">FAQ</a>
+        </div>
       </body>
       </html>
     HTML
@@ -754,7 +809,8 @@ class PagesController < ActionController::Base
         <style>
           @font-face {
             font-family: 'Whirlybats';
-            src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2-variations');
+            src: url('/fonts/WhirlyBatsVariable.woff2') format('woff2'),
+                 url('/fonts/WhirlybatsVariable.ttf') format('truetype');
             font-display: swap;
           }
           .whirly-icon {
