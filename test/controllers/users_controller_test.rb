@@ -1,35 +1,6 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
-  # --- Signup tests ---
-
-  test "signup with valid params creates user" do
-    assert_difference("User.count", 1) do
-      post "/signup", params: { user: { username: "brand_new", email: "brandnew@example.com", password: "GoodPass1", password_confirmation: "GoodPass1" } }
-    end
-    assert_response :created
-    json = JSON.parse(response.body)
-    assert json["auth_token"].present?
-    assert_equal "brand_new", json["user"]["username"]
-  end
-
-  test "signup with weak password fails" do
-    post "/signup", params: { user: { username: "weakpw", email: "weak@example.com", password: "weakpass", password_confirmation: "weakpass" } }
-    assert_response :unprocessable_entity
-    json = JSON.parse(response.body)
-    assert json["errors"].any? { |e| e.include?("uppercase") || e.include?("digit") }
-  end
-
-  test "signup with short password fails" do
-    post "/signup", params: { user: { username: "shortpw", email: "short@example.com", password: "Sh1", password_confirmation: "Sh1" } }
-    assert_response :unprocessable_entity
-  end
-
-  test "signup with duplicate username fails" do
-    post "/signup", params: { user: { username: "matt", email: "different@example.com", password: "GoodPass1", password_confirmation: "GoodPass1" } }
-    assert_response :unprocessable_entity
-  end
-
   # --- GET /me tests ---
 
   test "me returns current user info" do
@@ -39,6 +10,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal "matt", json["username"]
     assert json.key?("shame_active")
     assert json.key?("page_slug")
+    assert json.key?("page_deleted")
   end
 
   test "me without auth returns 401" do
@@ -62,6 +34,26 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "deactivate shame without auth returns 401" do
     patch "/shame/deactivate"
+    assert_response :unauthorized
+  end
+
+  # --- Delete page tests ---
+
+  test "delete page clears page data" do
+    delete "/my_page", headers: auth_headers_for(:matt)
+    assert_response :ok
+    json = JSON.parse(response.body)
+    assert_equal "Page deleted", json["message"]
+
+    user = users(:matt).reload
+    assert_nil user.page_slug
+    assert_equal false, user.shame_active
+    assert_equal true, user.page_deleted
+    assert_equal false, user.image_public
+  end
+
+  test "delete page without auth returns 401" do
+    delete "/my_page"
     assert_response :unauthorized
   end
 

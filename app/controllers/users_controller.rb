@@ -1,33 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy ]
-  before_action :verify_app_attest!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy ]
-
-  # POST /signup
-  def create
-    user = User.new(user_params)
-
-    if user.save
-      render json: {
-        user: {
-          id: user.id,
-          username: user.username
-        },
-        auth_token: user.auth_token,
-        token_expires_at: user.token_expires_at&.iso8601,
-        refresh_token: user.refresh_token,
-        refresh_token_expires_at: user.refresh_token_expires_at&.iso8601
-      }, status: :created
-    else
-      error_codes = []
-      error_codes << "username_taken" if user.errors[:username].any? { |e| e.include?("taken") }
-      error_codes << "email_taken" if user.errors[:email].any? { |e| e.include?("taken") }
-
-      render json: {
-        errors: user.errors.full_messages,
-        error_codes: error_codes
-      }, status: :unprocessable_entity
-    end
-  end
+  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy, :delete_page ]
+  before_action :verify_app_attest!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy, :delete_page ]
 
   # GET /me
   def me
@@ -40,7 +13,8 @@ class UsersController < ApplicationController
       page_slug: user.page_slug,
       page_url: user.page_slug.present? ? "#{request.base_url}/p/#{user.page_slug}" : nil,
       shame_active: user.shame_active,
-      shame_activated_at: user.shame_activated_at&.iso8601
+      shame_activated_at: user.shame_activated_at&.iso8601,
+      page_deleted: user.page_deleted
     }
 
     if user.profile_image.attached?
@@ -110,6 +84,19 @@ class UsersController < ApplicationController
     }, status: :ok
   end
 
+  # DELETE /my_page
+  def delete_page
+    current_user.profile_image.purge if current_user.profile_image.attached?
+    current_user.update!(
+      shame_active: false,
+      shame_activated_at: nil,
+      page_slug: nil,
+      image_public: false,
+      page_deleted: true
+    )
+    render json: { message: "Page deleted" }
+  end
+
   # DELETE /delete_account
   def destroy
     current_user.log_security_event("account_deleted", { ip: request.remote_ip })
@@ -118,8 +105,4 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
-  end
 end

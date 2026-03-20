@@ -19,7 +19,7 @@ class FocusSession < ApplicationRecord
   def fail!
     transaction do
       update!(status: 'failed', ended_at: Time.current)
-      user.activate_shame!
+      user.activate_shame! if user.page_slug.present?
     end
   end
 

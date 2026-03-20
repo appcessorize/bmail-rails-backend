@@ -8,6 +8,7 @@ class SecurityTest < ActionDispatch::IntegrationTest
       [:get, "/me"],
       [:delete, "/logout"],
       [:delete, "/delete_account"],
+      [:delete, "/my_page"],
       [:post, "/upload_image"],
       [:patch, "/update_image_privacy"],
       [:delete, "/delete_image"],
@@ -84,27 +85,6 @@ class SecurityTest < ActionDispatch::IntegrationTest
     assert_not_includes controller_source, "parse_mode: 'HTML'"
   end
 
-  # --- Password complexity ---
-
-  test "weak passwords are rejected at signup" do
-    weak_passwords = [
-      "alllowercase1",   # no uppercase
-      "ALLUPPERCASE1",   # no lowercase
-      "NoDigitsHere",    # no digit
-      "Short1",          # too short
-    ]
-
-    weak_passwords.each do |pw|
-      post "/signup", params: { user: { username: "pwtest_#{pw[0..5]}", email: "#{pw[0..5]}@example.com", password: pw, password_confirmation: pw } }
-      assert_response :unprocessable_entity, "Password '#{pw}' should be rejected"
-    end
-  end
-
-  test "strong password is accepted at signup" do
-    post "/signup", params: { user: { username: "strongpw", email: "strongpw@example.com", password: "StrongPass1", password_confirmation: "StrongPass1" } }
-    assert_response :created
-  end
-
   # --- Entry isolation ---
 
   test "user cannot read other user entries via direct ID" do
@@ -140,16 +120,4 @@ class SecurityTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  # --- Account lockout ---
-
-  test "account locks after max failed attempts" do
-    user = users(:jane)
-    User::MAX_FAILED_ATTEMPTS.times do
-      post "/login", params: { username: "jane", password: "WrongPassword1" }
-    end
-
-    # Next attempt should show locked
-    post "/login", params: { username: "jane", password: "SecurePass1" }
-    assert_response :too_many_requests
-  end
 end

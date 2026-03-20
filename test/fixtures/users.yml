@@ -9,6 +9,7 @@ matt:
   page_slug: abc123def456
   shame_active: false
   failed_login_attempts: 0
+  page_deleted: false
 
 # Second user for isolation tests
 jane:

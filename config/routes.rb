@@ -20,10 +20,8 @@ Rails.application.routes.draw do
   get "/p/:slug/image", to: "shame_pages#image", as: :shame_page_image
 
   # API endpoints
-  post   "/signup", to: "users#create"
   get    "/me",     to: "users#me"
 
-  post   "/login",  to: "sessions#create"
   post   "/auth/apple", to: "sessions#apple"
   post   "/auth/refresh", to: "sessions#refresh"
   delete "/logout", to: "sessions#destroy"
@@ -31,6 +29,7 @@ Rails.application.routes.draw do
   get  "/attest/challenge", to: "attestations#challenge"
   post "/attest",           to: "attestations#create"
   delete "/delete_account", to: "users#destroy"
+  delete "/my_page", to: "users#delete_page"
 
   post   "/upload_image", to: "users#upload_image"
   patch  "/update_image_privacy", to: "users#update_image_privacy"

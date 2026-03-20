@@ -22,4 +22,10 @@ class EntryTest < ActiveSupport::TestCase
     entry = entries(:matt_entry)
     assert_equal users(:matt), entry.user
   end
+
+  test "strips HTML tags from title and body on save" do
+    entry = Entry.create!(title: "<b>Bold Title</b>", body: "<script>alert('xss')</script>Safe text", user: users(:matt))
+    assert_equal "Bold Title", entry.title
+    assert_equal "alert('xss')Safe text", entry.body
+  end
 end

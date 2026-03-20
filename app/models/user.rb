@@ -35,6 +35,7 @@ class User < ApplicationRecord
   # Generate a unique 12-character slug for the public shame page
   def generate_page_slug
     return if page_slug.present?
+    return if page_deleted?
 
     loop do
       self.page_slug = SecureRandom.alphanumeric(12).downcase
