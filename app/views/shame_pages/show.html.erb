@@ -316,7 +316,13 @@
           <div class="blur-bg"></div>
           <div class="blur-text">
             <p><span class="camera-icon">📸</span>Photo will appear here if they pick up their phone</p>
-            <a href="#notifySection" onclick="document.getElementById('watchEmail').focus()" style="color:var(--bm-blue); font-size:0.85rem; margin-top:0.75rem; display:inline-block;">Add your email for updates</a>
+            <div style="margin-top:1rem; width:100%; max-width:280px;" id="blurEmailWrapper">
+              <div style="display:flex; gap:0.4rem;">
+                <input type="email" id="blurWatchEmail" placeholder="your@email.com" style="flex:1; padding:0.6rem 0.75rem; border-radius:8px; border:1.5px solid rgba(79,155,196,0.4); background:rgba(0,0,0,0.5); color:var(--bm-cream); font-size:0.85rem; font-family:var(--font-body);" autocomplete="email">
+                <button onclick="submitBlurWatch()" id="blurWatchBtn" style="padding:0.6rem 0.75rem; border-radius:8px; border:none; background:var(--bm-blue); color:#fff; font-weight:700; font-size:0.8rem; cursor:pointer; font-family:var(--font-body); white-space:nowrap;">Notify Me</button>
+              </div>
+            </div>
+            <div id="blurWatchSuccess" style="display:none; margin-top:1rem; color:#22c55e; font-size:0.85rem; font-weight:600;"></div>
           </div>
         </div>
 
@@ -455,6 +461,30 @@
       var btn = document.getElementById('explainToggle');
       el.classList.toggle('open');
       btn.textContent = el.classList.contains('open') ? 'How does this work? ▴' : 'How does this work? ▾';
+    }
+
+    // Blur box inline watch
+    function submitBlurWatch() {
+      var email = document.getElementById('blurWatchEmail').value.trim();
+      if (!email || !email.includes('@')) return;
+      var btn = document.getElementById('blurWatchBtn');
+      btn.disabled = true; btn.textContent = '...';
+      var formData = new FormData();
+      formData.append('email', email);
+      fetch('<%= shame_page_watch_path(@user.page_slug) %>', { method: 'POST', body: formData })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        document.getElementById('blurEmailWrapper').style.display = 'none';
+        var s = document.getElementById('blurWatchSuccess');
+        s.textContent = data.message || "You'll be notified!";
+        s.style.display = '';
+        // Also update the lower form if visible
+        document.getElementById('notifyFormWrapper').style.display = 'none';
+        var ls = document.getElementById('notifySuccess');
+        ls.textContent = data.message || "You'll be notified!";
+        ls.style.display = '';
+      })
+      .catch(function() { btn.disabled = false; btn.textContent = 'Notify Me'; });
     }
 
     // Watch / notify
