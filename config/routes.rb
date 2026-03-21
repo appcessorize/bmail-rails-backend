@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get "/p/:slug", to: "shame_pages#show", as: :shame_page
   get "/p/:slug/image", to: "shame_pages#image", as: :shame_page_image
   post "/p/:slug/report", to: "shame_pages#report", as: :shame_page_report
+  post "/p/:slug/watch", to: "shame_pages#watch", as: :shame_page_watch
+  get "/unsubscribe/:token", to: "shame_pages#unsubscribe", as: :unsubscribe_watcher
 
   # API endpoints
   get    "/me",     to: "users#me"

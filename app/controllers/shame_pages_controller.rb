@@ -51,6 +51,36 @@ class ShamePagesController < ActionController::Base
     end
   end
 
+  # POST /p/:slug/watch
+  def watch
+    watcher = PageWatcher.new(
+      page_slug: params[:slug],
+      email: params[:email]
+    )
+
+    if watcher.save
+      render json: { message: "You'll be notified when this page changes." }, status: :created
+    else
+      if watcher.errors[:email]&.include?("is already watching this page")
+        render json: { message: "You're already watching this page." }, status: :ok
+      else
+        render json: { errors: watcher.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+  end
+
+  # GET /unsubscribe/:token
+  def unsubscribe
+    watcher = PageWatcher.find_by(unsubscribe_token: params[:token])
+
+    if watcher
+      watcher.destroy
+      render html: unsubscribe_success_html.html_safe
+    else
+      render html: "<p>Link expired or already unsubscribed.</p>".html_safe, status: :not_found
+    end
+  end
+
   # GET /admin/reports
   def reports_index
     render json: { error: "Unauthorized" }, status: :unauthorized and return unless admin_authorized?
@@ -88,5 +118,33 @@ class ShamePagesController < ActionController::Base
     Net::HTTP.post_form(uri, chat_id: ENV["TELEGRAM_CHAT_ID"], text: message)
   rescue StandardError => e
     Rails.logger.error("Telegram report notification failed: #{e.message}")
+  end
+
+  def unsubscribe_success_html
+    <<~HTML
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Unsubscribed - Blackmail.wtf</title>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font-family: 'Avenir Next', sans-serif; background: #120f0e; color: #f9fafb; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+          .card { text-align: center; padding: 3rem; }
+          h1 { color: #4f9bc4; font-size: 1.5rem; margin-bottom: 1rem; }
+          p { opacity: 0.7; margin-bottom: 2rem; }
+          a { color: #4f9bc4; text-decoration: none; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>Unsubscribed</h1>
+          <p>You won't receive any more notifications for this page.</p>
+          <a href="/">Back to Blackmail.wtf</a>
+        </div>
+      </body>
+      </html>
+    HTML
   end
 end

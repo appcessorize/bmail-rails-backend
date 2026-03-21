@@ -4,8 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-itunes-app" content="app-id=6745029022">
-  <title><%= @shame_visible ? "SHAME! - Blackmail.wtf" : "Staying Focused - Blackmail.wtf" %></title>
+  <title><%= @shame_visible ? "SHAME! - Blackmail.wtf" : "I'm Blackmailing Myself - Blackmail.wtf" %></title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
+
+  <!-- OG / Social share -->
+  <meta property="og:title" content="<%= @shame_visible ? "SHAME! They failed!" : "Help, I'm being blackmailed!" %>">
+  <meta property="og:description" content="<%= @shame_visible ? "This person couldn't resist their phone." : "Someone is blackmailing themselves to stay off their phone." %>">
+  <meta property="og:image" content="<%= "#{ENV.fetch("PUBLIC_BASE_URL", request.base_url)}/images/og-share.png" %>">
+  <meta property="og:url" content="<%= request.original_url %>">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
   <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="/fonts/WhirlyBatsVariable.woff2" as="font" type="font/woff2" crossorigin>
   <style>
@@ -13,7 +22,6 @@
       font-family: 'WhirlyBirdie';
       src: url('/fonts/WhirlyBirdie-WideBold.otf') format('opentype');
       font-weight: bold;
-      font-style: normal;
       font-display: swap;
     }
     @font-face {
@@ -41,12 +49,7 @@
       line-height: 1.6;
     }
     a { text-decoration: none; }
-    .container {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 0 20px;
-      width: 100%;
-    }
+    .container { max-width: 520px; margin: 0 auto; padding: 0 20px; width: 100%; }
     header {
       display: flex;
       justify-content: space-between;
@@ -57,35 +60,16 @@
     }
     header .logo img { height: 32px; width: auto; }
     .faq-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 2px solid var(--bm-blue);
-      background: none;
-      color: var(--bm-blue);
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      font-family: var(--font-body);
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 2px solid var(--bm-blue); background: none;
+      color: var(--bm-blue); font-size: 1.1rem; font-weight: bold;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; font-family: var(--font-body);
     }
     .faq-btn:hover { background: rgba(79, 155, 196, 0.1); }
     main { flex: 1; text-align: center; }
-    .status-badge {
-      display: inline-block;
-      padding: 0.5rem 1.5rem;
-      border-radius: 99px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 1.5rem;
-    }
-    .status-badge.failed { background: var(--bm-red); color: #fff; }
-    .status-badge.focused { display: none; }
+
+    /* Headings */
     h1 {
       font-family: var(--font-display);
       font-size: 2.8rem;
@@ -95,40 +79,31 @@
       margin-bottom: 1rem;
     }
     h1.shame-title { color: var(--bm-red); }
-    h1.focus-title { color: var(--bm-blue); }
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--bm-blue);
-      margin-bottom: 2rem;
+    h1.focus-title { color: var(--bm-cream); }
+    .subtitle { font-size: 1.05rem; color: rgba(249,250,251,0.7); margin-bottom: 2rem; line-height: 1.7; }
+    .status-badge {
+      display: inline-block; padding: 0.5rem 1.5rem; border-radius: 99px;
+      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; margin-bottom: 1.5rem;
     }
+    .status-badge.failed { background: var(--bm-red); color: #fff; }
+
+    /* Shame image */
     .shame-image {
-      width: 100%;
-      max-width: 360px;
-      margin: 0 auto 1.5rem;
-      border-radius: 16px;
-      border: 4px solid var(--bm-red);
-      box-shadow: 0 0 40px rgba(229, 51, 42, 0.4);
-      display: block;
+      width: 100%; max-width: 360px; margin: 0 auto 1.5rem;
+      border-radius: 16px; border: 4px solid var(--bm-red);
+      box-shadow: 0 0 40px rgba(229, 51, 42, 0.4); display: block;
     }
-    .time-ago {
-      font-size: 0.85rem;
-      color: rgba(249, 250, 251, 0.5);
-      margin-bottom: 2rem;
-    }
+    .time-ago { font-size: 0.85rem; color: rgba(249,250,251,0.5); margin-bottom: 2rem; }
+
+    /* Blur box (no shame) */
     .blur-box {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      margin: 0 auto 2rem;
-      aspect-ratio: 1;
-      border-radius: 16px;
-      border: 4px solid rgba(79, 155, 196, 0.4);
-      overflow: hidden;
+      position: relative; width: 100%; max-width: 360px;
+      margin: 0 auto 2rem; aspect-ratio: 1; border-radius: 16px;
+      border: 4px solid rgba(79, 155, 196, 0.25); overflow: hidden;
     }
     .blur-bg {
-      position: absolute;
-      inset: -20px;
-      filter: blur(30px);
+      position: absolute; inset: -20px; filter: blur(30px);
       background:
         radial-gradient(circle at 30% 40%, rgba(229,51,42,0.4) 0%, transparent 50%),
         radial-gradient(circle at 70% 60%, rgba(79,155,196,0.35) 0%, transparent 50%),
@@ -142,296 +117,180 @@
       100% { filter: blur(35px) brightness(1.1); }
     }
     .blur-text {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      text-align: center;
+      position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; padding: 2rem;
+      font-weight: 700; font-size: 1.15rem; line-height: 1.6; text-align: center;
     }
+    .blur-text .camera-icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+
+    /* Explain more toggle */
+    .explain-toggle {
+      background: none; border: none; color: var(--bm-blue); cursor: pointer;
+      font-size: 0.9rem; font-weight: 600; font-family: var(--font-body);
+      padding: 0.5rem 0; margin-bottom: 1rem; transition: opacity 0.2s;
+    }
+    .explain-toggle:hover { opacity: 0.8; }
+    .explain-content {
+      display: none; text-align: left; background: rgba(79,155,196,0.08);
+      border: 1px solid rgba(79,155,196,0.2); border-radius: 12px;
+      padding: 1.25rem; margin-bottom: 2rem; font-size: 0.95rem;
+      line-height: 1.7; color: rgba(249,250,251,0.75);
+    }
+    .explain-content.open { display: block; }
+
+    /* Notify section */
+    .notify-section {
+      background: rgba(79, 155, 196, 0.08);
+      border: 1px solid rgba(79, 155, 196, 0.25);
+      border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;
+    }
+    .notify-section h3 {
+      font-family: var(--font-display);
+      color: var(--bm-blue); font-size: 1.1rem;
+      letter-spacing: 1px; margin-bottom: 0.4rem;
+    }
+    .notify-section p {
+      font-size: 0.9rem; color: rgba(249,250,251,0.5); margin-bottom: 1rem;
+    }
+    .notify-form {
+      display: flex; gap: 0.5rem;
+    }
+    .notify-form input {
+      flex: 1; padding: 0.75rem 1rem; border-radius: 10px;
+      border: 1.5px solid rgba(79,155,196,0.3); background: rgba(0,0,0,0.3);
+      color: var(--bm-cream); font-size: 0.95rem; font-family: var(--font-body);
+    }
+    .notify-form input:focus { outline: none; border-color: var(--bm-blue); }
+    .notify-form input::placeholder { color: rgba(249,250,251,0.3); }
+    .notify-form button {
+      padding: 0.75rem 1.25rem; border-radius: 10px; border: none;
+      background: var(--bm-blue); color: #fff; font-weight: 700;
+      font-size: 0.95rem; cursor: pointer; font-family: var(--font-body);
+      transition: transform 0.2s; white-space: nowrap;
+    }
+    .notify-form button:hover { transform: translateY(-1px); }
+    .notify-form button:disabled { opacity: 0.6; cursor: default; transform: none; }
+    .notify-success {
+      color: #22c55e; font-weight: 600; font-size: 0.95rem; padding: 0.5rem 0;
+    }
+    .notify-error {
+      color: var(--bm-red); font-size: 0.85rem; margin-top: 0.5rem;
+    }
+
+    /* Share section */
     .share-section {
       background: rgba(249, 250, 251, 0.05);
-      border: 1px solid rgba(79, 155, 196, 0.3);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      border: 1px solid rgba(79, 155, 196, 0.2);
+      border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;
     }
-    .share-label {
-      font-size: 0.85rem;
-      color: rgba(249, 250, 251, 0.5);
-      margin-bottom: 1rem;
-    }
-    .share-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-    }
+    .share-label { font-size: 0.85rem; color: rgba(249,250,251,0.5); margin-bottom: 1rem; }
+    .share-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .share-buttons .btn-share { grid-column: 1 / -1; }
     .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      width: 100%;
-      padding: 0.85rem 1rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      font-family: var(--font-body);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
-      text-decoration: none;
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      width: 100%; padding: 0.85rem 1rem; border-radius: 12px;
+      font-weight: 600; font-size: 0.95rem; font-family: var(--font-body);
+      cursor: pointer; transition: all 0.2s ease; border: none;
+      text-decoration: none; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
     .btn:active { transform: translateY(0); }
     .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
     .btn-share { background: var(--bm-blue); padding: 1rem 1.5rem; font-size: 1.05rem; }
     .btn-copy {
-      background: rgba(79, 155, 196, 0.15);
-      color: var(--bm-cream);
+      background: rgba(79, 155, 196, 0.15); color: var(--bm-cream);
       border: 1.5px solid rgba(79, 155, 196, 0.4);
     }
     .btn-copy:hover { border-color: var(--bm-blue); background: rgba(79, 155, 196, 0.25); }
     .btn-copy.copied { border-color: #22c55e; background: #22c55e; color: #fff; }
     .btn-whatsapp { background: #25d366; }
     .btn-whatsapp:hover { background: #20bd5a; }
-    .btn-x { background: #1a1a1a; border: 1.5px solid rgba(255,255,255,0.15); }
-    .btn-x:hover { border-color: rgba(255,255,255,0.3); }
-    .cta-card {
-      background: var(--bm-cream);
-      border-radius: 16px;
-      padding: 1.5rem;
-      text-align: center;
-      margin-bottom: 2rem;
+
+    /* Download CTA */
+    .download-section {
+      background: var(--bm-cream); border-radius: 16px;
+      padding: 1.5rem; text-align: center; margin-bottom: 2rem;
     }
-    .cta-card p {
-      color: var(--bm-dark);
-      font-weight: 700;
-      margin-bottom: 1rem;
+    .download-section p {
+      color: var(--bm-dark); font-weight: 700; margin-bottom: 1rem; font-size: 1.05rem;
     }
-    .btn-primary {
-      display: inline-block;
-      background: var(--bm-red);
-      color: #fff;
-      padding: 0.85rem 2rem;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.05rem;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-family: var(--font-body);
+    .download-section .app-badge {
+      height: 48px; transition: transform 0.2s;
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(229, 51, 42, 0.4);
+    .download-section .app-badge:hover { transform: translateY(-2px); }
+
+    /* Report */
+    .report-btn {
+      background: none; border: 1px solid rgba(249,250,251,0.12);
+      color: rgba(249,250,251,0.35); padding: 0.5rem 1rem;
+      border-radius: 8px; font-size: 0.8rem; cursor: pointer;
+      transition: all 0.2s; font-family: var(--font-body); margin-bottom: 2rem;
     }
+    .report-btn:hover { border-color: var(--bm-red); color: var(--bm-red); }
+
+    /* Footer */
     footer {
-      border-top: 2px solid var(--bm-blue);
-      padding: 2rem 0;
-      text-align: center;
-      margin-top: auto;
+      border-top: 2px solid rgba(79,155,196,0.3);
+      padding: 2rem 0; text-align: center; margin-top: auto;
     }
-    .footer-quote {
-      font-style: italic;
-      color: var(--bm-blue);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-    .footer-copy {
-      color: rgba(79, 155, 196, 0.5);
-      font-size: 0.8rem;
-    }
-    .footer-links {
-      margin-top: 0.75rem;
-      font-size: 0.8rem;
-    }
-    .footer-links a {
-      color: var(--bm-blue);
-      opacity: 0.6;
-      margin: 0 0.5rem;
-      transition: opacity 0.2s;
-    }
+    .footer-quote { font-style: italic; color: var(--bm-blue); font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .footer-copy { color: rgba(79, 155, 196, 0.5); font-size: 0.8rem; }
+    .footer-links { margin-top: 0.75rem; font-size: 0.8rem; }
+    .footer-links a { color: var(--bm-blue); opacity: 0.6; margin: 0 0.5rem; transition: opacity 0.2s; }
     .footer-links a:hover { opacity: 1; }
 
-    /* Report Modal */
-    .report-btn {
-      background: none;
-      border: 1px solid rgba(249, 250, 251, 0.15);
-      color: rgba(249, 250, 251, 0.4);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: var(--font-body);
-      margin-bottom: 2rem;
-    }
-    .report-btn:hover {
-      border-color: var(--bm-red);
-      color: var(--bm-red);
-    }
-    .report-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .report-modal.open { display: flex; }
-    .report-card {
-      background: var(--bm-dark);
-      border: 2px solid var(--bm-red);
-      border-radius: 16px;
-      max-width: 420px;
-      width: 100%;
-      padding: 1.5rem;
-    }
-    .report-card h3 {
-      font-family: var(--font-display);
-      color: var(--bm-red);
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      letter-spacing: 1px;
-    }
-    .report-card label {
-      display: block;
-      color: var(--bm-cream);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-    .report-card select, .report-card textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1.5px solid rgba(229, 51, 42, 0.3);
-      border-radius: 8px;
-      background: rgba(0,0,0,0.4);
-      color: var(--bm-cream);
-      font-size: 0.95rem;
-      font-family: var(--font-body);
-      margin-bottom: 1rem;
-    }
-    .report-card select:focus, .report-card textarea:focus {
-      outline: none;
-      border-color: var(--bm-red);
-    }
-    .report-card textarea { min-height: 80px; resize: vertical; }
-    .report-actions {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-    }
-    .report-actions button {
-      flex: 1;
-      padding: 0.75rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      border: none;
-      font-family: var(--font-body);
-      transition: transform 0.2s;
-    }
-    .report-actions button:hover { transform: translateY(-1px); }
-    .btn-report-cancel {
-      background: rgba(249, 250, 251, 0.1);
-      color: var(--bm-cream);
-    }
-    .btn-report-submit {
-      background: var(--bm-red);
-      color: #fff;
-    }
-    .report-success {
-      text-align: center;
-      color: #22c55e;
-      font-weight: 600;
-      padding: 1rem 0;
-    }
-
-    /* FAQ Modal */
+    /* Modals */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 50;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85); z-index: 50;
+      align-items: center; justify-content: center; padding: 1rem;
     }
-    .modal-overlay.open {
-      display: flex;
-    }
+    .modal-overlay.open { display: flex; }
     .modal {
-      background: var(--bm-dark);
-      border: 2px solid var(--bm-blue);
-      border-radius: 16px;
-      max-width: 520px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
+      background: var(--bm-dark); border: 2px solid var(--bm-blue);
+      border-radius: 16px; max-width: 520px; width: 100%;
+      max-height: 80vh; overflow-y: auto;
     }
     .modal-header {
-      position: sticky;
-      top: 0;
-      background: var(--bm-dark);
+      position: sticky; top: 0; background: var(--bm-dark);
       border-bottom: 1px solid var(--bm-blue);
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 1rem 1.5rem; display: flex;
+      justify-content: space-between; align-items: center;
     }
-    .modal-header h2 {
-      font-family: var(--font-display);
-      color: var(--bm-blue);
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-    }
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--bm-cream);
-      font-size: 1.8rem;
-      cursor: pointer;
-      line-height: 1;
-    }
+    .modal-header h2 { font-family: var(--font-display); color: var(--bm-blue); font-size: 1.3rem; letter-spacing: 1px; }
+    .modal-close { background: none; border: none; color: var(--bm-cream); font-size: 1.8rem; cursor: pointer; line-height: 1; }
     .modal-close:hover { color: var(--bm-blue); }
     .modal-body { padding: 1.5rem; }
     .modal-body .faq-item { margin-bottom: 1.5rem; }
-    .modal-body .faq-item h3 {
-      font-family: var(--font-display);
-      color: var(--bm-red);
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.5px;
-    }
-    .modal-body .faq-item p {
-      color: rgba(249, 250, 251, 0.8);
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
+    .modal-body .faq-item h3 { font-family: var(--font-display); color: var(--bm-red); font-size: 1rem; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+    .modal-body .faq-item p { color: rgba(249,250,251,0.8); font-size: 0.9rem; line-height: 1.6; }
+
+    /* Report modal */
+    .report-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+    .report-modal.open { display: flex; }
+    .report-card { background: var(--bm-dark); border: 2px solid var(--bm-red); border-radius: 16px; max-width: 420px; width: 100%; padding: 1.5rem; }
+    .report-card h3 { font-family: var(--font-display); color: var(--bm-red); font-size: 1.3rem; margin-bottom: 1rem; letter-spacing: 1px; }
+    .report-card label { display: block; color: var(--bm-cream); font-size: 0.9rem; margin-bottom: 0.5rem; font-weight: 600; }
+    .report-card select, .report-card textarea { width: 100%; padding: 0.75rem; border: 1.5px solid rgba(229,51,42,0.3); border-radius: 8px; background: rgba(0,0,0,0.4); color: var(--bm-cream); font-size: 0.95rem; font-family: var(--font-body); margin-bottom: 1rem; }
+    .report-card select:focus, .report-card textarea:focus { outline: none; border-color: var(--bm-red); }
+    .report-card textarea { min-height: 80px; resize: vertical; }
+    .report-actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+    .report-actions button { flex: 1; padding: 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; font-family: var(--font-body); transition: transform 0.2s; }
+    .report-actions button:hover { transform: translateY(-1px); }
+    .btn-report-cancel { background: rgba(249,250,251,0.1); color: var(--bm-cream); }
+    .btn-report-submit { background: var(--bm-red); color: #fff; }
+    .report-success { text-align: center; color: #22c55e; font-weight: 600; padding: 1rem 0; }
 
     @media (max-width: 480px) {
       h1 { font-size: 2.2rem; }
+      .notify-form { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <a href="/" class="logo">
-        <img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL">
-      </a>
+      <a href="/" class="logo"><img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL"></a>
       <button class="faq-btn" onclick="openFaqModal()">?</button>
     </header>
 
@@ -439,14 +298,10 @@
       <% if @shame_visible %>
         <div><span class="status-badge failed">FAILED</span></div>
         <h1 class="shame-title">THEY COULDN'T<br>RESIST</h1>
-        <p class="subtitle">This person failed their focus session.</p>
+        <p class="subtitle">This person failed their focus session.<br>Their embarrassing photo is now public.</p>
 
         <% if @has_image %>
-          <img
-            src="<%= shame_page_image_path(@user.page_slug) %>"
-            alt="Shame Photo"
-            class="shame-image"
-          >
+          <img src="<%= shame_page_image_path(@user.page_slug) %>" alt="Shame Photo" class="shame-image">
         <% end %>
 
         <% if @shame_activated_at %>
@@ -454,18 +309,45 @@
         <% end %>
 
       <% else %>
-        <div><span class="status-badge focused">FOCUSED</span></div>
-        <h1 class="focus-title">STAYING<br>STRONG</h1>
-        <p class="subtitle">This person is keeping their focus. No shame here... yet.</p>
+        <h1 class="focus-title">I'M BLACKMAILING<br>MYSELF</h1>
+        <p class="subtitle">If I use my phone too much, an embarrassing picture will appear here.</p>
 
         <div class="blur-box">
           <div class="blur-bg"></div>
           <div class="blur-text">
-            <p>📸<br><br>Photo will show here if they pick up their phone</p>
+            <p><span class="camera-icon">📸</span>Photo will appear here if they pick up their phone</p>
           </div>
+        </div>
+
+        <button class="explain-toggle" id="explainToggle" onclick="toggleExplain()">How does this work? ▾</button>
+        <div class="explain-content" id="explainContent">
+          <p>This person is using <strong>Blackmail</strong>, an app that uses the power of shame to help you stay off your phone.</p>
+          <p style="margin-top: 0.75rem;">Here's how it works:</p>
+          <ol style="margin: 0.75rem 0 0 1.25rem; color: rgba(249,250,251,0.75);">
+            <li style="margin-bottom: 0.4rem;">They uploaded an embarrassing photo of themselves</li>
+            <li style="margin-bottom: 0.4rem;">They shared this page with friends (that's you!)</li>
+            <li style="margin-bottom: 0.4rem;">They start a focus timer and put their phone face-down</li>
+            <li>If they pick up their phone before the timer ends, their embarrassing photo appears on this page for everyone to see</li>
+          </ol>
+          <p style="margin-top: 0.75rem; color: var(--bm-blue); font-weight: 600;">The fear of public embarrassment keeps them focused.</p>
         </div>
       <% end %>
 
+      <!-- Get Updates -->
+      <div class="notify-section">
+        <h3>Get Updates</h3>
+        <p>Get notified the moment this page changes.</p>
+        <div id="notifyFormWrapper">
+          <div class="notify-form" id="notifyForm">
+            <input type="email" id="watchEmail" placeholder="your@email.com" autocomplete="email">
+            <button id="watchBtn" onclick="submitWatch()">Notify Me</button>
+          </div>
+          <div id="watchError" class="notify-error" style="display:none;"></div>
+        </div>
+        <div id="notifySuccess" class="notify-success" style="display:none;"></div>
+      </div>
+
+      <!-- Share -->
       <div class="share-section">
         <p class="share-label">Share this page</p>
         <div class="share-buttons">
@@ -484,12 +366,15 @@
         </div>
       </div>
 
-      <button class="report-btn" onclick="openReportModal()">Report Content</button>
-
-      <div class="cta-card">
-        <p>Get updates on this page</p>
-        <a href="/" class="btn-primary">Get Blackmail</a>
+      <!-- Download -->
+      <div class="download-section">
+        <p>Want to blackmail yourself?</p>
+        <a href="https://apps.apple.com/app/blackmail-focus-or-else/id6745029022" target="_blank" rel="noopener">
+          <img src="/images/appstorebadgeblack.svg" alt="Download on the App Store" class="app-badge">
+        </a>
       </div>
+
+      <button class="report-btn" onclick="openReportModal()">Report Content</button>
     </main>
 
     <footer>
@@ -529,7 +414,7 @@
         </div>
         <div class="faq-item">
           <h3>Is this page public?</h3>
-          <p>The page URL is a random code that's impossible to guess. Only people who have been shared the link can see it - there's no public directory.</p>
+          <p>The page URL is a random code that's impossible to guess. Only people who have been shared the link can see it &mdash; there's no public directory.</p>
         </div>
       </div>
     </div>
@@ -563,88 +448,114 @@
   </div>
 
   <script>
+    // Explain toggle
+    function toggleExplain() {
+      var el = document.getElementById('explainContent');
+      var btn = document.getElementById('explainToggle');
+      el.classList.toggle('open');
+      btn.textContent = el.classList.contains('open') ? 'How does this work? ▴' : 'How does this work? ▾';
+    }
+
+    // Watch / notify
+    function submitWatch() {
+      var email = document.getElementById('watchEmail').value.trim();
+      var errorEl = document.getElementById('watchError');
+      errorEl.style.display = 'none';
+
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Please enter a valid email address.';
+        errorEl.style.display = '';
+        return;
+      }
+
+      var btn = document.getElementById('watchBtn');
+      btn.disabled = true;
+      btn.textContent = 'Subscribing...';
+
+      var formData = new FormData();
+      formData.append('email', email);
+
+      fetch('<%= shame_page_watch_path(@user.page_slug) %>', {
+        method: 'POST',
+        body: formData
+      })
+      .then(function(resp) { return resp.json(); })
+      .then(function(data) {
+        document.getElementById('notifyFormWrapper').style.display = 'none';
+        var success = document.getElementById('notifySuccess');
+        success.textContent = data.message || "You'll be notified when this page changes.";
+        success.style.display = '';
+      })
+      .catch(function() {
+        errorEl.textContent = 'Something went wrong. Try again.';
+        errorEl.style.display = '';
+        btn.disabled = false;
+        btn.textContent = 'Notify Me';
+      });
+    }
+
+    // Report
     function openReportModal() {
       document.getElementById('reportModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
     function closeReportModal() {
       document.getElementById('reportModal').classList.remove('open');
       document.body.style.overflow = '';
-      // Reset form
       document.getElementById('reportForm').style.display = '';
       document.getElementById('reportSuccess').style.display = 'none';
       document.getElementById('reportReason').value = '';
       document.getElementById('reportDetails').value = '';
     }
-
     document.getElementById('reportModal').addEventListener('click', function(e) {
       if (e.target === this) closeReportModal();
     });
-
     function submitReport() {
       var reason = document.getElementById('reportReason').value;
-      if (!reason) { return; }
-
+      if (!reason) return;
       var btn = document.getElementById('reportSubmitBtn');
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
-
-      var details = document.getElementById('reportDetails').value;
+      btn.disabled = true; btn.textContent = 'Submitting...';
       var formData = new FormData();
       formData.append('reason', reason);
-      formData.append('details', details);
-
-      fetch('<%= shame_page_report_path(@user.page_slug) %>', {
-        method: 'POST',
-        body: formData
-      })
-      .then(function(resp) {
+      formData.append('details', document.getElementById('reportDetails').value);
+      fetch('<%= shame_page_report_path(@user.page_slug) %>', { method: 'POST', body: formData })
+      .then(function() {
         document.getElementById('reportForm').style.display = 'none';
         document.getElementById('reportSuccess').style.display = '';
       })
-      .catch(function() {
-        btn.disabled = false;
-        btn.textContent = 'Submit Report';
-      });
+      .catch(function() { btn.disabled = false; btn.textContent = 'Submit Report'; });
     }
 
+    // FAQ
     function openFaqModal() {
       document.getElementById('faqModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
     function closeFaqModal() {
       document.getElementById('faqModal').classList.remove('open');
       document.body.style.overflow = '';
     }
-
     document.getElementById('faqModal').addEventListener('click', function(e) {
       if (e.target === this) closeFaqModal();
     });
 
+    // Share
     function shareNative() {
       if (navigator.share) {
         navigator.share({
-          title: '<%= @shame_visible ? "SHAME! They failed!" : "Are they focused?" %>',
-          text: '<%= @shame_visible ? "They couldn\'t resist their phone!" : "Check if they failed their focus session" %>',
+          title: '<%= @shame_visible ? "SHAME! They failed!" : "Help, I\\'m being blackmailed!" %>',
+          text: '<%= @shame_visible ? "They couldn\\'t resist their phone!" : "Someone is blackmailing themselves to stay off their phone" %>',
           url: window.location.href
         }).catch(console.error);
-      } else {
-        copyLink();
-      }
+      } else { copyLink(); }
     }
-
     function copyLink() {
       navigator.clipboard.writeText(window.location.href).then(function() {
         var btn = document.getElementById('copyBtn');
         var text = document.getElementById('copyText');
         text.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(function() {
-          text.textContent = 'Copy Link';
-          btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(function() { text.textContent = 'Copy Link'; btn.classList.remove('copied'); }, 2000);
       });
     }
   </script>

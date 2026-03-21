@@ -34,6 +34,13 @@ class Rack::Attack
     end
   end
 
+  # Throttle page watch subscriptions by IP
+  throttle("watch/ip", limit: 10, period: 300) do |req|
+    if req.path.match?(%r{\A/p/.+/watch\z}) && req.post?
+      req.ip
+    end
+  end
+
   # Throttle admin endpoint by IP (prevents brute-force on admin token)
   throttle("admin/ip", limit: 5, period: 60) do |req|
     if req.path.start_with?("/admin")
