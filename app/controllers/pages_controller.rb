@@ -176,10 +176,11 @@ class PagesController < ActionController::Base
             opacity: 0.85;
           }
           .shame-text {
-            font-size: 3rem;
+            font-family: 'WhirlyBirdie', Georgia, serif;
+            font-size: 4rem;
             color: var(--bm-red);
             font-weight: 900;
-            font-style: italic;
+            letter-spacing: 4px;
             margin: 1.5rem 0 2.5rem;
           }
           .app-badge {
@@ -594,7 +595,7 @@ class PagesController < ActionController::Base
              
             </p>
                  <p class="hero-text">Fighting modern psychological manipulation is simple when you use the oldest motivational strategy:</p>
-            <p class="hero">SHAME</p>
+            <p class="shame-text">SHAME</p>
 
              <p class="hero-text">Blackmail is an iOS app that forces you to take a break from your phone.It uses the power of embarrassment to help you break free from mindlessly scrolling, liking, and tapping.</p>
               <p class="hero-text">because you don't need motivation...</p>
@@ -935,9 +936,11 @@ class PagesController < ActionController::Base
             display: block;
           }
           .shame-text {
-            font-size: 3rem;
+            font-family: 'WhirlyBirdie', Georgia, serif;
+            font-size: 4rem;
             color: var(--bm-red);
             font-weight: 900;
+            letter-spacing: 4px;
             text-align: center;
             margin: 2rem 0;
           }
