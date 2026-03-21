@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       email: user.email,
       image_public: user.image_public,
       page_slug: user.page_slug,
-      page_url: user.page_slug.present? ? "#{request.base_url}/p/#{user.page_slug}" : nil,
+      page_url: user.page_slug.present? ? "#{ENV.fetch("PUBLIC_BASE_URL", request.base_url)}/p/#{user.page_slug}" : nil,
       shame_active: user.shame_active,
       shame_activated_at: user.shame_activated_at&.iso8601,
       page_deleted: user.page_deleted

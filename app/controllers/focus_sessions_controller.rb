@@ -92,6 +92,6 @@ class FocusSessionsController < ApplicationController
 
   def page_url_for(user)
     return nil unless user.page_slug.present?
-    "#{request.base_url}/p/#{user.page_slug}"
+    "#{ENV.fetch("PUBLIC_BASE_URL", request.base_url)}/p/#{user.page_slug}"
   end
 end
