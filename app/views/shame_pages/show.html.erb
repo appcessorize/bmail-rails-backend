@@ -316,6 +316,7 @@
           <div class="blur-bg"></div>
           <div class="blur-text">
             <p><span class="camera-icon">📸</span>Photo will appear here if they pick up their phone</p>
+            <a href="#notifySection" onclick="document.getElementById('watchEmail').focus()" style="color:var(--bm-blue); font-size:0.85rem; margin-top:0.75rem; display:inline-block;">Add your email for updates</a>
           </div>
         </div>
 
@@ -334,7 +335,7 @@
       <% end %>
 
       <!-- Get Updates -->
-      <div class="notify-section">
+      <div class="notify-section" id="notifySection">
         <h3>Get Updates</h3>
         <p>Get notified the moment this page changes.</p>
         <div id="notifyFormWrapper">
