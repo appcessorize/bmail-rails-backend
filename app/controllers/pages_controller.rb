@@ -770,7 +770,7 @@ class PagesController < ActionController::Base
               <div class="footer-section">
                 <h4><span class="footer-icon">✉</span> Contact</h4>
                 <a href="/contact">Send us a message</a>
-                <a href="https://twitter.com/blackmailwtf" target="_blank">@blackmailwtf</a>
+                <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a>
               </div>
               <div class="footer-section">
                 <h4><span class="footer-icon">≥</span> About</h4>
@@ -1180,97 +1180,79 @@ class PagesController < ActionController::Base
             font-family: 'WhirlyBirdie', Georgia, serif;
             font-size: 3.5rem;
             color: var(--bm-red);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             letter-spacing: 2px;
           }
           .subtitle {
-            font-family: 'WhirlyBirdie', Georgia, serif;
             color: var(--bm-blue);
-            font-size: 1.3rem;
+            font-size: 1rem;
             margin-bottom: 3rem;
-            letter-spacing: 1px;
-          }
-          section {
-            margin-bottom: 4rem;
           }
           h2 {
             font-family: 'WhirlyBirdie', Georgia, serif;
             color: var(--bm-blue);
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--bm-blue);
+            font-size: 1.4rem;
+            margin: 2.5rem 0 1rem;
             letter-spacing: 1px;
           }
-          .fact-sheet {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+          .press-body {
+            max-width: 700px;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            -webkit-user-select: text;
+            user-select: text;
           }
-          .fact {
-            background: rgba(79, 155, 196, 0.1);
-            border: 1px solid var(--bm-blue);
-            border-radius: 12px;
+          .press-body p { margin-bottom: 1rem; }
+          .press-body ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+          }
+          .press-body li {
+            margin-bottom: 0.5rem;
+          }
+          .press-body strong { color: var(--bm-cream); }
+          .boilerplate {
+            background: rgba(229, 51, 42, 0.08);
+            border-left: 4px solid var(--bm-red);
             padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+          }
+          .fact-line {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.3rem;
           }
           .fact-label {
             color: var(--bm-blue);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+            min-width: 120px;
+            font-weight: 600;
           }
-          .fact-value {
-            color: var(--bm-cream);
-            font-size: 1.1rem;
-          }
-          .description {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            max-width: 700px;
-          }
-          .description p { margin-bottom: 1rem; }
-          .boilerplate {
-            background: rgba(229, 51, 42, 0.1);
-            border-left: 4px solid var(--bm-red);
-            padding: 1.5rem;
-            border-radius: 0 12px 12px 0;
-            font-style: italic;
-          }
-          .assets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          .colors-row {
+            display: flex;
             gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
           }
-          .asset-card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-          }
-          .asset-preview {
-            height: 80px;
+          .color-swatch {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
+            gap: 0.6rem;
           }
-          .asset-preview img {
-            max-height: 100%;
-            max-width: 100%;
+          .color-swatch span {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
           }
-          .asset-name {
-            color: var(--bm-cream);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+          .assets-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
           }
-          .asset-format {
-            color: #888;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-          }
-          .download-btn {
+          .assets-row a {
             display: inline-block;
             background: var(--bm-blue);
             color: #000;
@@ -1279,31 +1261,9 @@ class PagesController < ActionController::Base
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: bold;
+            transition: transform 0.2s;
           }
-          .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-          }
-          .contact-card {
-            background: rgba(79, 155, 196, 0.1);
-            border: 1px solid var(--bm-blue);
-            border-radius: 12px;
-            padding: 1.5rem;
-          }
-          .contact-card h3 {
-            color: var(--bm-red);
-            margin-bottom: 0.5rem;
-          }
-          .contact-card a {
-            color: var(--bm-blue);
-            text-decoration: none;
-          }
-          .contact-card p {
-            color: #888;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-          }
+          .assets-row a:hover { transform: translateY(-1px); }
           footer {
             text-align: center;
             padding: 3rem 0;
@@ -1318,156 +1278,71 @@ class PagesController < ActionController::Base
         <div class="container">
           <header>
             <div class="header-inner">
-              <a href="/" class="back-link">← Back to Home</a>
+              <a href="/" class="back-link">&larr; Back to Home</a>
               <img src="/images/BLACKMAILLogoLight.svg" alt="BLACKMAIL" style="height: 30px;">
             </div>
           </header>
 
           <h1>Press Kit</h1>
-          <p class="subtitle">Everything you need to write about Blackmail.wtf</p>
+          <p class="subtitle">Everything below is ready to copy &amp; paste.</p>
 
-          <section>
+          <div class="press-body">
+
             <h2>Fact Sheet</h2>
-            <div class="fact-sheet">
-              <div class="fact">
-                <div class="fact-label">Product Name</div>
-                <div class="fact-value">Blackmail</div>
-              </div>
-              <div class="fact">
-                <div class="fact-label">Website</div>
-                <div class="fact-value">blackmail.wtf</div>
-              </div>
-              <div class="fact">
-                <div class="fact-label">Platform</div>
-                <div class="fact-value">iOS</div>
-              </div>
-              <div class="fact">
-                <div class="fact-label">Price</div>
-                <div class="fact-value">Free</div>
-              </div>
-              <div class="fact">
-                <div class="fact-label">Category</div>
-                <div class="fact-value">Productivity / Focus</div>
-              </div>
-              <div class="fact">
-                <div class="fact-label">Launch</div>
-                <div class="fact-value">2025</div>
-              </div>
-            </div>
-          </section>
+            <div class="fact-line"><span class="fact-label">App Name</span> Blackmail: Focus or Else</div>
+            <div class="fact-line"><span class="fact-label">Website</span> blackmail.wtf</div>
+            <div class="fact-line"><span class="fact-label">Platform</span> iOS (iPhone)</div>
+            <div class="fact-line"><span class="fact-label">Price</span> Free</div>
+            <div class="fact-line"><span class="fact-label">Category</span> Productivity / Focus</div>
+            <div class="fact-line"><span class="fact-label">Launch</span> 2025</div>
+            <div class="fact-line"><span class="fact-label">Contact</span> support@blackmail.wtf</div>
 
-          <section>
-            <h2>Description</h2>
-            <div class="description">
-              <p><strong>Blackmail</strong> is a focus app that uses social accountability and the fear of embarrassment to help you stay off your phone.</p>
-              <p>Users upload an embarrassing photo and share a unique "shame page" URL with friends. When they start a focus timer and pick up their phone before it ends, their embarrassing photo becomes visible on the shame page.</p>
-              <p>The app fights fire with fire—using psychological pressure to counteract the addictive design patterns employed by social media and other apps.</p>
-            </div>
-          </section>
+            <h2>One-Liner</h2>
+            <p>Blackmail is an iOS app that uses the power of shame to help you put your phone down.</p>
 
-          <section>
+            <h2>Short Description</h2>
+            <p>Blackmail is a focus app that uses social accountability and the fear of embarrassment to help you stay off your phone. Upload an embarrassing photo, share your unique shame page with friends, and start a focus timer. If you pick up your phone before the timer ends, your photo goes live.</p>
+
             <h2>Boilerplate</h2>
             <div class="boilerplate">
-              <p>Blackmail.wtf is a productivity app that helps users reclaim their focus by leveraging the power of social accountability. In a world where the brightest minds are employed to keep you scrolling, Blackmail offers a simple antidote: shame. Upload an embarrassing photo, share your page with friends, and watch your focus skyrocket when real consequences are on the line.</p>
+              <p>Right now, some of the world's most talented people are working overtime to stop you from putting down your phone. Blackmail fights back with the oldest motivational strategy known to humanity: shame. Upload an embarrassing photo, share your page with friends, start a focus session, and watch your willpower skyrocket when real consequences are on the line. No subscriptions, no gamification, no gentle reminders. Just consequences.</p>
             </div>
-          </section>
 
-          <section>
             <h2>Key Features</h2>
-            <ul style="list-style: none; padding: 0;">
-              <li style="padding: 0.8rem 0; border-bottom: 1px solid #333;">📸 <strong>Shame Photo Upload</strong> — Upload an embarrassing selfie as motivation</li>
-              <li style="padding: 0.8rem 0; border-bottom: 1px solid #333;">🔗 <strong>Shareable Shame Pages</strong> — Unique anonymous URLs to share with friends</li>
-              <li style="padding: 0.8rem 0; border-bottom: 1px solid #333;">⏰ <strong>Focus Timer</strong> — Customizable focus sessions from 5 minutes to 4 hours</li>
-              <li style="padding: 0.8rem 0; border-bottom: 1px solid #333;">📱 <strong>Phone Face-Down Detection</strong> — Monitors when you pick up your phone</li>
-              <li style="padding: 0.8rem 0; border-bottom: 1px solid #333;">🔒 <strong>Privacy Controls</strong> — Hide or delete your photo anytime</li>
-              <li style="padding: 0.8rem 0;">🍎 <strong>Sign in with Apple</strong> — Quick, private authentication</li>
+            <ul>
+              <li><strong>Shame Photo Upload</strong> &mdash; Upload an embarrassing selfie as motivation</li>
+              <li><strong>Shareable Shame Pages</strong> &mdash; Unique anonymous URLs to share with friends</li>
+              <li><strong>Focus Timer</strong> &mdash; Sessions from 5 minutes to 4 hours</li>
+              <li><strong>Phone Face-Down Detection</strong> &mdash; Detects when you pick up your phone</li>
+              <li><strong>Privacy Controls</strong> &mdash; Hide or permanently delete your shame page anytime</li>
+              <li><strong>Sign in with Apple</strong> &mdash; No email or password needed</li>
             </ul>
-          </section>
 
-          <section>
-            <h2>Brand Assets</h2>
-            <div class="assets-grid">
-              <div class="asset-card">
-                <div class="asset-preview" style="background: #fff; border-radius: 8px;">
-                  <img src="/images/BLACKMAILLogoDark.svg" alt="Logo for light backgrounds">
-                </div>
-                <div class="asset-name">Logo (for light bg)</div>
-                <div class="asset-format">SVG</div>
-                <a href="/images/BLACKMAILLogoDark.svg" download class="download-btn">Download</a>
-              </div>
-              <div class="asset-card">
-                <div class="asset-preview">
-                  <img src="/images/BLACKMAILLogoLight.svg" alt="Logo for dark backgrounds">
-                </div>
-                <div class="asset-name">Logo (for dark bg)</div>
-                <div class="asset-format">SVG</div>
-                <a href="/images/BLACKMAILLogoLight.svg" download class="download-btn">Download</a>
-              </div>
-              <div class="asset-card">
-                <div class="asset-preview">
-                  <div style="width: 60px; height: 60px; background: var(--bm-red); border-radius: 12px;"></div>
-                </div>
-                <div class="asset-name">App Icon</div>
-                <div class="asset-format">PNG, 1024x1024</div>
-                <a href="/images/app-icon.png" download class="download-btn">Download</a>
-              </div>
-            </div>
-          </section>
-
-          <section>
             <h2>Brand Colors</h2>
-            <div class="assets-grid">
-              <div class="asset-card">
-                <div class="asset-preview">
-                  <div style="width: 80px; height: 80px; background: #e5332a; border-radius: 8px;"></div>
-                </div>
-                <div class="asset-name">Blackmail Red</div>
-                <div class="asset-format">#e5332a</div>
-              </div>
-              <div class="asset-card">
-                <div class="asset-preview">
-                  <div style="width: 80px; height: 80px; background: #4f9bc4; border-radius: 8px;"></div>
-                </div>
-                <div class="asset-name">Blackmail Blue</div>
-                <div class="asset-format">#4f9bc4</div>
-              </div>
-              <div class="asset-card">
-                <div class="asset-preview">
-                  <div style="width: 80px; height: 80px; background: #120f0e; border-radius: 8px; border: 1px solid #333;"></div>
-                </div>
-                <div class="asset-name">Dark Background</div>
-                <div class="asset-format">#120f0e</div>
-              </div>
-              <div class="asset-card">
-                <div class="asset-preview">
-                  <div style="width: 80px; height: 80px; background: #f9fafb; border-radius: 8px;"></div>
-                </div>
-                <div class="asset-name">Cream</div>
-                <div class="asset-format">#f9fafb</div>
-              </div>
+            <div class="colors-row">
+              <div class="color-swatch"><span style="background:#e5332a;"></span> #e5332a (Red)</div>
+              <div class="color-swatch"><span style="background:#4f9bc4;"></span> #4f9bc4 (Blue)</div>
+              <div class="color-swatch"><span style="background:#120f0e; border: 1px solid #333;"></span> #120f0e (Dark)</div>
+              <div class="color-swatch"><span style="background:#f9fafb;"></span> #f9fafb (Cream)</div>
             </div>
-          </section>
 
-          <section>
-            <h2>Contact</h2>
-            <div class="contact-grid">
-              <div class="contact-card">
-                <h3>Press & General Inquiries</h3>
-                <a href="/contact">Send us a message</a>
-                <p>For interviews, reviews, partnerships, and media requests</p>
-              </div>
-              <div class="contact-card">
-                <h3>Social</h3>
-                <a href="https://twitter.com/blackmailwtf" target="_blank">@blackmailwtf</a>
-                <p>Follow for updates and announcements</p>
-              </div>
+            <h2>Assets</h2>
+            <div class="assets-row">
+              <a href="/images/BLACKMAILLogoDark.svg" download>Logo (light bg) SVG</a>
+              <a href="/images/BLACKMAILLogoLight.svg" download>Logo (dark bg) SVG</a>
+              <a href="/images/app-icon.png" download>App Icon PNG</a>
             </div>
-          </section>
+
+            <h2>Contact</h2>
+            <p>For press, partnerships, or general inquiries:<br>
+            <a href="mailto:support@blackmail.wtf" style="color: var(--bm-blue);">support@blackmail.wtf</a></p>
+
+          </div>
 
           <footer>
-            <p>© 2025 Blackmail.wtf</p>
+            <p>&copy; 2025 Blackmail.wtf</p>
             <p style="margin-top: 0.5rem;">
-              <a href="/">Home</a> • <a href="/manifesto">Manifesto</a> • <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a>
+              <a href="/">Home</a> &bull; <a href="/manifesto">Manifesto</a> &bull; <a href="/privacy">Privacy</a> &bull; <a href="/terms">Terms</a>
             </p>
           </footer>
         </div>
