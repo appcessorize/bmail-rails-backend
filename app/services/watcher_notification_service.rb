@@ -13,7 +13,7 @@ class WatcherNotificationService
     watchers.find_each do |watcher|
       send_notification(watcher, page_url)
     rescue StandardError => e
-      Rails.logger.error("Watcher notification failed for #{watcher.email}: #{e.message}")
+      Rails.logger.error("Watcher notification failed for watcher ##{watcher.id}: #{e.message}")
     end
   end
 

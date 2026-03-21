@@ -53,6 +53,11 @@ class ShamePagesController < ActionController::Base
 
   # POST /p/:slug/watch
   def watch
+    unless User.exists?(page_slug: params[:slug])
+      render json: { error: "Page not found" }, status: :not_found
+      return
+    end
+
     watcher = PageWatcher.new(
       page_slug: params[:slug],
       email: params[:email]

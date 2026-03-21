@@ -74,7 +74,7 @@ class User < ApplicationRecord
   # Activate shame mode (called when user fails a focus session)
   def activate_shame!
     update!(shame_active: true, shame_activated_at: Time.current)
-    WatcherNotificationService.notify_watchers(self)
+    Thread.new { WatcherNotificationService.notify_watchers(self) }
   end
 
   # Deactivate shame mode (called when user manually clears it)
