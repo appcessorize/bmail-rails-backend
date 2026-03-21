@@ -1517,6 +1517,14 @@ class PagesController < ActionController::Base
               <h3>Report Content</h3>
               <p>Report inappropriate or offensive content on a shame page.</p>
             </a>
+            <a href="/privacy" class="support-card">
+              <h3>Privacy Policy</h3>
+              <p>How we handle your data and protect your privacy.</p>
+            </a>
+            <a href="/terms" class="support-card">
+              <h3>Terms of Service</h3>
+              <p>The rules and guidelines for using Blackmail.</p>
+            </a>
           </div>
 
           <!-- FAQ -->
