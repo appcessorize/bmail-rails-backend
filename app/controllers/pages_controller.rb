@@ -19,6 +19,10 @@ class PagesController < ActionController::Base
     render html: terms_of_service_html.html_safe
   end
 
+  def support
+    render html: support_page_html.html_safe
+  end
+
   private
 
   # Shared colors from manifesto
@@ -1343,6 +1347,247 @@ class PagesController < ActionController::Base
             <p>&copy; 2025 Blackmail.wtf</p>
             <p style="margin-top: 0.5rem;">
               <a href="/">Home</a> &bull; <a href="/manifesto">Manifesto</a> &bull; <a href="/privacy">Privacy</a> &bull; <a href="/terms">Terms</a>
+            </p>
+          </footer>
+        </div>
+      </body>
+      </html>
+    HTML
+  end
+
+  def support_page_html
+    <<~HTML
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="apple-itunes-app" content="app-id=6745029022">
+        <title>Support - Blackmail.wtf</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
+        <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
+        #{shared_styles}
+        <style>
+          body { background: #000; color: var(--bm-cream); min-height: 100vh; }
+          header {
+            padding: 20px 0;
+            border-bottom: 2px solid var(--bm-blue);
+            margin-bottom: 40px;
+          }
+          .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .back-link {
+            color: var(--bm-blue);
+            text-decoration: none;
+            font-size: 1rem;
+          }
+          h1 {
+            font-family: 'WhirlyBirdie', Georgia, serif;
+            font-size: 3rem;
+            color: var(--bm-red);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+          }
+          .subtitle {
+            color: rgba(249, 250, 251, 0.6);
+            font-size: 1.05rem;
+            margin-bottom: 3rem;
+          }
+          h2 {
+            font-family: 'WhirlyBirdie', Georgia, serif;
+            color: var(--bm-blue);
+            font-size: 1.4rem;
+            margin: 3rem 0 1.5rem;
+            letter-spacing: 1px;
+          }
+
+          /* Support links */
+          .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+          }
+          .support-card {
+            background: rgba(79, 155, 196, 0.08);
+            border: 1px solid rgba(79, 155, 196, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--bm-cream);
+            transition: border-color 0.2s, transform 0.2s;
+            display: block;
+          }
+          .support-card:hover {
+            border-color: var(--bm-blue);
+            transform: translateY(-2px);
+          }
+          .support-card h3 {
+            color: var(--bm-blue);
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+          }
+          .support-card p {
+            color: rgba(249, 250, 251, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.5;
+          }
+
+          /* FAQ */
+          .faq-item {
+            border-bottom: 1px solid rgba(79, 155, 196, 0.15);
+            padding: 1.25rem 0;
+            cursor: pointer;
+          }
+          .faq-item:last-child { border-bottom: none; }
+          .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--bm-cream);
+          }
+          .faq-question .arrow {
+            color: var(--bm-blue);
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+          }
+          .faq-item.open .arrow { transform: rotate(180deg); }
+          .faq-answer {
+            display: none;
+            color: rgba(249, 250, 251, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            padding-top: 0.75rem;
+          }
+          .faq-item.open .faq-answer { display: block; }
+
+          /* Account section */
+          .account-actions {
+            list-style: none;
+            padding: 0;
+          }
+          .account-actions li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(79, 155, 196, 0.15);
+            font-size: 0.95rem;
+            line-height: 1.6;
+          }
+          .account-actions li:last-child { border-bottom: none; }
+          .account-actions strong { color: var(--bm-cream); }
+          .account-actions span { color: rgba(249, 250, 251, 0.6); }
+
+          footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 2px solid var(--bm-blue);
+            margin-top: 4rem;
+          }
+          footer p { color: var(--bm-blue); font-size: 0.85rem; }
+          footer a { color: var(--bm-blue); text-decoration: none; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <header>
+            <div class="header-inner">
+              <a href="/" class="back-link">&larr; Home</a>
+              <img src="/images/BLACKMAILLogoLight.svg" alt="BLACKMAIL" style="height: 30px;">
+            </div>
+          </header>
+
+          <h1>Support</h1>
+          <p class="subtitle">Need help? You're in the right place.</p>
+
+          <!-- Contact -->
+          <div class="support-grid">
+            <a href="mailto:support@blackmail.wtf" class="support-card">
+              <h3>Email Us</h3>
+              <p>support@blackmail.wtf &mdash; we reply the same day.</p>
+            </a>
+            <a href="/contact" class="support-card">
+              <h3>Contact Form</h3>
+              <p>Send us a message directly from the website.</p>
+            </a>
+            <a href="mailto:support@blackmail.wtf?subject=Content%20Report" class="support-card">
+              <h3>Report Content</h3>
+              <p>Report inappropriate or offensive content on a shame page.</p>
+            </a>
+          </div>
+
+          <!-- FAQ -->
+          <h2>Frequently Asked Questions</h2>
+
+          <div class="faq-list">
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">What is Blackmail? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Blackmail is an app that helps you stay focused by using the power of shame. Upload an embarrassing photo, set a focus timer, and if you pick up your phone before the timer ends, your photo becomes visible on your public shame page.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">How does the shame page work? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Each user gets a unique, anonymous URL (like blackmail.wtf/p/abc123). Share this with friends. When you fail a focus session, your embarrassing photo appears on that page until you manually hide it.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">Is my photo secure? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Yes. Your photo is stored securely and is only visible on your shame page when you fail a focus session. You can hide it at any time from Settings. Photos are encrypted on your device and transmitted over HTTPS.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">Can I delete my photo? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Yes. Go to Settings &gt; Image Settings &gt; Delete Image. Your photo will be permanently removed from our servers.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">How do I hide my shame photo? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Go to Settings &gt; My Page &gt; Hide Shame Image. This will immediately remove your photo from your public shame page.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">Can people find my page without the link? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">No. Your page URL is a random 12-character code that is impossible to guess. There is no public directory or search. Only people you share the link with can see your page.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">What happens if I complete a focus session? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Nothing bad. Your photo stays private. The shame page will show that you're &ldquo;Staying Strong&rdquo; with no photo visible.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">Can I delete my shame page permanently? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Yes. Go to Settings &gt; My Page &gt; Delete My Page. This permanently removes your public shame page, your photo, and cannot be undone.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">How do I delete my account? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">Go to Settings &gt; Account &gt; Delete Account. This permanently deletes your account, all photos, focus session history, and your shame page. This action cannot be undone.</div>
+            </div>
+
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+              <div class="faq-question">How do I report inappropriate content? <span class="arrow">&#x25BE;</span></div>
+              <div class="faq-answer">On any shame page, tap the &ldquo;Report Content&rdquo; button at the bottom. You can also email us at support@blackmail.wtf or use the Report Content option in the app's Settings.</div>
+            </div>
+          </div>
+
+          <!-- Account management -->
+          <h2>Account Management</h2>
+          <ul class="account-actions">
+            <li><strong>Delete your photo:</strong> <span>Settings &gt; Image Settings &gt; Delete Image</span></li>
+            <li><strong>Hide shame image:</strong> <span>Settings &gt; My Page &gt; Hide Shame Image</span></li>
+            <li><strong>Delete your shame page:</strong> <span>Settings &gt; My Page &gt; Delete My Page (permanent)</span></li>
+            <li><strong>Delete your account:</strong> <span>Settings &gt; Account &gt; Delete Account (permanent)</span></li>
+            <li><strong>Report content:</strong> <span>Settings &gt; About &gt; Report Content, or email support@blackmail.wtf</span></li>
+          </ul>
+
+          <footer>
+            <p>&copy; 2025 Blackmail.wtf</p>
+            <p style="margin-top: 0.5rem;">
+              <a href="/">Home</a> &bull; <a href="/privacy">Privacy</a> &bull; <a href="/terms">Terms</a> &bull; <a href="/contact">Contact</a>
             </p>
           </footer>
         </div>

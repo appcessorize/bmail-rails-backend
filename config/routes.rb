@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # Content pages
   get "/manifesto", to: "pages#manifesto"
   get "/press", to: "pages#press"
+  get "/support", to: "pages#support"
   get "/contact", to: "contacts#new"
   post "/contact", to: "contacts#create"
 
