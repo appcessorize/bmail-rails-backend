@@ -248,6 +248,115 @@
       color: rgba(79, 155, 196, 0.5);
       font-size: 0.8rem;
     }
+    .footer-links {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+    }
+    .footer-links a {
+      color: var(--bm-blue);
+      opacity: 0.6;
+      margin: 0 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .footer-links a:hover { opacity: 1; }
+
+    /* Report Modal */
+    .report-btn {
+      background: none;
+      border: 1px solid rgba(249, 250, 251, 0.15);
+      color: rgba(249, 250, 251, 0.4);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+      margin-bottom: 2rem;
+    }
+    .report-btn:hover {
+      border-color: var(--bm-red);
+      color: var(--bm-red);
+    }
+    .report-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .report-modal.open { display: flex; }
+    .report-card {
+      background: var(--bm-dark);
+      border: 2px solid var(--bm-red);
+      border-radius: 16px;
+      max-width: 420px;
+      width: 100%;
+      padding: 1.5rem;
+    }
+    .report-card h3 {
+      font-family: var(--font-display);
+      color: var(--bm-red);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+    }
+    .report-card label {
+      display: block;
+      color: var(--bm-cream);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .report-card select, .report-card textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid rgba(229, 51, 42, 0.3);
+      border-radius: 8px;
+      background: rgba(0,0,0,0.4);
+      color: var(--bm-cream);
+      font-size: 0.95rem;
+      font-family: var(--font-body);
+      margin-bottom: 1rem;
+    }
+    .report-card select:focus, .report-card textarea:focus {
+      outline: none;
+      border-color: var(--bm-red);
+    }
+    .report-card textarea { min-height: 80px; resize: vertical; }
+    .report-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .report-actions button {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-body);
+      transition: transform 0.2s;
+    }
+    .report-actions button:hover { transform: translateY(-1px); }
+    .btn-report-cancel {
+      background: rgba(249, 250, 251, 0.1);
+      color: var(--bm-cream);
+    }
+    .btn-report-submit {
+      background: var(--bm-red);
+      color: #fff;
+    }
+    .report-success {
+      text-align: center;
+      color: #22c55e;
+      font-weight: 600;
+      padding: 1rem 0;
+    }
 
     /* FAQ Modal */
     .modal-overlay {
@@ -379,6 +488,8 @@
         </div>
       </div>
 
+      <button class="report-btn" onclick="openReportModal()">Report Content</button>
+
       <div class="cta-card">
         <p>Get updates on this page</p>
         <a href="/" class="btn-primary">Get Blackmail</a>
@@ -388,6 +499,11 @@
     <footer>
       <p class="footer-quote">"On your deathbed, do you think you will regret not using your phone more?"</p>
       <p class="footer-copy">&copy; 2025 Blackmail.wtf</p>
+      <div class="footer-links">
+        <a href="mailto:support@blackmail.wtf">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
     </footer>
   </div>
 
@@ -423,7 +539,80 @@
     </div>
   </div>
 
+  <!-- Report Modal -->
+  <div class="report-modal" id="reportModal">
+    <div class="report-card">
+      <div id="reportForm">
+        <h3>Report Content</h3>
+        <label for="reportReason">Reason</label>
+        <select id="reportReason">
+          <option value="">Select a reason...</option>
+          <option value="inappropriate">Inappropriate or offensive content</option>
+          <option value="illegal">Illegal content</option>
+          <option value="harassment">Harassment or bullying</option>
+          <option value="other">Other</option>
+        </select>
+        <label for="reportDetails">Details (optional)</label>
+        <textarea id="reportDetails" placeholder="Provide additional details..."></textarea>
+        <div class="report-actions">
+          <button class="btn-report-cancel" onclick="closeReportModal()">Cancel</button>
+          <button class="btn-report-submit" id="reportSubmitBtn" onclick="submitReport()">Submit Report</button>
+        </div>
+      </div>
+      <div id="reportSuccess" class="report-success" style="display:none;">
+        <p>Thank you for your report.<br>We will review this content shortly.</p>
+        <button class="btn-report-cancel" onclick="closeReportModal()" style="margin-top:1rem;width:100%;">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    function openReportModal() {
+      document.getElementById('reportModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.remove('open');
+      document.body.style.overflow = '';
+      // Reset form
+      document.getElementById('reportForm').style.display = '';
+      document.getElementById('reportSuccess').style.display = 'none';
+      document.getElementById('reportReason').value = '';
+      document.getElementById('reportDetails').value = '';
+    }
+
+    document.getElementById('reportModal').addEventListener('click', function(e) {
+      if (e.target === this) closeReportModal();
+    });
+
+    function submitReport() {
+      var reason = document.getElementById('reportReason').value;
+      if (!reason) { return; }
+
+      var btn = document.getElementById('reportSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      var details = document.getElementById('reportDetails').value;
+      var formData = new FormData();
+      formData.append('reason', reason);
+      formData.append('details', details);
+
+      fetch('<%= shame_page_report_path(@user.page_slug) %>', {
+        method: 'POST',
+        body: formData
+      })
+      .then(function(resp) {
+        document.getElementById('reportForm').style.display = 'none';
+        document.getElementById('reportSuccess').style.display = '';
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.textContent = 'Submit Report';
+      });
+    }
+
     function openFaqModal() {
       document.getElementById('faqModal').classList.add('open');
       document.body.style.overflow = 'hidden';

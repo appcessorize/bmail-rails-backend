@@ -1,3 +1,5 @@
+require "net/http"
+
 class ShamePagesController < ActionController::Base
   skip_before_action :verify_authenticity_token, raise: false
 
@@ -32,9 +34,59 @@ class ShamePagesController < ActionController::Base
     redirect_to user.profile_image.url(expires_in: 15.minutes), allow_other_host: true
   end
 
+  # POST /p/:slug/report
+  def report
+    report = Report.new(
+      page_slug: params[:slug],
+      reason: params[:reason],
+      details: params[:details],
+      reporter_ip: request.remote_ip
+    )
+
+    if report.save
+      send_report_telegram_notification(report)
+      render json: { message: "Report submitted. Thank you." }, status: :created
+    else
+      render json: { errors: report.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # GET /admin/reports
+  def reports_index
+    render json: { error: "Unauthorized" }, status: :unauthorized and return unless admin_authorized?
+
+    reports = Report.recent
+    render json: reports
+  end
+
   private
 
-  def find_shame_user
-    User.find_by(page_slug: params[:slug])
+  def admin_authorized?
+    token = ENV["ADMIN_TOKEN"]
+    return false if token.blank?
+
+    ActiveSupport::SecurityUtils.secure_compare(
+      request.headers["X-Admin-Token"].to_s,
+      token
+    )
+  end
+
+  def send_report_telegram_notification(report)
+    return unless ENV["TELEGRAM_BOT_TOKEN"].present? && ENV["TELEGRAM_CHAT_ID"].present?
+
+    message = <<~MSG
+      🚨 Content Report
+
+      Page: /p/#{report.page_slug}
+      Reason: #{report.reason}
+      Details: #{report.details.presence || "None"}
+      IP: #{report.reporter_ip}
+      Time: #{report.created_at.strftime("%Y-%m-%d %H:%M UTC")}
+    MSG
+
+    uri = URI("https://api.telegram.org/bot#{ENV["TELEGRAM_BOT_TOKEN"]}/sendMessage")
+    Net::HTTP.post_form(uri, chat_id: ENV["TELEGRAM_CHAT_ID"], text: message)
+  rescue StandardError => e
+    Rails.logger.error("Telegram report notification failed: #{e.message}")
   end
 end

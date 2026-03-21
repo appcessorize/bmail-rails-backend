@@ -27,6 +27,13 @@ class Rack::Attack
     end
   end
 
+  # Throttle content reports by IP
+  throttle("report/ip", limit: 5, period: 300) do |req|
+    if req.path.match?(%r{\A/p/.+/report\z}) && req.post?
+      req.ip
+    end
+  end
+
   # Throttle admin endpoint by IP (prevents brute-force on admin token)
   throttle("admin/ip", limit: 5, period: 60) do |req|
     if req.path.start_with?("/admin")

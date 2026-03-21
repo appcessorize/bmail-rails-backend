@@ -14,10 +14,12 @@ Rails.application.routes.draw do
 
   # Admin endpoints
   get "/admin/contacts", to: "contacts#index"
+  get "/admin/reports", to: "shame_pages#reports_index"
 
   # Public shame page (no auth required)
   get "/p/:slug", to: "shame_pages#show", as: :shame_page
   get "/p/:slug/image", to: "shame_pages#image", as: :shame_page_image
+  post "/p/:slug/report", to: "shame_pages#report", as: :shame_page_report
 
   # API endpoints
   get    "/me",     to: "users#me"
