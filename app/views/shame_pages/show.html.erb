@@ -8,8 +8,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
 
   <!-- OG / Social share -->
-  <meta property="og:title" content="<%= @shame_visible ? "SHAME! They failed!" : "Help, I'm being blackmailed!" %>">
-  <meta property="og:description" content="<%= @shame_visible ? "This person couldn't resist their phone." : "Someone is blackmailing themselves to stay off their phone." %>">
+  <meta property="og:title" content="<%= @shame_visible ? "SHAME! They Failed Their Focus Session — Blackmail.wtf" : "Help, I'm Being Blackmailed to Stay Off My Phone — Blackmail.wtf" %>">
+  <meta property="og:description" content="<%= @shame_visible ? "This person couldn't resist picking up their phone. Their embarrassing photo is now live for everyone to see. Check it out." : "Someone is using Blackmail to stay off their phone. If they fail, their embarrassing photo goes live. Watch this page to see if they crack." %>">
   <meta property="og:image" content="<%= "#{ENV.fetch("PUBLIC_BASE_URL", request.base_url)}/images/og-share.png" %>">
   <meta property="og:url" content="<%= request.original_url %>">
   <meta property="og:type" content="website">
