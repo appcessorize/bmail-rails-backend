@@ -263,6 +263,7 @@ class ContactsController < ActionController::Base
             text-decoration: none;
           }
         </style>
+        <script defer src="https://umamipod.pikapod.net/script.js" data-website-id="5d73ff14-c500-44db-a236-a3b74598c018"></script>
       </head>
       <body>
         <header>
@@ -356,6 +357,7 @@ class ContactsController < ActionController::Base
             transform: translateY(-2px);
           }
         </style>
+        <script defer src="https://umamipod.pikapod.net/script.js" data-website-id="5d73ff14-c500-44db-a236-a3b74598c018"></script>
       </head>
       <body>
         <div class="success-container">

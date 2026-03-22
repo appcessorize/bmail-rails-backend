@@ -47,6 +47,10 @@ class PagesController < ActionController::Base
     HTML
   end
 
+  def analytics_script
+    '<script defer src="https://umamipod.pikapod.net/script.js" data-website-id="5d73ff14-c500-44db-a236-a3b74598c018"></script>'
+  end
+
   def shared_styles
     <<~CSS
       <style>
@@ -586,6 +590,7 @@ class PagesController < ActionController::Base
             .menu-toggle { display: block; }
           }
         </style>
+        #{analytics_script}
       </head>
       <body>
         <div class="container">
@@ -1016,6 +1021,7 @@ class PagesController < ActionController::Base
             .shame-text { font-size: 2rem; }
           }
         </style>
+        #{analytics_script}
       </head>
       <body>
         <a href="/" class="close-btn">✕</a>
@@ -1291,6 +1297,7 @@ class PagesController < ActionController::Base
           footer p { color: var(--bm-blue); }
           footer a { color: var(--bm-blue); text-decoration: none; }
         </style>
+        #{analytics_script}
       </head>
       <body>
         <div class="container">
@@ -1505,6 +1512,7 @@ class PagesController < ActionController::Base
           footer p { color: var(--bm-blue); font-size: 0.85rem; }
           footer a { color: var(--bm-blue); text-decoration: none; }
         </style>
+        #{analytics_script}
       </head>
       <body>
         <div class="container">
@@ -1631,6 +1639,7 @@ class PagesController < ActionController::Base
         #{og_tags(title: "Privacy Policy — Blackmail.wtf", description: "How Blackmail handles your data. Your photos are stored securely, your page URL is anonymous, and you can delete everything at any time.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         #{legal_page_styles}
+        #{analytics_script}
       </head>
       <body>
         <div class="container">
@@ -1701,6 +1710,7 @@ class PagesController < ActionController::Base
         #{og_tags(title: "Terms of Service — Blackmail.wtf", description: "Terms and conditions for using Blackmail. Rules for user-generated content, account management, and acceptable use.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         #{legal_page_styles}
+        #{analytics_script}
       </head>
       <body>
         <div class="container">
