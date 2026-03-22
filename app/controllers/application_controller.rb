@@ -4,7 +4,8 @@ class ApplicationController < ActionController::API
   private
 
   def authenticate_user!
-    token = request.headers["Authorization"]&.split(" ")&.last
+    auth_header = request.headers["Authorization"].to_s
+    token = auth_header.start_with?("Bearer ") ? auth_header[7..] : nil
     @current_user = User.find_by_valid_token(token)
 
     render json: { error: "Unauthorized" }, status: :unauthorized unless @current_user

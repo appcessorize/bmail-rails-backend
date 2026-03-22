@@ -66,7 +66,7 @@ class Rack::Attack
   end
 
   # Throttle token refresh requests
-  throttle("auth_refresh/ip", limit: 20, period: 60) do |req|
+  throttle("auth_refresh/ip", limit: 5, period: 60) do |req|
     req.ip if req.path == "/auth/refresh" && req.post?
   end
 
