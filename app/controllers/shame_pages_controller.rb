@@ -64,6 +64,7 @@ class ShamePagesController < ActionController::Base
     )
 
     if watcher.save
+      Thread.new { WatcherNotificationService.send_welcome(watcher) }
       render json: { message: "You'll be notified when this page changes." }, status: :created
     else
       if watcher.errors[:email]&.include?("is already watching this page")
