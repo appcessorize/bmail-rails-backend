@@ -65,14 +65,10 @@ class ShamePagesController < ActionController::Base
 
     if watcher.save
       Thread.new { WatcherNotificationService.send_welcome(watcher) }
-      render json: { message: "You'll be notified when this page changes." }, status: :created
-    else
-      if watcher.errors[:email]&.include?("is already watching this page")
-        render json: { message: "You're already watching this page." }, status: :ok
-      else
-        render json: { errors: watcher.errors.full_messages }, status: :unprocessable_entity
-      end
     end
+
+    # Always show the same message to prevent email enumeration
+    render json: { message: "You'll be notified when this page changes." }, status: :ok
   end
 
   # GET /unsubscribe/:token
