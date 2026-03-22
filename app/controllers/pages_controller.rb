@@ -36,6 +36,17 @@ class PagesController < ActionController::Base
     }
   end
 
+  def og_tags(title:, description:)
+    base = ENV.fetch("PUBLIC_BASE_URL", "https://blackmail.wtf")
+    <<~HTML
+      <meta property="og:title" content="#{title}">
+      <meta property="og:description" content="#{description}">
+      <meta property="og:image" content="#{base}/images/og-share.png">
+      <meta property="og:type" content="website">
+      <meta name="twitter:card" content="summary_large_image">
+    HTML
+  end
+
   def shared_styles
     <<~CSS
       <style>
@@ -121,6 +132,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Blackmail.wtf - Freedom from Your Phone</title>
+        #{og_tags(title: "Blackmail — Put Your Phone Down or Face the Consequences", description: "Blackmail is a free iOS app that uses the power of shame to help you stay off your phone. Upload an embarrassing photo, share your page, and stay focused — or your photo goes live.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
         <link rel="preload" href="/fonts/WhirlyBatsVariable.woff2" as="font" type="font/woff2" crossorigin>
@@ -807,6 +819,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Manifesto - Blackmail.wtf</title>
+        #{og_tags(title: "The Blackmail Manifesto — Why Shame Beats Motivation", description: "The brightest minds are working to keep you scrolling. Blackmail fights back with the oldest motivational strategy known to humanity: shame.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
         <link rel="preload" href="/fonts/WhirlyBatsVariable.woff2" as="font" type="font/woff2" crossorigin>
@@ -1160,6 +1173,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Press Kit - Blackmail.wtf</title>
+        #{og_tags(title: "Blackmail Press Kit — Everything You Need to Write About Us", description: "Press kit for Blackmail.wtf: the iOS focus app that uses shame to help you put your phone down. Includes description, brand assets, and contact info.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
         #{shared_styles}
@@ -1364,6 +1378,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Support - Blackmail.wtf</title>
+        #{og_tags(title: "Blackmail Support — Help, FAQ & Contact", description: "Get help with Blackmail. FAQ, account management, content reporting, and contact information. We reply the same day.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         <link rel="preload" href="/fonts/WhirlyBirdie-WideBold.otf" as="font" type="font/otf" crossorigin>
         #{shared_styles}
@@ -1613,6 +1628,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Privacy Policy - Blackmail.wtf</title>
+        #{og_tags(title: "Privacy Policy — Blackmail.wtf", description: "How Blackmail handles your data. Your photos are stored securely, your page URL is anonymous, and you can delete everything at any time.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         #{legal_page_styles}
       </head>
@@ -1682,6 +1698,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Terms of Service - Blackmail.wtf</title>
+        #{og_tags(title: "Terms of Service — Blackmail.wtf", description: "Terms and conditions for using Blackmail. Rules for user-generated content, account management, and acceptable use.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         #{legal_page_styles}
       </head>
