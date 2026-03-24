@@ -123,20 +123,39 @@ class AppAttestVerificationService
     root_ca_pem = File.read(APPLE_APP_ATTEST_ROOT_CA_PATH)
     root_ca = OpenSSL::X509::Certificate.new(root_ca_pem)
 
+    Rails.logger.info("[AppAttest] Root CA subject: #{root_ca.subject}")
+    Rails.logger.info("[AppAttest] Root CA issuer: #{root_ca.issuer}")
+    Rails.logger.info("[AppAttest] Leaf cert subject: #{leaf_cert.subject}")
+    Rails.logger.info("[AppAttest] Leaf cert issuer: #{leaf_cert.issuer}")
+    Rails.logger.info("[AppAttest] Intermediate certs count: #{intermediate_certs.size}")
+    intermediate_certs.each_with_index do |cert, i|
+      Rails.logger.info("[AppAttest] Intermediate[#{i}] subject: #{cert.subject}")
+      Rails.logger.info("[AppAttest] Intermediate[#{i}] issuer: #{cert.issuer}")
+    end
+
     store = OpenSSL::X509::Store.new
     store.add_cert(root_ca)
 
     # Also add Apple Root CA - G3 (some attestation chains use this root)
+    g3_loaded = false
     if File.exist?(APPLE_ROOT_CA_G3_PATH)
       root_ca_g3 = OpenSSL::X509::Certificate.new(File.read(APPLE_ROOT_CA_G3_PATH))
       store.add_cert(root_ca_g3)
+      g3_loaded = true
+      Rails.logger.info("[AppAttest] G3 Root CA loaded, subject: #{root_ca_g3.subject}")
+    else
+      Rails.logger.warn("[AppAttest] G3 Root CA file NOT FOUND at #{APPLE_ROOT_CA_G3_PATH}")
     end
 
     intermediate_certs.each { |cert| store.add_cert(cert) }
 
     unless store.verify(leaf_cert)
+      Rails.logger.error("[AppAttest] Verify failed: #{store.error_string} (error code: #{store.error})")
+      Rails.logger.error("[AppAttest] G3 loaded: #{g3_loaded}, store certs: root + #{intermediate_certs.size} intermediates")
       raise VerificationError, "certificate chain verification failed: #{store.error_string}"
     end
+
+    Rails.logger.info("[AppAttest] Certificate chain verified successfully")
   end
 
   def extract_nonce_from_cert(cert)
