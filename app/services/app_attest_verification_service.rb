@@ -7,6 +7,7 @@ class AppAttestVerificationService
   class VerificationError < StandardError; end
 
   APPLE_APP_ATTEST_ROOT_CA_PATH = Rails.root.join("config", "certs", "Apple_App_Attestation_Root_CA.pem")
+  APPLE_ROOT_CA_G3_PATH = Rails.root.join("config", "certs", "Apple_Root_CA_G3.pem")
   PRODUCTION_AAGUID = "appattestdevelop".bytes.pack("C*") # 16 bytes, will check both
   DEVELOPMENT_AAGUID = "appattestdevelop".bytes.pack("C*")
 
@@ -124,6 +125,13 @@ class AppAttestVerificationService
 
     store = OpenSSL::X509::Store.new
     store.add_cert(root_ca)
+
+    # Also add Apple Root CA - G3 (some attestation chains use this root)
+    if File.exist?(APPLE_ROOT_CA_G3_PATH)
+      root_ca_g3 = OpenSSL::X509::Certificate.new(File.read(APPLE_ROOT_CA_G3_PATH))
+      store.add_cert(root_ca_g3)
+    end
+
     intermediate_certs.each { |cert| store.add_cert(cert) }
 
     unless store.verify(leaf_cert)
