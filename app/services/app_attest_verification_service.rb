@@ -107,19 +107,39 @@ class AppAttestVerificationService
     Rails.logger.info("[AppAttest] stored public_key DER size: #{credential.public_key.bytesize}")
     Rails.logger.info("[AppAttest] stored public_key hex (first 40): #{credential.public_key.unpack1('H*')[0..79]}")
 
+    # Method 1: Standard verify
     verified = public_key.verify("SHA256", signature, message) rescue false
     Rails.logger.info("[AppAttest] verify(SHA256) result: #{verified}")
 
     unless verified
-      # Try without double-hashing: Apple signs SHA256(authenticatorData + clientDataHash) directly
+      # Method 2: dsa_verify_asn1 with pre-computed hash
       message_hash = Digest::SHA256.digest(message)
-      verified_raw = public_key.verify_raw(nil, signature, message_hash) rescue false
-      Rails.logger.info("[AppAttest] verify_raw result: #{verified_raw}")
+      verified_dsa = (public_key.dsa_verify_asn1(message_hash, signature) rescue false)
+      Rails.logger.info("[AppAttest] dsa_verify_asn1 result: #{verified_dsa}")
 
-      unless verified_raw
-        # Try verify with raw nonce (no SHA256 wrapping of client data)
-        verified_direct = public_key.verify("SHA256", signature, authenticator_data + client_data_hash) rescue false
-        Rails.logger.info("[AppAttest] verify_direct result: #{verified_direct}")
+      unless verified_dsa
+        # Method 3: Try with Digest object instead of string
+        verified_digest_obj = (public_key.verify(OpenSSL::Digest.new("SHA256"), signature, message) rescue false)
+        Rails.logger.info("[AppAttest] verify(Digest.new) result: #{verified_digest_obj}")
+
+        # Method 4: Reconstruct key from raw point and try
+        begin
+          raw_point = credential.public_key
+          key2 = OpenSSL::PKey::EC.new("prime256v1")
+          key2.public_key = OpenSSL::PKey::EC::Point.new(
+            OpenSSL::PKey::EC::Group.new("prime256v1"),
+            OpenSSL::BN.new(raw_point[-65..-1].unpack1("H*"), 16)
+          )
+          verified_reconstructed = key2.verify("SHA256", signature, message) rescue false
+          Rails.logger.info("[AppAttest] verify(reconstructed key) result: #{verified_reconstructed}")
+        rescue => e
+          Rails.logger.info("[AppAttest] key reconstruction failed: #{e.message}")
+        end
+
+        # Log hex of signature and authenticator_data for manual verification
+        Rails.logger.info("[AppAttest] signature hex: #{signature.unpack1('H*')}")
+        Rails.logger.info("[AppAttest] authenticator_data hex: #{authenticator_data.unpack1('H*')}")
+
         raise VerificationError, "signature verification failed"
       end
     end
