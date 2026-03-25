@@ -100,66 +100,21 @@ class AppAttestVerificationService
   def verify_assertion(assertion_data, credential, client_data_hash)
     assertion = CBOR.decode(assertion_data)
 
-    Rails.logger.info("[AppAttest] Assertion CBOR keys: #{assertion.keys.inspect}")
     authenticator_data = assertion["authenticatorData"] || assertion.values.first
     signature = assertion["signature"] || assertion.values.last
 
     raise VerificationError, "missing authenticator data" unless authenticator_data
     raise VerificationError, "missing signature" unless signature
 
-    Rails.logger.info("[AppAttest] authenticator_data size: #{authenticator_data.bytesize}, signature size: #{signature.bytesize}")
-    Rails.logger.info("[AppAttest] client_data_hash: #{client_data_hash.unpack1('H*')}")
+    # Apple's generateAssertion signs SHA256(authenticatorData || clientDataHash).
+    # Since ECDSA internally hashes, we need to pre-hash and use verify with the pre-hashed nonce.
+    nonce = Digest::SHA256.digest(authenticator_data + client_data_hash)
 
-    # Compute message = authenticatorData + clientDataHash
-    message = authenticator_data + client_data_hash
-    Rails.logger.info("[AppAttest] message size: #{message.bytesize}")
+    public_key = OpenSSL::PKey.read(credential.public_key)
 
-    # Verify signature with stored public key
-    begin
-      public_key = OpenSSL::PKey.read(credential.public_key)
-    rescue => e
-      Rails.logger.info("[AppAttest] PKey.read failed (#{e.message}), falling back to EC.new")
-      public_key = OpenSSL::PKey::EC.new(credential.public_key)
-    end
-    Rails.logger.info("[AppAttest] public_key class: #{public_key.class}, curve: #{public_key.group.curve_name rescue 'unknown'}")
-    Rails.logger.info("[AppAttest] stored public_key DER size: #{credential.public_key.bytesize}")
-    Rails.logger.info("[AppAttest] stored public_key hex (first 40): #{credential.public_key.unpack1('H*')[0..79]}")
-
-    # Method 1: Standard verify
-    verified = public_key.verify("SHA256", signature, message) rescue false
-    Rails.logger.info("[AppAttest] verify(SHA256) result: #{verified}")
-
-    unless verified
-      # Method 2: dsa_verify_asn1 with pre-computed hash
-      message_hash = Digest::SHA256.digest(message)
-      verified_dsa = (public_key.dsa_verify_asn1(message_hash, signature) rescue false)
-      Rails.logger.info("[AppAttest] dsa_verify_asn1 result: #{verified_dsa}")
-
-      unless verified_dsa
-        # Method 3: Try with Digest object instead of string
-        verified_digest_obj = (public_key.verify(OpenSSL::Digest.new("SHA256"), signature, message) rescue false)
-        Rails.logger.info("[AppAttest] verify(Digest.new) result: #{verified_digest_obj}")
-
-        # Method 4: Reconstruct key from raw point and try
-        begin
-          raw_point = credential.public_key
-          key2 = OpenSSL::PKey::EC.new("prime256v1")
-          key2.public_key = OpenSSL::PKey::EC::Point.new(
-            OpenSSL::PKey::EC::Group.new("prime256v1"),
-            OpenSSL::BN.new(raw_point[-65..-1].unpack1("H*"), 16)
-          )
-          verified_reconstructed = key2.verify("SHA256", signature, message) rescue false
-          Rails.logger.info("[AppAttest] verify(reconstructed key) result: #{verified_reconstructed}")
-        rescue => e
-          Rails.logger.info("[AppAttest] key reconstruction failed: #{e.message}")
-        end
-
-        # Log hex of signature and authenticator_data for manual verification
-        Rails.logger.info("[AppAttest] signature hex: #{signature.unpack1('H*')}")
-        Rails.logger.info("[AppAttest] authenticator_data hex: #{authenticator_data.unpack1('H*')}")
-
-        raise VerificationError, "signature verification failed"
-      end
+    # Verify: the signature is ECDSA over the nonce (already hashed), so use SHA256 verify on the nonce
+    unless public_key.verify("SHA256", signature, nonce)
+      raise VerificationError, "signature verification failed"
     end
 
     # Extract and verify sign count
