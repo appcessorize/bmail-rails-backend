@@ -82,22 +82,37 @@ class AppAttestVerificationService
   def verify_assertion(assertion_data, credential, client_data_hash)
     assertion = CBOR.decode(assertion_data)
 
+    Rails.logger.info("[AppAttest] Assertion CBOR keys: #{assertion.keys.inspect}")
     authenticator_data = assertion["authenticatorData"] || assertion.values.first
     signature = assertion["signature"] || assertion.values.last
 
     raise VerificationError, "missing authenticator data" unless authenticator_data
     raise VerificationError, "missing signature" unless signature
 
-    # Compute message = authenticatorData + SHA256(clientDataHash)
-    # Note: client_data_hash is already the SHA256 of the canonical string
+    Rails.logger.info("[AppAttest] authenticator_data size: #{authenticator_data.bytesize}, signature size: #{signature.bytesize}")
+    Rails.logger.info("[AppAttest] client_data_hash: #{client_data_hash.unpack1('H*')}")
+
+    # Compute message = authenticatorData + clientDataHash
     message = authenticator_data + client_data_hash
-    message_hash = Digest::SHA256.digest(message)
+    Rails.logger.info("[AppAttest] message size: #{message.bytesize}")
 
     # Verify signature with stored public key
     public_key = OpenSSL::PKey::EC.new(credential.public_key)
-    unless public_key.verify("SHA256", signature, message)
-      # Try verifying against the raw message hash
-      unless public_key.verify_raw(nil, signature, message_hash)
+    Rails.logger.info("[AppAttest] public_key curve: #{public_key.group.curve_name rescue 'unknown'}")
+
+    verified = public_key.verify("SHA256", signature, message) rescue false
+    Rails.logger.info("[AppAttest] verify(SHA256) result: #{verified}")
+
+    unless verified
+      # Try without double-hashing: Apple signs SHA256(authenticatorData + clientDataHash) directly
+      message_hash = Digest::SHA256.digest(message)
+      verified_raw = public_key.verify_raw(nil, signature, message_hash) rescue false
+      Rails.logger.info("[AppAttest] verify_raw result: #{verified_raw}")
+
+      unless verified_raw
+        # Try verify with raw nonce (no SHA256 wrapping of client data)
+        verified_direct = public_key.verify("SHA256", signature, authenticator_data + client_data_hash) rescue false
+        Rails.logger.info("[AppAttest] verify_direct result: #{verified_direct}")
         raise VerificationError, "signature verification failed"
       end
     end
