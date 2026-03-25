@@ -22,15 +22,18 @@ class ApplicationController < ActionController::API
     assertion_b64 = request.headers["X-App-Assertion"]
 
     unless key_id.present? && assertion_b64.present?
+      Rails.logger.info("[AppAttest] Missing headers - key_id: #{key_id.present?}, assertion: #{assertion_b64.present?}")
       return render json: { error: "attestation_required", error_code: "attestation_required" }, status: :forbidden
     end
 
     credential = AppAttestCredential.find_by(key_id: key_id, user: @current_user)
     unless credential
+      Rails.logger.info("[AppAttest] Unknown key_id: #{key_id} for user #{@current_user&.id}")
       return render json: { error: "unknown_attestation_key" }, status: :forbidden
     end
 
     client_data = build_client_data_hash(request)
+    Rails.logger.info("[AppAttest] Assertion verify - method: #{request.method}, path: #{request.path}, body_size: #{request.raw_post.to_s.length}, client_data_hash: #{client_data.unpack1('H*')}")
     assertion_data = Base64.decode64(assertion_b64)
     AppAttestVerificationService.new.verify_assertion(assertion_data, credential, client_data)
   rescue AppAttestVerificationService::VerificationError => e
