@@ -26,7 +26,10 @@ class ApplicationController < ActionController::API
       return render json: { error: "attestation_required", error_code: "attestation_required" }, status: :forbidden
     end
 
-    credential = AppAttestCredential.find_by(key_id: key_id, user: @current_user)
+    all_credentials = AppAttestCredential.where(user: @current_user)
+    Rails.logger.info("[AppAttest] User #{@current_user&.id} has #{all_credentials.count} credential(s), looking for key_id: #{key_id}")
+    all_credentials.each { |c| Rails.logger.info("[AppAttest]   credential id=#{c.id} key_id=#{c.key_id} sign_count=#{c.sign_count}") }
+    credential = all_credentials.find_by(key_id: key_id)
     unless credential
       Rails.logger.info("[AppAttest] Unknown key_id: #{key_id} for user #{@current_user&.id}")
       return render json: { error: "unknown_attestation_key" }, status: :forbidden

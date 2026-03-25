@@ -97,8 +97,15 @@ class AppAttestVerificationService
     Rails.logger.info("[AppAttest] message size: #{message.bytesize}")
 
     # Verify signature with stored public key
-    public_key = OpenSSL::PKey::EC.new(credential.public_key)
-    Rails.logger.info("[AppAttest] public_key curve: #{public_key.group.curve_name rescue 'unknown'}")
+    begin
+      public_key = OpenSSL::PKey.read(credential.public_key)
+    rescue => e
+      Rails.logger.info("[AppAttest] PKey.read failed (#{e.message}), falling back to EC.new")
+      public_key = OpenSSL::PKey::EC.new(credential.public_key)
+    end
+    Rails.logger.info("[AppAttest] public_key class: #{public_key.class}, curve: #{public_key.group.curve_name rescue 'unknown'}")
+    Rails.logger.info("[AppAttest] stored public_key DER size: #{credential.public_key.bytesize}")
+    Rails.logger.info("[AppAttest] stored public_key hex (first 40): #{credential.public_key.unpack1('H*')[0..79]}")
 
     verified = public_key.verify("SHA256", signature, message) rescue false
     Rails.logger.info("[AppAttest] verify(SHA256) result: #{verified}")
