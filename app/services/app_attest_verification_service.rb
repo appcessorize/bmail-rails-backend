@@ -68,13 +68,31 @@ class AppAttestVerificationService
     end
 
     # Store credential
+    pub_key_der = public_key.to_der
+    Rails.logger.info("[AppAttest] Storing public_key DER size: #{pub_key_der.bytesize}, hex: #{pub_key_der.unpack1('H*')}")
+
     credential = user.app_attest_credentials.create!(
       key_id: key_id,
-      public_key: public_key.to_der,
+      public_key: pub_key_der,
       receipt: att_stmt["receipt"],
       sign_count: parsed_auth_data[:sign_count],
       environment: environment
     )
+
+    # Self-test: verify we can read back the key and use it
+    stored_der = credential.reload.public_key
+    Rails.logger.info("[AppAttest] Read-back DER size: #{stored_der.bytesize}, hex: #{stored_der.unpack1('H*')}")
+    Rails.logger.info("[AppAttest] DER match: #{pub_key_der == stored_der}")
+
+    begin
+      read_back_key = OpenSSL::PKey.read(stored_der)
+      test_data = "test"
+      test_sig = public_key.sign("SHA256", test_data)
+      test_verify = read_back_key.verify("SHA256", test_sig, test_data)
+      Rails.logger.info("[AppAttest] Self-test sign+verify: #{test_verify}")
+    rescue => e
+      Rails.logger.error("[AppAttest] Self-test failed: #{e.class} #{e.message}")
+    end
 
     credential
   end
