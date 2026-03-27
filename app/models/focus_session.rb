@@ -3,7 +3,7 @@ class FocusSession < ApplicationRecord
 
   validates :duration_minutes, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 480 }
   validates :started_at, presence: true
-  validates :status, presence: true, inclusion: { in: %w[active completed failed] }
+  validates :status, presence: true, inclusion: { in: %w[active completed failed cancelled] }
 
   scope :active, -> { where(status: 'active') }
   scope :completed, -> { where(status: 'completed') }
@@ -12,12 +12,17 @@ class FocusSession < ApplicationRecord
 
   # Complete the session successfully
   def complete!
+    return unless active?
     update!(status: 'completed', ended_at: Time.current)
   end
 
   # Mark the session as failed and activate shame
   def fail!
     transaction do
+      # Lock the row to prevent race conditions
+      reload(lock: true)
+      return unless active?
+
       update!(status: 'failed', ended_at: Time.current)
       user.activate_shame! if user.page_slug.present?
     end
