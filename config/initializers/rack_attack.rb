@@ -70,6 +70,16 @@ class Rack::Attack
     req.ip if req.path == "/auth/refresh" && req.post?
   end
 
+  # Throttle focus session creation by IP
+  throttle("focus_sessions/ip", limit: 10, period: 60) do |req|
+    req.ip if req.path == "/focus_sessions" && req.post?
+  end
+
+  # Throttle focus session state changes by IP
+  throttle("focus_sessions_update/ip", limit: 20, period: 60) do |req|
+    req.ip if req.path.match?(%r{\A/focus_sessions/\d+/(complete|fail)\z}) && req.patch?
+  end
+
   # General request throttling by IP
   throttle("req/ip", limit: 300, period: 60) do |req|
     req.ip
