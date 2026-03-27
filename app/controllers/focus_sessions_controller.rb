@@ -22,7 +22,7 @@ class FocusSessionsController < ApplicationController
     current_user.focus_sessions.active.update_all(status: 'cancelled', ended_at: Time.current)
 
     session = current_user.focus_sessions.new(
-      duration_minutes: params[:duration_minutes],
+      duration_minutes: params.require(:duration_minutes),
       started_at: Time.current,
       status: 'active'
     )

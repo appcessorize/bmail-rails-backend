@@ -80,6 +80,11 @@ class Rack::Attack
     req.ip if req.path.match?(%r{\A/focus_sessions/\d+/(complete|fail)\z}) && req.patch?
   end
 
+  # Throttle shame page lookups to prevent slug enumeration
+  throttle("shame_page/ip", limit: 30, period: 60) do |req|
+    req.ip if req.path.match?(%r{\A/p/[a-z0-9]+\z}) && req.get?
+  end
+
   # General request throttling by IP
   throttle("req/ip", limit: 300, period: 60) do |req|
     req.ip
