@@ -46,6 +46,9 @@ gem "jwt"
 # CBOR decoding for App Attest
 gem "cbor"
 
+# S3-compatible storage (Cloudflare R2)
+gem "aws-sdk-s3", require: false
+
 # Resend for transactional emails
 gem "resend"
 
