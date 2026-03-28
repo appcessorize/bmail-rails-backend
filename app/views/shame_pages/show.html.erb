@@ -46,13 +46,17 @@
     .site-header {
       max-width: 600px; margin: 0 auto; padding: 20px 20px;
       display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 2px solid var(--bm-blue);
+      background: var(--bm-cream);
     }
     .site-header img { height: 28px; }
-    .faq-link { color: var(--bm-blue); font-weight: 600; font-size: 0.9rem; }
+    .faq-link { color: var(--bm-dark); font-weight: 600; font-size: 0.9rem; opacity: 0.5; }
 
     /* Hero */
-    .hero { text-align: center; padding: 60px 20px 40px; max-width: 600px; margin: 0 auto; }
+    .hero {
+      text-align: center; padding: 60px 20px 40px; max-width: 100%; margin: 0 auto;
+      background: var(--bm-cream); color: var(--bm-dark);
+    }
+    .hero-inner { max-width: 600px; margin: 0 auto; }
     .hero h1 {
       font-family: var(--font-display);
       font-weight: bold;
@@ -64,7 +68,8 @@
       overflow-wrap: break-word;
     }
     .hero h1.shame { color: var(--bm-red); }
-    .hero h1.focus { color: var(--bm-cream); letter-spacing: 1px; font-family: 'Avenir Next', 'AvenirNext-Bold', sans-serif; font-size: clamp(1.4rem, 5vw, 2.2rem); text-transform: uppercase; }
+    .hero h1.focus { color: var(--bm-dark); letter-spacing: 1px; font-family: 'Avenir Next', 'AvenirNext-Bold', sans-serif; font-size: clamp(1.4rem, 5vw, 2.2rem); text-transform: uppercase; }
+    .hero .lead { color: rgba(18,15,14,0.6); }
     .hero .lead {
       font-size: 1.1rem;
       color: rgba(249,250,251,0.65);
@@ -82,17 +87,29 @@
     }
 
     /* Shame image */
+    .shame-image-wrapper {
+      width: 100%; max-width: 360px; margin: 2rem auto 0; position: relative;
+      border-radius: 16px; overflow: hidden; aspect-ratio: 3/4;
+      background: linear-gradient(110deg, #e0e0e0 8%, #f0f0f0 18%, #e0e0e0 33%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s linear infinite;
+    }
+    @keyframes shimmer {
+      to { background-position: -200% 0; }
+    }
     .shame-image {
-      width: 100%; max-width: 360px; margin: 2rem auto 0;
-      border-radius: 16px; border: 4px solid var(--bm-red);
-      box-shadow: 0 0 40px rgba(229, 51, 42, 0.35); display: block;
+      width: 100%; display: block; border-radius: 16px;
+      position: relative; z-index: 1;
+    }
+    .shame-image-wrapper.loaded {
+      background: none; animation: none; aspect-ratio: auto;
     }
 
     /* Blur box */
     .blur-box {
       position: relative; width: 100%; max-width: 340px;
       margin: 2rem auto 0; aspect-ratio: 1; border-radius: 16px;
-      border: 3px solid rgba(79, 155, 196, 0.2); overflow: hidden;
+      border: 3px solid rgba(18, 15, 14, 0.1); overflow: hidden;
     }
     .blur-bg {
       position: absolute; inset: -20px; filter: blur(30px);
@@ -116,12 +133,12 @@
     .blur-email-form { margin-top: 1.25rem; width: 100%; max-width: 240px; }
     .blur-email-form input {
       width: 100%; padding: 0.55rem 0.75rem; border-radius: 8px;
-      border: 1.5px solid rgba(79,155,196,0.4); background: rgba(0,0,0,0.5);
-      color: var(--bm-cream); font-size: 0.85rem; font-family: var(--font-body);
+      border: 1.5px solid rgba(79,155,196,0.4); background: rgba(255,255,255,0.8);
+      color: var(--bm-dark); font-size: 0.85rem; font-family: var(--font-body);
       margin-bottom: 0.4rem; text-align: center;
     }
     .blur-email-form input:focus { outline: none; border-color: var(--bm-blue); }
-    .blur-email-form input::placeholder { color: rgba(249,250,251,0.3); }
+    .blur-email-form input::placeholder { color: rgba(18,15,14,0.3); }
     .blur-email-form button {
       width: 100%; padding: 0.55rem; border-radius: 8px; border: none;
       background: var(--bm-blue); color: #fff; font-weight: 700;
@@ -204,13 +221,14 @@
 
     /* Footer */
     footer {
-      border-top: 1px solid rgba(79,155,196,0.15);
-      padding: 2rem 20px; text-align: center; max-width: 600px; margin: 0 auto;
+      background: var(--bm-cream); color: var(--bm-dark);
+      padding: 2.5rem 20px; text-align: center;
     }
+    footer .footer-inner { max-width: 600px; margin: 0 auto; }
     .footer-quote { font-style: italic; color: var(--bm-blue); font-size: 0.9rem; margin-bottom: 0.75rem; }
     .footer-links { font-size: 0.8rem; }
-    .footer-links a { color: rgba(79,155,196,0.5); margin: 0 0.5rem; }
-    .footer-links a:hover { color: var(--bm-blue); }
+    .footer-links a { color: rgba(18,15,14,0.4); margin: 0 0.5rem; }
+    .footer-links a:hover { color: var(--bm-dark); }
 
     /* Modals */
     .modal-overlay {
@@ -262,30 +280,37 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <a href="/"><img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL"></a>
-    <a href="#" class="faq-link" onclick="openFaqModal(); return false;">FAQ</a>
-  </header>
+  <div style="background: var(--bm-cream);">
+    <header class="site-header">
+      <a href="/"><img src="/images/BLACKMAILShadow.png" alt="BLACKMAIL"></a>
+      <a href="#" class="faq-link" onclick="openFaqModal(); return false;">FAQ</a>
+    </header>
+  </div>
 
   <% if @shame_visible %>
     <!-- SHAME STATE -->
     <div class="hero">
-      <div><span class="status-badge">FAILED</span></div>
-      <h1 class="shame">THEY COULDN'T<br>RESIST</h1>
-      <p class="lead">This person failed their focus session. Their embarrassing photo is now public.</p>
+      <div class="hero-inner">
+        <div><span class="status-badge">FAILED</span></div>
+        <h1 class="shame">THEY COULDN'T<br>RESIST</h1>
+        <p class="lead">This person failed their focus session. Their embarrassing photo is now public.</p>
 
-      <% if @has_image %>
-        <img src="<%= shame_page_image_path(@user.page_slug) %>" alt="Shame Photo" class="shame-image">
-      <% end %>
+        <% if @has_image %>
+          <div class="shame-image-wrapper" id="shameImageWrapper">
+            <img src="<%= shame_page_image_path(@user.page_slug) %>" alt="Shame Photo" class="shame-image" onload="document.getElementById('shameImageWrapper').classList.add('loaded')">
+          </div>
+        <% end %>
 
-      <% if @shame_activated_at %>
-        <p class="time-ago">Failed <%= time_ago_in_words(@shame_activated_at) %> ago</p>
-      <% end %>
+        <% if @shame_activated_at %>
+          <p class="time-ago" style="color: rgba(18,15,14,0.4);">Failed <%= time_ago_in_words(@shame_activated_at) %> ago</p>
+        <% end %>
+      </div>
     </div>
 
   <% else %>
     <!-- FOCUSED STATE -->
     <div class="hero">
+      <div class="hero-inner">
       <h1 class="focus">I'M BLACKMAILING MYSELF</h1>
       <p class="lead">If I use my phone too much, an embarrassing picture will appear here.</p>
 
@@ -299,6 +324,7 @@
           </div>
           <div id="blurWatchSuccess" style="display:none; margin-top:1rem; color:#22c55e; font-size:0.85rem; font-weight:600;"></div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -372,11 +398,13 @@
   </div>
 
   <footer>
-    <p class="footer-quote">"On your deathbed, will you regret not using your phone more?"</p>
-    <div class="footer-links">
-      <a href="mailto:support@blackmail.wtf">Contact</a>
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
+    <div class="footer-inner">
+      <p class="footer-quote">"On your deathbed, will you regret not using your phone more?"</p>
+      <div class="footer-links">
+        <a href="mailto:support@blackmail.wtf">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
     </div>
   </footer>
 
