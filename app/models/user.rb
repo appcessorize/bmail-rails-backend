@@ -168,8 +168,7 @@ class User < ApplicationRecord
       errors.add(:profile_image, "size must be less than 5MB")
     end
 
-    # Validate magic bytes to prevent content-type spoofing
-    validate_image_magic_bytes
+    # Magic bytes validation is done in controller before R2 upload
   end
 
   MAGIC_BYTES = {

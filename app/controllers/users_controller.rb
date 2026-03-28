@@ -30,6 +30,19 @@ class UsersController < ApplicationController
   # POST /upload_image
   def upload_image
     if params[:image].present?
+      # Validate magic bytes from upload tempfile BEFORE sending to R2
+      header = params[:image].tempfile.tap(&:rewind).read(6)
+      params[:image].tempfile.rewind
+
+      valid_magic = User::MAGIC_BYTES.any? do |magic, types|
+        header.byteslice(0, magic.bytesize) == magic &&
+          types.include?(params[:image].content_type)
+      end
+
+      unless valid_magic
+        return render json: { errors: ["Image file type is invalid"] }, status: :unprocessable_entity
+      end
+
       current_user.profile_image.purge if current_user.profile_image.attached?
       current_user.profile_image.attach(params[:image])
 
