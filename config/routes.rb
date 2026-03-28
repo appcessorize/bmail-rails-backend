@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   post "/contact", to: "contacts#create"
 
   # Admin endpoints
+  get "/admin", to: "admin#dashboard"
   get "/admin/contacts", to: "contacts#index"
   get "/admin/reports", to: "shame_pages#reports_index"
 

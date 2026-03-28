@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackmail Admin</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; padding: 20px; }
+    h1 { font-size: 1.4rem; color: #4f9bc4; margin-bottom: 24px; }
+    h2 { font-size: 1rem; color: #4f9bc4; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat { background: #1a1a1a; border-radius: 8px; padding: 16px; text-align: center; }
+    .stat .num { font-size: 2rem; font-weight: 700; color: #fff; }
+    .stat .label { font-size: 0.75rem; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat.alert .num { color: #e5332a; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 24px; }
+    th { text-align: left; padding: 8px 12px; color: #888; border-bottom: 1px solid #222; font-weight: 600; }
+    td { padding: 8px 12px; border-bottom: 1px solid #1a1a1a; }
+    tr:hover td { background: #111; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .badge-red { background: rgba(229,51,42,0.2); color: #e5332a; }
+    .badge-green { background: rgba(34,197,94,0.2); color: #22c55e; }
+    .badge-blue { background: rgba(79,155,196,0.2); color: #4f9bc4; }
+    .badge-gray { background: rgba(136,136,136,0.2); color: #888; }
+    a { color: #4f9bc4; text-decoration: none; }
+    a:hover { opacity: 0.8; }
+    .truncate { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .time { color: #666; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>BLACKMAIL Admin</h1>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num"><%= @stats[:total_users] %></div>
+      <div class="label">Users</div>
+    </div>
+    <div class="stat">
+      <div class="num"><%= @stats[:users_with_images] %></div>
+      <div class="label">With Images</div>
+    </div>
+    <div class="stat <%= @stats[:active_shame] > 0 ? 'alert' : '' %>">
+      <div class="num"><%= @stats[:active_shame] %></div>
+      <div class="label">Active Shame</div>
+    </div>
+    <div class="stat">
+      <div class="num"><%= @stats[:total_sessions] %></div>
+      <div class="label">Sessions</div>
+    </div>
+    <div class="stat">
+      <div class="num"><%= @stats[:completed_sessions] %></div>
+      <div class="label">Completed</div>
+    </div>
+    <div class="stat alert">
+      <div class="num"><%= @stats[:failed_sessions] %></div>
+      <div class="label">Failed</div>
+    </div>
+    <div class="stat <%= @stats[:unresolved_reports] > 0 ? 'alert' : '' %>">
+      <div class="num"><%= @stats[:unresolved_reports] %></div>
+      <div class="label">Open Reports</div>
+    </div>
+    <div class="stat">
+      <div class="num"><%= @stats[:unread_contacts] %></div>
+      <div class="label">Unread Msgs</div>
+    </div>
+  </div>
+
+  <h2>Users</h2>
+  <table>
+    <tr><th>ID</th><th>Username</th><th>Email</th><th>Page</th><th>Shame</th><th>Image</th><th>Joined</th></tr>
+    <% @users.each do |u| %>
+    <tr>
+      <td><%= u.id %></td>
+      <td><%= u.username %></td>
+      <td class="truncate"><%= u.email || '—' %></td>
+      <td><% if u.page_slug %><a href="/p/<%= u.page_slug %>" target="_blank">/p/<%= u.page_slug %></a><% else %>—<% end %></td>
+      <td><% if u.shame_active %><span class="badge badge-red">ACTIVE</span><% else %><span class="badge badge-green">OK</span><% end %></td>
+      <td><% if u.profile_image.attached? %><span class="badge badge-blue">Yes</span><% else %><span class="badge badge-gray">No</span><% end %></td>
+      <td class="time"><%= u.created_at.strftime("%b %d, %Y") %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <h2>Recent Sessions</h2>
+  <table>
+    <tr><th>ID</th><th>User</th><th>Duration</th><th>Status</th><th>Started</th></tr>
+    <% @recent_sessions.each do |s| %>
+    <tr>
+      <td><%= s.id %></td>
+      <td><%= s.user&.username || '?' %></td>
+      <td><%= s.duration_minutes %>m</td>
+      <td>
+        <% case s.status %>
+        <% when 'completed' %><span class="badge badge-green">Completed</span>
+        <% when 'failed' %><span class="badge badge-red">Failed</span>
+        <% when 'active' %><span class="badge badge-blue">Active</span>
+        <% when 'cancelled' %><span class="badge badge-gray">Cancelled</span>
+        <% end %>
+      </td>
+      <td class="time"><%= s.started_at.strftime("%b %d %H:%M") %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <h2>Reports</h2>
+  <% if @reports.any? %>
+  <table>
+    <tr><th>Page</th><th>Reason</th><th>Details</th><th>IP</th><th>Resolved</th><th>Date</th></tr>
+    <% @reports.each do |r| %>
+    <tr>
+      <td><a href="/p/<%= r.page_slug %>" target="_blank"><%= r.page_slug %></a></td>
+      <td><%= r.reason %></td>
+      <td class="truncate"><%= r.details || '—' %></td>
+      <td class="time"><%= r.reporter_ip %></td>
+      <td><%= r.resolved ? '✓' : '✗' %></td>
+      <td class="time"><%= r.created_at.strftime("%b %d %H:%M") %></td>
+    </tr>
+    <% end %>
+  </table>
+  <% else %>
+  <p style="color:#666;">No reports yet.</p>
+  <% end %>
+
+  <h2>Contact Messages</h2>
+  <% if @contacts.any? %>
+  <table>
+    <tr><th>Email</th><th>Message</th><th>Read</th><th>Date</th></tr>
+    <% @contacts.each do |c| %>
+    <tr>
+      <td><a href="mailto:<%= c.email %>"><%= c.email %></a></td>
+      <td class="truncate"><%= c.message %></td>
+      <td><%= c.read ? '✓' : '✗' %></td>
+      <td class="time"><%= c.created_at.strftime("%b %d %H:%M") %></td>
+    </tr>
+    <% end %>
+  </table>
+  <% else %>
+  <p style="color:#666;">No messages yet.</p>
+  <% end %>
+</body>
+</html>
