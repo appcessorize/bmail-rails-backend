@@ -38,6 +38,6 @@ class AttestationsController < ApplicationController
       timestamp: Time.current.iso8601
     }.to_json)
 
-    render json: { error: "attestation_failed", detail: e.message }, status: :unprocessable_entity
+    render json: { error: "attestation_failed" }, status: :unprocessable_entity
   end
 end

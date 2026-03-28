@@ -16,8 +16,6 @@ class ShamePagesController < ActionController::Base
     @shame_visible = @user.shame_visible?
     @has_image = @shame_visible && @user.profile_image.attached?
     @shame_activated_at = @user.shame_activated_at
-    @debug_shame_active = @user.shame_active
-    @debug_image_attached = @user.profile_image.attached?
 
     render :show
   end

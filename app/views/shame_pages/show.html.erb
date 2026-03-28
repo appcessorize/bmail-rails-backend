@@ -267,14 +267,6 @@
     <a href="#" class="faq-link" onclick="openFaqModal(); return false;">FAQ</a>
   </header>
 
-  <!-- DEBUG: Remove before launch -->
-  <div style="background:#222; color:#888; font-size:11px; padding:8px 16px; font-family:monospace; text-align:center;">
-    shame_active: <%= @debug_shame_active %> |
-    image_attached: <%= @debug_image_attached %> |
-    shame_visible: <%= @shame_visible %> |
-    has_image: <%= @has_image %>
-  </div>
-
   <% if @shame_visible %>
     <!-- SHAME STATE -->
     <div class="hero">
