@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get "/admin/logout", to: "admin#logout"
   get "/admin", to: "admin#dashboard"
   post "/admin/users/:id/deactivate_shame", to: "admin#deactivate_shame"
-  delete "/admin/users/:id", to: "admin#delete_user"
+  post "/admin/users/:id/delete", to: "admin#delete_user"
   post "/admin/reports/:id/resolve", to: "admin#resolve_report"
   post "/admin/contacts/:id/read", to: "admin#mark_contact_read"
   get "/admin/contacts", to: "contacts#index"

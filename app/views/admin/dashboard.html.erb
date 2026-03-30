@@ -97,8 +97,7 @@
             <button type="submit" class="btn btn-sm" onclick="return confirm('Deactivate shame for <%= u.username %>?')">Clear Shame</button>
           </form>
         <% end %>
-        <form method="POST" action="/admin/users/<%= u.id %>" style="display:inline;">
-          <input type="hidden" name="_method" value="delete">
+        <form method="POST" action="/admin/users/<%= u.id %>/delete" style="display:inline;">
           <button type="submit" class="btn btn-danger" onclick="return confirm('DELETE user <%= u.username %>? This cannot be undone.')">Delete</button>
         </form>
       </td>
