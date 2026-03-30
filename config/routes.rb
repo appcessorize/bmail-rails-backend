@@ -14,7 +14,13 @@ Rails.application.routes.draw do
   post "/contact", to: "contacts#create"
 
   # Admin endpoints
+  get "/admin/login", to: "admin#login"
+  post "/admin/authenticate", to: "admin#authenticate"
   get "/admin", to: "admin#dashboard"
+  post "/admin/users/:id/deactivate_shame", to: "admin#deactivate_shame"
+  delete "/admin/users/:id", to: "admin#delete_user"
+  post "/admin/reports/:id/resolve", to: "admin#resolve_report"
+  post "/admin/contacts/:id/read", to: "admin#mark_contact_read"
   get "/admin/contacts", to: "contacts#index"
   get "/admin/reports", to: "shame_pages#reports_index"
 

@@ -27,10 +27,20 @@
     a:hover { opacity: 0.8; }
     .truncate { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .time { color: #666; font-size: 0.8rem; }
+    .btn { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
+    .btn-sm { background: #333; color: #e5e5e5; }
+    .btn-sm:hover { background: #444; }
+    .btn-danger { background: rgba(229,51,42,0.2); color: #e5332a; }
+    .btn-danger:hover { background: rgba(229,51,42,0.4); }
+    .flash { padding: 10px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem; }
+    .flash-notice { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .flash-alert { background: rgba(229,51,42,0.15); color: #e5332a; }
   </style>
 </head>
 <body>
   <h1>BLACKMAIL Admin</h1>
+  <% if flash[:notice] %><div class="flash flash-notice"><%= flash[:notice] %></div><% end %>
+  <% if flash[:alert] %><div class="flash flash-alert"><%= flash[:alert] %></div><% end %>
 
   <div class="stats">
     <div class="stat">
@@ -69,7 +79,7 @@
 
   <h2>Users</h2>
   <table>
-    <tr><th>ID</th><th>Username</th><th>Email</th><th>Page</th><th>Shame</th><th>Image</th><th>Joined</th></tr>
+    <tr><th>ID</th><th>Username</th><th>Email</th><th>Page</th><th>Shame</th><th>Image</th><th>Joined</th><th>Actions</th></tr>
     <% @users.each do |u| %>
     <tr>
       <td><%= u.id %></td>
@@ -79,6 +89,17 @@
       <td><% if u.shame_active %><span class="badge badge-red">ACTIVE</span><% else %><span class="badge badge-green">OK</span><% end %></td>
       <td><% if u.profile_image.attached? %><span class="badge badge-blue">Yes</span><% else %><span class="badge badge-gray">No</span><% end %></td>
       <td class="time"><%= u.created_at.strftime("%b %d, %Y") %></td>
+      <td>
+        <% if u.shame_active %>
+          <form method="POST" action="/admin/users/<%= u.id %>/deactivate_shame" style="display:inline;">
+            <button type="submit" class="btn btn-sm" onclick="return confirm('Deactivate shame for <%= u.username %>?')">Clear Shame</button>
+          </form>
+        <% end %>
+        <form method="POST" action="/admin/users/<%= u.id %>" style="display:inline;">
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" class="btn btn-danger" onclick="return confirm('DELETE user <%= u.username %>? This cannot be undone.')">Delete</button>
+        </form>
+      </td>
     </tr>
     <% end %>
   </table>
@@ -110,15 +131,22 @@
   <h2>Reports</h2>
   <% if @reports.any? %>
   <table>
-    <tr><th>Page</th><th>Reason</th><th>Details</th><th>IP</th><th>Resolved</th><th>Date</th></tr>
+    <tr><th>Page</th><th>Reason</th><th>Details</th><th>IP</th><th>Status</th><th>Date</th><th>Action</th></tr>
     <% @reports.each do |r| %>
     <tr>
       <td><a href="/p/<%= r.page_slug %>" target="_blank"><%= r.page_slug %></a></td>
       <td><%= r.reason %></td>
       <td class="truncate"><%= r.details || '—' %></td>
       <td class="time"><%= r.reporter_ip %></td>
-      <td><%= r.resolved ? '✓' : '✗' %></td>
+      <td><%= r.resolved ? '<span class="badge badge-green">Resolved</span>' : '<span class="badge badge-red">Open</span>' %></td>
       <td class="time"><%= r.created_at.strftime("%b %d %H:%M") %></td>
+      <td>
+        <% unless r.resolved %>
+          <form method="POST" action="/admin/reports/<%= r.id %>/resolve" style="display:inline;">
+            <button type="submit" class="btn btn-sm">Resolve</button>
+          </form>
+        <% end %>
+      </td>
     </tr>
     <% end %>
   </table>
@@ -129,13 +157,20 @@
   <h2>Contact Messages</h2>
   <% if @contacts.any? %>
   <table>
-    <tr><th>Email</th><th>Message</th><th>Read</th><th>Date</th></tr>
+    <tr><th>Email</th><th>Message</th><th>Status</th><th>Date</th><th>Action</th></tr>
     <% @contacts.each do |c| %>
     <tr>
       <td><a href="mailto:<%= c.email %>"><%= c.email %></a></td>
       <td class="truncate"><%= c.message %></td>
-      <td><%= c.read ? '✓' : '✗' %></td>
+      <td><%= c.read ? '<span class="badge badge-green">Read</span>' : '<span class="badge badge-blue">New</span>' %></td>
       <td class="time"><%= c.created_at.strftime("%b %d %H:%M") %></td>
+      <td>
+        <% unless c.read %>
+          <form method="POST" action="/admin/contacts/<%= c.id %>/read" style="display:inline;">
+            <button type="submit" class="btn btn-sm">Mark Read</button>
+          </form>
+        <% end %>
+      </td>
     </tr>
     <% end %>
   </table>

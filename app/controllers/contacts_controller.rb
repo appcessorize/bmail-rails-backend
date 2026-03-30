@@ -1,5 +1,6 @@
 require "net/http"
 require "cgi"
+require "json"
 
 class ContactsController < ActionController::Base
   # GET /contact
@@ -9,6 +10,10 @@ class ContactsController < ActionController::Base
 
   # POST /contact
   def create
+    unless verify_turnstile(params["cf-turnstile-response"])
+      return render html: contact_form_html(["Captcha verification failed. Please try again."]).html_safe, status: :forbidden
+    end
+
     @contact = Contact.new(contact_params)
 
     if @contact.save
@@ -58,6 +63,20 @@ class ContactsController < ActionController::Base
 
   def telegram_configured?
     ENV["TELEGRAM_BOT_TOKEN"].present? && ENV["TELEGRAM_CHAT_ID"].present?
+  end
+
+  def verify_turnstile(token)
+    return false if token.blank?
+
+    secret = ENV["CLOUDFLARE_TURNSTILE_SECRET_KEY"]
+    return true if secret.blank?
+
+    uri = URI("https://challenges.cloudflare.com/turnstile/v0/siteverify")
+    response = Net::HTTP.post_form(uri, secret: secret, response: token, remoteip: request.remote_ip)
+    result = JSON.parse(response.body)
+    result["success"] == true
+  rescue StandardError
+    false
   end
 
   def admin_authorized?
@@ -263,6 +282,7 @@ class ContactsController < ActionController::Base
             text-decoration: none;
           }
         </style>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <script defer src="https://umamipod.pikapod.net/script.js" data-website-id="5d73ff14-c500-44db-a236-a3b74598c018"></script>
       </head>
       <body>
@@ -287,6 +307,7 @@ class ContactsController < ActionController::Base
               <label for="message">Your Message</label>
               <textarea id="message" name="message" placeholder="Your message..." required minlength="10" maxlength="5000"></textarea>
             </div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACxvDpu0x1EF7msb" data-theme="dark" style="margin-bottom:1rem;"></div>
             <button type="submit" class="submit-btn" id="submitBtn">
               <span class="btn-text">Send Message ✈</span>
               <span class="spinner"></span>
