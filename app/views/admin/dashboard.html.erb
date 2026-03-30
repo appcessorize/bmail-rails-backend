@@ -39,8 +39,7 @@
 </head>
 <body>
   <h1>BLACKMAIL Admin</h1>
-  <% if flash[:notice] %><div class="flash flash-notice"><%= flash[:notice] %></div><% end %>
-  <% if flash[:alert] %><div class="flash flash-alert"><%= flash[:alert] %></div><% end %>
+  <% if params[:notice] %><div class="flash flash-notice"><%= params[:notice] %></div><% end %>
 
   <div class="stats">
     <div class="stat">

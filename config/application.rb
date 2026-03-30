@@ -29,10 +29,8 @@ module BmbackendRails
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # Add session/cookie/flash middleware for admin dashboard
+    # Add cookie middleware for admin dashboard auth
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore, key: "_blackmail_admin_session"
-    config.middleware.use ActionDispatch::Flash
 
     # Enable rack-attack middleware
     config.middleware.use Rack::Attack

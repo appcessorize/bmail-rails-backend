@@ -21,7 +21,7 @@ class AdminController < ActionController::Base
 
     token = ENV["ADMIN_TOKEN"]
     if token.present? && ActiveSupport::SecurityUtils.secure_compare(params[:token].to_s, token)
-      session[:admin_authenticated] = true
+      cookies.signed[:admin_auth] = { value: "authenticated", expires: 24.hours.from_now, httponly: true, secure: Rails.env.production? }
       redirect_to admin_path
     else
       render html: login_html("Invalid token").html_safe, layout: false, status: :unauthorized
@@ -54,9 +54,9 @@ class AdminController < ActionController::Base
   def deactivate_shame
     user = User.find(params[:id])
     user.deactivate_shame!
-    redirect_to admin_path, notice: "Shame deactivated for #{user.username}"
+    redirect_to "/admin?notice=Shame+deactivated+for+#{CGI.escape(user.username)}"
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_path, alert: "User not found"
+    redirect_to "/admin?notice=User+not+found"
   end
 
   # DELETE /admin/users/:id
@@ -67,34 +67,34 @@ class AdminController < ActionController::Base
     user.focus_sessions.destroy_all
     user.app_attest_credentials.destroy_all
     user.destroy!
-    redirect_to admin_path, notice: "User #{username} deleted"
+    redirect_to "/admin?notice=User+#{CGI.escape(username)}+deleted"
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_path, alert: "User not found"
+    redirect_to "/admin?notice=User+not+found"
   end
 
   # POST /admin/reports/:id/resolve
   def resolve_report
     report = Report.find(params[:id])
     report.update!(resolved: true)
-    redirect_to admin_path, notice: "Report resolved"
+    redirect_to "/admin?notice=Report+resolved"
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_path, alert: "Report not found"
+    redirect_to "/admin?notice=Report+not+found"
   end
 
   # POST /admin/contacts/:id/read
   def mark_contact_read
     contact = Contact.find(params[:id])
     contact.update!(read: true)
-    redirect_to admin_path, notice: "Contact marked as read"
+    redirect_to "/admin?notice=Contact+marked+as+read"
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_path, alert: "Contact not found"
+    redirect_to "/admin?notice=Contact+not+found"
   end
 
   private
 
   def authorize_admin!
-    unless session[:admin_authenticated]
-      redirect_to admin_login_path
+    unless cookies.signed[:admin_auth] == "authenticated"
+      redirect_to "/admin/login"
     end
   end
 
