@@ -14,6 +14,12 @@ class AdminController < ActionController::Base
 
   # POST /admin/authenticate
   def authenticate
+    # Honeypot — if bots fill these, reject silently
+    if params[:username].present? || params[:email].present?
+      render html: login_html("Invalid credentials").html_safe, layout: false, status: :unauthorized
+      return
+    end
+
     turnstile_token = params["cf-turnstile-response"]
     unless verify_turnstile(turnstile_token)
       return render html: login_html("Captcha verification failed").html_safe, layout: false, status: :forbidden
@@ -24,8 +30,14 @@ class AdminController < ActionController::Base
       cookies.signed[:admin_auth] = { value: "authenticated", expires: 24.hours.from_now, httponly: true, secure: Rails.env.production? }
       redirect_to admin_path
     else
-      render html: login_html("Invalid token").html_safe, layout: false, status: :unauthorized
+      render html: login_html("Invalid credentials").html_safe, layout: false, status: :unauthorized
     end
+  end
+
+  # GET /admin/logout
+  def logout
+    cookies.delete(:admin_auth)
+    redirect_to "/admin/login"
   end
 
   # GET /admin
@@ -113,12 +125,12 @@ class AdminController < ActionController::Base
   end
 
   def login_html(error = nil)
-    error_html = error ? "<p style='color:#e5332a;margin-bottom:1rem;'>#{error}</p>" : ""
+    error_html = error ? "<p style='color:#e5332a;margin-bottom:1rem;font-size:0.9rem;'>#{error}</p>" : ""
     <<~HTML
       <!DOCTYPE html>
       <html><head>
         <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Login - Blackmail</title>
+        <title>Login - Blackmail</title>
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <style>
           * { margin:0; padding:0; box-sizing:border-box; }
@@ -127,16 +139,19 @@ class AdminController < ActionController::Base
           h1 { color:#4f9bc4; font-size:1.2rem; margin-bottom:1.5rem; text-align:center; }
           input { width:100%; padding:0.75rem; border:1px solid #333; border-radius:8px; background:#0a0a0a; color:#e5e5e5; font-size:1rem; margin-bottom:1rem; }
           input:focus { outline:none; border-color:#4f9bc4; }
+          .hp { position:absolute; left:-9999px; opacity:0; height:0; width:0; }
           button { width:100%; padding:0.75rem; border:none; border-radius:8px; background:#4f9bc4; color:#fff; font-weight:600; font-size:1rem; cursor:pointer; margin-top:0.5rem; }
           button:hover { opacity:0.9; }
           .cf-turnstile { margin-bottom:1rem; }
         </style>
       </head><body>
         <div class="card">
-          <h1>BLACKMAIL Admin</h1>
+          <h1>BLACKMAIL</h1>
           #{error_html}
-          <form method="POST" action="/admin/authenticate">
-            <input type="password" name="token" placeholder="Admin Token" required autofocus>
+          <form method="POST" action="/admin/authenticate" autocomplete="off">
+            <input type="text" name="username" class="hp" tabindex="-1" autocomplete="off">
+            <input type="email" name="email" class="hp" tabindex="-1" autocomplete="off">
+            <input type="password" name="token" placeholder="Token" required autofocus>
             <div class="cf-turnstile" data-sitekey="#{TURNSTILE_SITE_KEY}" data-theme="dark"></div>
             <button type="submit">Login</button>
           </form>

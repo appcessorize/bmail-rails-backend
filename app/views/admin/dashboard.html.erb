@@ -38,7 +38,10 @@
   </style>
 </head>
 <body>
-  <h1>BLACKMAIL Admin</h1>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <h1 style="margin:0;">BLACKMAIL Admin</h1>
+    <a href="/admin/logout" style="color:#888; font-size:0.85rem;">Logout</a>
+  </div>
   <% if params[:notice] %><div class="flash flash-notice"><%= params[:notice] %></div><% end %>
 
   <div class="stats">

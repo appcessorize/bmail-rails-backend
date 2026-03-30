@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   # Admin endpoints
   get "/admin/login", to: "admin#login"
   post "/admin/authenticate", to: "admin#authenticate"
+  get "/admin/logout", to: "admin#logout"
   get "/admin", to: "admin#dashboard"
   post "/admin/users/:id/deactivate_shame", to: "admin#deactivate_shame"
   delete "/admin/users/:id", to: "admin#delete_user"
