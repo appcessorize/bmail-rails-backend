@@ -92,11 +92,14 @@
       <td><%= s.user&.username || '?' %></td>
       <td><%= s.duration_minutes %>m</td>
       <td>
-        <% case s.status %>
-        <% when 'completed' %><span class="badge badge-green">Completed</span>
-        <% when 'failed' %><span class="badge badge-red">Failed</span>
-        <% when 'active' %><span class="badge badge-blue">Active</span>
-        <% when 'cancelled' %><span class="badge badge-gray">Cancelled</span>
+        <% if s.status == 'completed' %>
+          <span class="badge badge-green">Completed</span>
+        <% elsif s.status == 'failed' %>
+          <span class="badge badge-red">Failed</span>
+        <% elsif s.status == 'active' %>
+          <span class="badge badge-blue">Active</span>
+        <% elsif s.status == 'cancelled' %>
+          <span class="badge badge-gray">Cancelled</span>
         <% end %>
       </td>
       <td class="time"><%= s.started_at.strftime("%b %d %H:%M") %></td>
