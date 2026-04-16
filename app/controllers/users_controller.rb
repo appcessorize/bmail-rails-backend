@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy, :delete_page ]
-  before_action :verify_app_attest!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy, :delete_page ]
+  before_action :authenticate_user!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy, :delete_page, :ensure_page ]
+  before_action :verify_app_attest!, only: [ :me, :upload_image, :update_image_privacy, :delete_image, :deactivate_shame, :destroy, :delete_page, :ensure_page ]
 
   # GET /me
   def me
@@ -108,6 +108,23 @@ class UsersController < ApplicationController
       page_deleted: true
     )
     render json: { message: "Page deleted" }
+  end
+
+  # POST /ensure_page
+  def ensure_page
+    user = current_user
+
+    unless user.page_slug.present?
+      # Clear page_deleted first so generate_page_slug doesn't early-return
+      user.page_deleted = false
+      user.generate_page_slug
+      user.save!
+    end
+
+    render json: {
+      page_slug: user.page_slug,
+      page_url: "#{ENV.fetch("PUBLIC_BASE_URL", request.base_url)}/p/#{user.page_slug}"
+    }
   end
 
   # DELETE /delete_account

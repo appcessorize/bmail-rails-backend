@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   delete "/delete_account", to: "users#destroy"
   delete "/my_page", to: "users#delete_page"
 
+  post   "/ensure_page", to: "users#ensure_page"
   post   "/upload_image", to: "users#upload_image"
   patch  "/update_image_privacy", to: "users#update_image_privacy"
   delete "/delete_image", to: "users#delete_image"
