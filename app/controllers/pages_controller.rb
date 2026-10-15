@@ -1636,7 +1636,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Privacy Policy - Blackmail.wtf</title>
-        #{og_tags(title: "Privacy Policy — Blackmail.wtf", description: "How Blackmail handles your data. Your photos are stored securely, your page URL is anonymous, and you can delete everything at any time.")}
+        #{og_tags(title: "Privacy Policy — Blackmail.wtf", description: "How Blackmail handles your data. Your photo is private, only friends you add can ever see it, and you can delete everything at any time.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         #{legal_page_styles}
         #{analytics_script}
@@ -1645,52 +1645,100 @@ class PagesController < ActionController::Base
         <div class="container">
           <a href="/" class="back-link">← Back to Home</a>
           <h1>Privacy Policy</h1>
-          <p class="updated">Last updated: January 2025</p>
+          <p class="updated">Last updated: October 14, 2026</p>
+
+          <section>
+            <h2>The short version</h2>
+            <ul>
+              <li>Your photo is private. Only friends you add in the app can see it, and only after you fail a focus session.</li>
+              <li>There are no public pages, links or search. Nobody outside your friends list can ever see your photo.</li>
+              <li>We don't sell your data and we don't use it for advertising or tracking.</li>
+              <li>You can hide your photo, remove friends, or delete your account and everything in it from inside the app at any time.</li>
+            </ul>
+          </section>
 
           <section>
             <h2>1. Information We Collect</h2>
-            <p>We collect the following information when you use Blackmail.wtf:</p>
             <ul>
-              <li><strong>Account Information:</strong> Username, email address (optional), and authentication credentials.</li>
-              <li><strong>Profile Images:</strong> Photos you voluntarily upload for use with the shame feature.</li>
-              <li><strong>Usage Data:</strong> Focus session history, including start times, durations, and completion status.</li>
+              <li><strong>Sign in with Apple:</strong> a unique Apple user identifier, and the name and email address (or Apple private relay address) if you choose to share them.</li>
+              <li><strong>Your photo:</strong> the photo you add in the app. It is stored privately in our cloud storage and a copy is kept encrypted on your device.</li>
+              <li><strong>Friends:</strong> the friends you add through invite links, any users you block, and invite links you create.</li>
+              <li><strong>Focus status:</strong> whether you have an active failed focus session and when it started, so your friends' app can show your status.</li>
+              <li><strong>Reports:</strong> if you report someone, the report reason, any details you write, and who it concerns.</li>
+              <li><strong>Notifications:</strong> a push notification token for your device, if you allow notifications.</li>
+              <li><strong>Diagnostics and usage:</strong> crash reports and basic app usage events (for example, which screens are opened), used to fix bugs and improve the app. These are not used for advertising.</li>
+              <li><strong>App integrity:</strong> a token from Apple's App Attest / DeviceCheck that confirms requests come from the genuine app.</li>
             </ul>
           </section>
 
           <section>
-            <h2>2. How We Use Your Information</h2>
-            <p>We use your information to:</p>
+            <h2>2. Information That Never Leaves Your Device</h2>
             <ul>
-              <li>Provide and operate the Blackmail.wtf service</li>
-              <li>Display your shame page when you fail a focus session (only if you have uploaded a photo)</li>
-              <li>Track your focus session history</li>
-              <li>Improve and maintain our service</li>
+              <li><strong>Motion sensors:</strong> used only to detect when your phone is face down or picked up during a session. Motion data is processed on your device and is never stored or sent to us.</li>
+              <li><strong>Face ID / passcode:</strong> used by iOS to unlock your hidden photo. We never receive any biometric data.</li>
+              <li><strong>Camera and photo library:</strong> we only receive the single photo you choose to add.</li>
             </ul>
           </section>
 
           <section>
-            <h2>3. Information Sharing</h2>
-            <p>We do not sell, trade, or rent your personal information to third parties. Your profile image is only displayed on your unique shame page URL when shame is active, and only to those who have your specific page link.</p>
-          </section>
-
-          <section>
-            <h2>4. Data Security</h2>
-            <p>We implement reasonable security measures to protect your personal information. However, no method of transmission over the internet is 100% secure.</p>
-          </section>
-
-          <section>
-            <h2>5. Your Rights</h2>
-            <p>You can:</p>
+            <h2>3. How We Use Your Information</h2>
             <ul>
-              <li>Delete your profile image at any time</li>
-              <li>Hide your shame image from your public page</li>
-              <li>Delete your account entirely from the app settings</li>
+              <li>To run the app: sign you in, store your photo, connect you with friends, and show your focus status to them</li>
+              <li>To show your photo to your accepted friends while you have a failed focus session</li>
+              <li>To send notifications you have allowed, such as friend requests</li>
+              <li>To keep the service safe: review reports, enforce blocks, and prevent abuse</li>
+              <li>To fix crashes and improve the app</li>
             </ul>
           </section>
 
           <section>
-            <h2>6. Contact Us</h2>
-            <p>For privacy-related questions, <a href="/contact">contact us here</a>.</p>
+            <h2>4. Who Can See Your Photo</h2>
+            <p>Only users who have accepted a friend invite with you. They can see your photo only while you have a failed focus session that you haven't hidden, through a link that expires after a short time. If you remove or block someone, they lose access immediately. We do not publish your photo anywhere.</p>
+          </section>
+
+          <section>
+            <h2>5. Service Providers</h2>
+            <p>We do not sell, rent or trade your personal information. We use the following providers to run the app, and they process data only on our behalf:</p>
+            <ul>
+              <li><strong>Google Firebase (Google Cloud):</strong> sign-in, database, photo storage, cloud functions, push notifications, crash reporting and app analytics</li>
+              <li><strong>Apple:</strong> Sign in with Apple, push notification delivery and App Attest</li>
+            </ul>
+            <p>We may disclose information if required by law or to protect the safety of our users.</p>
+          </section>
+
+          <section>
+            <h2>6. Data Retention and Deletion</h2>
+            <ul>
+              <li><strong>Hide your photo:</strong> Settings &rarr; My Status &rarr; Hide My Photo. Friends stop seeing it immediately.</li>
+              <li><strong>Delete your photo:</strong> Settings &rarr; Image Settings. It is removed from our storage.</li>
+              <li><strong>Delete your account:</strong> Settings &rarr; Delete Account. This permanently deletes your account, photo, friends, blocks and status, and revokes the app's Sign in with Apple access. Any remaining copies in backups or logs are removed within 30 days.</li>
+            </ul>
+            <p>We keep your information only for as long as your account exists, except reports, which we may keep for a limited time to prevent abuse.</p>
+          </section>
+
+          <section>
+            <h2>7. Your Rights</h2>
+            <p>Depending on where you live, you may have the right to access, correct, export or delete your personal information, or to object to how we use it. You can do most of this in the app. For anything else, email us and we will respond within 30 days.</p>
+          </section>
+
+          <section>
+            <h2>8. Children</h2>
+            <p>Blackmail is not intended for children under 13, and we do not knowingly collect information from them. If you believe a child has created an account, contact us and we will delete it.</p>
+          </section>
+
+          <section>
+            <h2>9. Security</h2>
+            <p>Data is encrypted in transit and at rest, access to photos is limited to accepted friends through short-lived links, and requests are verified with App Attest. No system is perfectly secure, but we work to protect your information.</p>
+          </section>
+
+          <section>
+            <h2>10. Changes</h2>
+            <p>If we make material changes to this policy we will update the date above and let you know in the app.</p>
+          </section>
+
+          <section>
+            <h2>11. Contact Us</h2>
+            <p>Privacy questions or requests: <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a></p>
           </section>
         </div>
       </body>
@@ -1707,7 +1755,7 @@ class PagesController < ActionController::Base
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-itunes-app" content="app-id=6745029022">
         <title>Terms of Service - Blackmail.wtf</title>
-        #{og_tags(title: "Terms of Service — Blackmail.wtf", description: "Terms and conditions for using Blackmail. Rules for user-generated content, account management, and acceptable use.")}
+        #{og_tags(title: "Terms of Service — Blackmail.wtf", description: "Terms for using Blackmail: friends-only photos, zero tolerance for abuse, and how to report or block users.")}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📵</text></svg>">
         #{legal_page_styles}
         #{analytics_script}
@@ -1716,57 +1764,77 @@ class PagesController < ActionController::Base
         <div class="container">
           <a href="/" class="back-link">← Back to Home</a>
           <h1>Terms of Service</h1>
-          <p class="updated">Last updated: January 2025</p>
+          <p class="updated">Last updated: October 14, 2026</p>
 
           <section>
             <h2>1. Acceptance of Terms</h2>
-            <p>By accessing or using Blackmail.wtf, you agree to be bound by these Terms of Service. If you do not agree, do not use our service.</p>
+            <p>By downloading or using the Blackmail app ("Blackmail", "we", "us"), you agree to these Terms and our <a href="/privacy">Privacy Policy</a>. If you do not agree, do not use the app.</p>
           </section>
 
           <section>
-            <h2>2. Description of Service</h2>
-            <p>Blackmail.wtf is a focus and productivity app that uses social accountability to help you stay off your phone. You upload a photo that may be displayed on a public page if you fail to complete a focus session.</p>
+            <h2>2. The Service</h2>
+            <p>Blackmail is a focus app. You add a photo of yourself, start a focus timer and put your phone face down. If you pick up your phone before the timer ends, friends you have added in the app can see your photo until you hide it. There are no public pages: your photo is only ever shown to your accepted friends.</p>
           </section>
 
           <section>
-            <h2>3. User Responsibilities</h2>
-            <p>You agree to:</p>
+            <h2>3. Eligibility and Accounts</h2>
+            <p>You must be at least 13 years old, and old enough to agree to these Terms where you live. You sign in with your Apple ID and are responsible for activity on your account.</p>
+          </section>
+
+          <section>
+            <h2>4. Your Content</h2>
             <ul>
-              <li>Only upload images of yourself that you have the right to share</li>
-              <li>Not upload illegal, harmful, or inappropriate content</li>
-              <li>Not use the service for any unlawful purpose</li>
-              <li>Keep your account credentials secure</li>
+              <li>Only add photos <strong>of yourself</strong> that you have the right to share.</li>
+              <li>Do not add photos of other people, children, nudity or sexual content, violence, hate symbols, or anything illegal.</li>
+              <li>You keep ownership of your photo. You give us a limited licence to store it and show it to your accepted friends as described above, which ends when you delete it or your account.</li>
             </ul>
           </section>
 
           <section>
-            <h2>4. Content Ownership</h2>
-            <p>You retain ownership of any images you upload. By uploading content, you grant us a license to display that content as part of the service (i.e., on your shame page when applicable).</p>
+            <h2>5. Zero Tolerance for Objectionable Content and Abuse</h2>
+            <p>There is no tolerance for objectionable content or abusive users. You agree not to:</p>
+            <ul>
+              <li>Harass, bully, threaten, shame or impersonate anyone</li>
+              <li>Share, screenshot or redistribute a friend's photo outside the app, or use it to embarrass or pressure them</li>
+              <li>Upload content that is sexual, violent, hateful, defamatory or illegal</li>
+              <li>Misuse, disrupt or try to gain unauthorised access to the service</li>
+            </ul>
+            <p>You can block any user and report any user or photo from inside the app. We review reports within 24 hours and will remove offending content and suspend or ban users who break these rules.</p>
           </section>
 
           <section>
-            <h2>5. Disclaimer</h2>
-            <p>The service is provided "as is" without warranties of any kind. We are not responsible for any embarrassment, social consequences, or other outcomes resulting from your use of the service.</p>
+            <h2>6. Your Choices</h2>
+            <p>You can hide or delete your photo, remove or block friends, and delete your account at any time from Settings.</p>
           </section>
 
           <section>
-            <h2>6. Limitation of Liability</h2>
-            <p>To the maximum extent permitted by law, Blackmail.wtf shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the service.</p>
+            <h2>7. Disclaimer</h2>
+            <p>Blackmail is provided "as is" and "as available" without warranties of any kind. You use it voluntarily and choose who can see your photo. We are not responsible for embarrassment or other consequences that result from your friends seeing a photo you chose to add.</p>
           </section>
 
           <section>
-            <h2>7. Termination</h2>
-            <p>We reserve the right to terminate or suspend your account at any time for violations of these terms or for any other reason at our discretion.</p>
+            <h2>8. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by law, we are not liable for any indirect, incidental, special or consequential damages arising from your use of the app. Nothing in these Terms limits rights you have under consumer law that cannot be excluded.</p>
           </section>
 
           <section>
-            <h2>8. Changes to Terms</h2>
-            <p>We may update these terms from time to time. Continued use of the service after changes constitutes acceptance of the new terms.</p>
+            <h2>9. Termination</h2>
+            <p>We may suspend or terminate accounts that break these Terms. You can stop using the app and delete your account at any time.</p>
           </section>
 
           <section>
-            <h2>9. Contact</h2>
-            <p>Questions about these terms? <a href="/contact">Contact us here</a>.</p>
+            <h2>10. Apple</h2>
+            <p>These Terms are between you and us, not Apple. Apple is not responsible for the app or its content, has no obligation to provide support for it, and is a third-party beneficiary of these Terms. Apple's Licensed Application End User License Agreement also applies.</p>
+          </section>
+
+          <section>
+            <h2>11. Changes</h2>
+            <p>We may update these Terms. If changes are material we will let you know in the app. Continuing to use the app after changes means you accept them.</p>
+          </section>
+
+          <section>
+            <h2>12. Contact</h2>
+            <p>Questions about these Terms: <a href="mailto:support@blackmail.wtf">support@blackmail.wtf</a></p>
           </section>
         </div>
       </body>
